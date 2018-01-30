@@ -23,8 +23,9 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 
 	void LateUpdate () {
-		transform.position = player.transform.position + ((-distance)*transform.forward) ; //update position
+		//transform.position = player.transform.position + ((-distance)*transform.forward) ; //update position
 		cameraRotate ();
+		cameraFollow ();
 
 	}
 	void cameraRotate (){
@@ -34,6 +35,7 @@ public class CameraController : MonoBehaviour {
 			rot_y = Input.GetAxis ("Mouse Y");
 			rot_z = Input.GetMouseButton (0) ? 1 : 0;
 			rot_z = rot_z - (Input.GetMouseButton (1) ? 1 : 0);
+
 			transform.RotateAround (player.transform.position, transform.up, (8 / 3) * rot_x * tracking);
 			transform.RotateAround (player.transform.position, transform.right, (8 / 3) * rot_y * tracking);
 			transform.RotateAround (player.transform.position, transform.forward, (8 / 3) * rot_z * tracking);
@@ -48,9 +50,9 @@ public class CameraController : MonoBehaviour {
 			roll = Input.GetKey ("q")?1:0;
 			roll = roll - (Input.GetKey ("e")?1:0);
 
-			transform.RotateAround (player.transform.position, transform.up, (2/3) * yaw);
-			transform.RotateAround (player.transform.position, transform.right, (2/3) * pitch);
-			transform.RotateAround (player.transform.position, transform.forward, (2/3) * roll);
+			transform.RotateAround (player.transform.position, player.transform.up, (8/3) * yaw);
+			//transform.RotateAround (player.transform.position, player.transform.right, (2/3) * pitch);
+			//transform.RotateAround (player.transform.position, player.transform.forward, (2/3) * roll);
 	}
 }
 
