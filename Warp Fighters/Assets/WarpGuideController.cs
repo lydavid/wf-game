@@ -18,14 +18,16 @@ public class WarpGuideController : MonoBehaviour {
     {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
-        dist = 0;
+        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
+
+        debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
     }
 
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
-        dist = 0;
+        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
 
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
@@ -35,23 +37,47 @@ public class WarpGuideController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        
-        
+        if (Input.GetKeyDown("1"))
+        {
+
+            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            foreach (Renderer variableName in GetComponentsInChildren<Renderer>())
+            {
+                variableName.material.color = Color.blue;
+            }
+        }
+
+        // red = superspeed warp
+        if (Input.GetKeyDown("2"))
+        {
+
+            GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            foreach (Renderer variableName in GetComponentsInChildren<Renderer>())
+            {
+                variableName.material.color = Color.red;
+            }
+        }
+
+
+
+
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
             //transform.forward = player.transform.forward;
             transform.position += transform.forward * 2;
+            dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
             //offset = player.transform.position - transform.position;
-            
+
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
             //transform.forward = player.transform.forward;
             transform.position -= transform.forward * 2;
+            dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
             //offset = player.transform.position - transform.position;
         }
-        dist = Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2));
+
 
         // moves with player
         //transform.position = player.transform.position - offset;
@@ -114,8 +140,7 @@ public class WarpGuideController : MonoBehaviour {
             transform.eulerAngles = player.transform.eulerAngles;
         }*/
 
-        transform.position = player.transform.position + player.transform.forward * dist;
-        transform.forward = player.transform.forward;
+        
     }
 
     private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
@@ -125,8 +150,11 @@ public class WarpGuideController : MonoBehaviour {
        return point; // return it
 }
 
-private void LateUpdate()
+    void LateUpdate()
     {
+        
+        transform.position = player.transform.position + player.transform.forward * dist;
+        transform.forward = player.transform.forward;
 
         if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
         {
@@ -146,5 +174,6 @@ private void LateUpdate()
     {
         debugText.text = "Guide: (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + ")";
         debugText.text += "\nRot: (" + transform.eulerAngles.x + ", " + transform.eulerAngles.y + ", " + transform.eulerAngles.z + ")";
+        debugText.text += "\nDist: " + dist;
     }
 }

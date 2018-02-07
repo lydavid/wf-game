@@ -13,8 +13,9 @@ public class AltPlayerController : MonoBehaviour {
 
     public Text debugText;
 
-    private GameObject warpGuide;
-    
+    private GameObject warpGuidePrefab; // stores location of prefab
+    private GameObject warpGuideRedPrefab; // stores prefab of red version
+    private bool isSpeedWarp;
 
     private void Reset()
     {
@@ -24,7 +25,9 @@ public class AltPlayerController : MonoBehaviour {
         rotSpeed = 5;
 
         // loads prefab from Resources folder at runtime
-        warpGuide = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+        warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+        warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
+        isSpeedWarp = false;
     }
 
     // Use this for initialization
@@ -36,7 +39,9 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeed = 5;
 
-        warpGuide = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+        warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+        warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
+        isSpeedWarp = false;
 
         SetDebugText();
 
@@ -46,6 +51,22 @@ public class AltPlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
+        /* Change warp type/color */
+        // blue = instantaneous warp
+        if (Input.GetKeyDown("1"))
+        {
+            isSpeedWarp = false;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            
+        }
+
+        // red = superspeed warp
+        if (Input.GetKeyDown("2"))
+        {
+            isSpeedWarp = true;
+            GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
 
         /* Movement */
         float walk = Input.GetAxis("Vertical") * speed * Time.deltaTime;
@@ -58,6 +79,7 @@ public class AltPlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
         }
 
+        /* Turning */
         if (Input.GetAxis("Mouse X") < 0)
         {
             transform.Rotate(new Vector3(0, -1 * rotSpeed, 0));
@@ -67,14 +89,24 @@ public class AltPlayerController : MonoBehaviour {
             transform.Rotate(new Vector3(0, 1 * rotSpeed, 0));
         }
 
+        
 
         /* Warp Guide */
         if (Input.GetButtonDown("Fire2"))
         {
             Vector3 pos = player.transform.position + transform.forward * init_dist;
 
-            Instantiate(warpGuide, pos, transform.rotation);
+            GameObject warpGuide;
 
+            if (isSpeedWarp)
+            {
+                warpGuide = Instantiate(warpGuideRedPrefab, pos, transform.rotation);
+            } else
+            {
+                warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
+            }
+
+            
         }
 
         /* Warp */
