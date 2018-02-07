@@ -9,7 +9,7 @@ public class AltPlayerController : MonoBehaviour {
     public float speed;
     public int init_dist; // initial distance to spawn warp guide
 
-    public int rotSpeed;
+    public int rotSpeed; // speed of rotating player with horizontal mouse axis
 
     public Text debugText;
 

@@ -35,13 +35,17 @@ public class WarpGuideController : MonoBehaviour {
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
             transform.position += player.transform.forward * 2;
+            offset = player.transform.position - transform.position;
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
             transform.position -= player.transform.forward * 2;
+            offset = player.transform.position - transform.position;
         }
 
-        
+        transform.position = player.transform.position - offset;
+
+
     }
 
     private void LateUpdate()
