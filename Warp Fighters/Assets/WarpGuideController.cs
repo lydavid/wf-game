@@ -4,33 +4,46 @@ using UnityEngine;
 
 public class WarpGuideController : MonoBehaviour {
 
-    GameObject target;
     GameObject player;
     Vector3 offset;
 
     private void Reset()
     {
-        target = gameObject;
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
     }
 
     // Use this for initialization
     void Start () {
-        target = gameObject;
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        // moves with player
+        //transform.position = player.transform.position - offset;
+
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            target.transform.position += Vector3.forward;
+            transform.position += Vector3.forward * 2;
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
-            target.transform.position -= Vector3.forward;
+            transform.position -= Vector3.forward * 2;
+        }
+
+        
+    }
+
+    private void LateUpdate()
+    {
+
+        if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
+        {
+            player.transform.position = transform.position;
+            Destroy(gameObject);
         }
 
         if (Input.GetButtonUp("Fire2"))
