@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class WarpGuideController : MonoBehaviour {
 
     GameObject player;
     Vector3 offset;
+
+    private Text debugText;
 
     private void Reset()
     {
@@ -17,6 +20,10 @@ public class WarpGuideController : MonoBehaviour {
     void Start () {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
+
+        debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
+
+        SetDebugText();
     }
 	
 	// Update is called once per frame
@@ -50,5 +57,13 @@ public class WarpGuideController : MonoBehaviour {
         {
             Destroy(gameObject);
         }
+
+        SetDebugText();
+    }
+
+    void SetDebugText()
+    {
+        debugText.text = "Guide: (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + ")";
+        debugText.text += "\nRot: (" + transform.eulerAngles.x + ", " + transform.eulerAngles.y + ", " + transform.eulerAngles.z + ")";
     }
 }

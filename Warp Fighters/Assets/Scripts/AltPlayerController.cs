@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class AltPlayerController : MonoBehaviour {
@@ -7,6 +8,8 @@ public class AltPlayerController : MonoBehaviour {
     public GameObject player;
     public float speed;
     public int init_dist; // initial distance to spawn warp guide
+
+    public Text debugText;
 
     private GameObject warpGuide;
     
@@ -29,6 +32,8 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
 
         warpGuide = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+
+        SetDebugText();
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -58,11 +63,18 @@ public class AltPlayerController : MonoBehaviour {
 
         }
 
-        
+
 
 
         /* Warp */
-        
 
+
+        SetDebugText();
+    }
+
+    void SetDebugText()
+    {
+        debugText.text = "Player: (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + ")";
+        debugText.text += "\nRot: (" + transform.eulerAngles.x + ", " + transform.eulerAngles.y + ", " + transform.eulerAngles.z + ")";
     }
 }
