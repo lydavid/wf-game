@@ -9,6 +9,8 @@ public class AltPlayerController : MonoBehaviour {
     public float speed;
     public int init_dist; // initial distance to spawn warp guide
 
+    public int rotSpeed;
+
     public Text debugText;
 
     private GameObject warpGuide;
@@ -19,7 +21,9 @@ public class AltPlayerController : MonoBehaviour {
         player = GameObject.Find("Player");
         speed = 15.0f;
         init_dist = 10;
+        rotSpeed = 5;
 
+        // loads prefab from Resources folder at runtime
         warpGuide = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
     }
 
@@ -30,6 +34,7 @@ public class AltPlayerController : MonoBehaviour {
         player = GameObject.Find("Player");
         speed = 15.0f;
         init_dist = 10;
+        rotSpeed = 5;
 
         warpGuide = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
 
@@ -53,21 +58,27 @@ public class AltPlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
         }
 
+        if (Input.GetAxis("Mouse X") < 0)
+        {
+            transform.Rotate(new Vector3(0, -1 * rotSpeed, 0));
+        }
+        if (Input.GetAxis("Mouse X") > 0)
+        {
+            transform.Rotate(new Vector3(0, 1 * rotSpeed, 0));
+        }
+
 
         /* Warp Guide */
         if (Input.GetButtonDown("Fire2"))
         {
-            Vector3 pos = player.transform.position + new Vector3(0, 0, init_dist);
+            Vector3 pos = player.transform.position + transform.forward * init_dist;
 
-            Instantiate(warpGuide, pos, Quaternion.identity);
+            Instantiate(warpGuide, pos, transform.rotation);
 
         }
 
-
-
-
         /* Warp */
-
+        // Warping is currently handled in the warp guide script
 
         SetDebugText();
     }
