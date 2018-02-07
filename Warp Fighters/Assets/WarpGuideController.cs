@@ -8,18 +8,24 @@ public class WarpGuideController : MonoBehaviour {
     GameObject player;
     Vector3 offset;
 
+    private float dist; // distance between guide and player
+
     private Text debugText;
+
+
 
     private void Reset()
     {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
+        dist = 0;
     }
 
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
+        dist = 0;
 
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
@@ -29,26 +35,97 @@ public class WarpGuideController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        // moves with player
-        //transform.position = player.transform.position - offset;
+        
+        
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
         {
-            transform.position += player.transform.forward * 2;
-            offset = player.transform.position - transform.position;
+            //transform.forward = player.transform.forward;
+            transform.position += transform.forward * 2;
+            //offset = player.transform.position - transform.position;
+            
         }
         else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
         {
-            transform.position -= player.transform.forward * 2;
-            offset = player.transform.position - transform.position;
+            //transform.forward = player.transform.forward;
+            transform.position -= transform.forward * 2;
+            //offset = player.transform.position - transform.position;
+        }
+        dist = Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2));
+
+        // moves with player
+        //transform.position = player.transform.position - offset;
+        //transform.forward = player.transform.forward;
+
+        //transform.Rotate(new Vector3(0, player.transform.eulerAngles.y, 0), player);
+        /*if (Input.GetAxis("Mouse X") != 0)
+        {
+            transform.RotateAround(player.transform.position, transform.up, player.transform.eulerAngles.y);
+        } else
+        {
+            transform.RotateAround(player.transform.position, transform.up, 0);
+        }*/
+        /*if (Input.GetAxis("Mouse X") != 0)
+        {
+            
+        } else
+        {
+            //transform.position = RotatePointAroundPivot(transform.position, player.transform.position, Vector3.zero);
         }
 
-        transform.position = player.transform.position - offset;
+        if (Mathf.Round(transform.eulerAngles.y) != Mathf.Round(player.transform.eulerAngles.y))
+        {
+            transform.position = RotatePointAroundPivot(transform.position, player.transform.position, player.transform.eulerAngles);
+        }*/
 
 
+
+        /*if (transform.eulerAngles != player.transform.eulerAngles)
+        {
+
+            // rotates with player
+            float origX = transform.position.x;
+            float origY = transform.position.z;
+            float rotAngle = player.transform.eulerAngles.y;
+
+            float newX = origY * Mathf.Sin(rotAngle * Mathf.Deg2Rad) + origX * Mathf.Cos(rotAngle * Mathf.Deg2Rad);
+            float newY = origY * Mathf.Cos(rotAngle * Mathf.Deg2Rad) - origX * Mathf.Sin(rotAngle * Mathf.Deg2Rad);
+
+            transform.position = new Vector3(newX, transform.position.y, newY);
+            transform.eulerAngles = player.transform.eulerAngles;
+        }*/
+
+        /*if (Mathf.Round(transform.eulerAngles.y) != Mathf.Round(player.transform.eulerAngles.y))
+        {
+
+            float AX = transform.position.x;
+            float AY = transform.position.z;
+
+            float BX = player.transform.position.x;
+            float BY = player.transform.position.z;
+
+            float rotAngle = player.transform.eulerAngles.y;
+
+
+            float newX = BX + (AX - BX) * Mathf.Cos(rotAngle * Mathf.Deg2Rad) - (AY - BY) * Mathf.Sin(rotAngle * Mathf.Deg2Rad);
+            float newY = BY + (AX - BX) * Mathf.Sin(rotAngle * Mathf.Deg2Rad) + (AY - BY) * Mathf.Cos(rotAngle * Mathf.Deg2Rad);
+            transform.position = new Vector3(newX, transform.position.y, newY);
+
+            transform.eulerAngles = player.transform.eulerAngles;
+        }*/
+
+        transform.position = player.transform.position + player.transform.forward * dist;
+        transform.forward = player.transform.forward;
     }
 
-    private void LateUpdate()
+    private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
+       Vector3 dir = point - pivot;
+       dir = Quaternion.Euler(angles) * dir; // rotate it
+       point = dir + pivot; // calculate rotated point
+       return point; // return it
+}
+
+private void LateUpdate()
     {
 
         if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
