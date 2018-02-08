@@ -92,11 +92,12 @@ public class AltPlayerController : MonoBehaviour {
             transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
         }
 
-        /* Turning along y-axis */
+
+        /* Turning along y-axis 
         if (Input.GetAxis("Mouse Y") < 0)
         {
             transform.Rotate(new Vector3(1 * rotSpeedY, 0, 0));
-        }
+        }*/
         if (Input.GetAxis("Mouse Y") > 0)
         {
             transform.Rotate(new Vector3(-1 * rotSpeedY, 0, 0));
