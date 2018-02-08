@@ -13,8 +13,6 @@ public class WarpGuideController : MonoBehaviour {
 
     private Text debugText;
 
-
-
     private void Reset()
     {
         player = GameObject.Find("Player");
@@ -78,68 +76,6 @@ public class WarpGuideController : MonoBehaviour {
             dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
             //offset = player.transform.position - transform.position;
         }
-
-
-        // moves with player
-        //transform.position = player.transform.position - offset;
-        //transform.forward = player.transform.forward;
-
-        //transform.Rotate(new Vector3(0, player.transform.eulerAngles.y, 0), player);
-        /*if (Input.GetAxis("Mouse X") != 0)
-        {
-            transform.RotateAround(player.transform.position, transform.up, player.transform.eulerAngles.y);
-        } else
-        {
-            transform.RotateAround(player.transform.position, transform.up, 0);
-        }*/
-        /*if (Input.GetAxis("Mouse X") != 0)
-        {
-            
-        } else
-        {
-            //transform.position = RotatePointAroundPivot(transform.position, player.transform.position, Vector3.zero);
-        }
-
-        if (Mathf.Round(transform.eulerAngles.y) != Mathf.Round(player.transform.eulerAngles.y))
-        {
-            transform.position = RotatePointAroundPivot(transform.position, player.transform.position, player.transform.eulerAngles);
-        }*/
-
-
-
-        /*if (transform.eulerAngles != player.transform.eulerAngles)
-        {
-
-            // rotates with player
-            float origX = transform.position.x;
-            float origY = transform.position.z;
-            float rotAngle = player.transform.eulerAngles.y;
-
-            float newX = origY * Mathf.Sin(rotAngle * Mathf.Deg2Rad) + origX * Mathf.Cos(rotAngle * Mathf.Deg2Rad);
-            float newY = origY * Mathf.Cos(rotAngle * Mathf.Deg2Rad) - origX * Mathf.Sin(rotAngle * Mathf.Deg2Rad);
-
-            transform.position = new Vector3(newX, transform.position.y, newY);
-            transform.eulerAngles = player.transform.eulerAngles;
-        }*/
-
-        /*if (Mathf.Round(transform.eulerAngles.y) != Mathf.Round(player.transform.eulerAngles.y))
-        {
-
-            float AX = transform.position.x;
-            float AY = transform.position.z;
-
-            float BX = player.transform.position.x;
-            float BY = player.transform.position.z;
-
-            float rotAngle = player.transform.eulerAngles.y;
-
-
-            float newX = BX + (AX - BX) * Mathf.Cos(rotAngle * Mathf.Deg2Rad) - (AY - BY) * Mathf.Sin(rotAngle * Mathf.Deg2Rad);
-            float newY = BY + (AX - BX) * Mathf.Sin(rotAngle * Mathf.Deg2Rad) + (AY - BY) * Mathf.Cos(rotAngle * Mathf.Deg2Rad);
-            transform.position = new Vector3(newX, transform.position.y, newY);
-
-            transform.eulerAngles = player.transform.eulerAngles;
-        }*/
 
         if (inSpeedWarp)
         {
