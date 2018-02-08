@@ -8,6 +8,8 @@ public class WarpGuideController : MonoBehaviour {
     GameObject player;
     Vector3 offset;
 
+	public int warpSpeed;
+
     private float dist; // distance between guide and player
     private bool inSpeedWarp;
 
@@ -17,6 +19,7 @@ public class WarpGuideController : MonoBehaviour {
     {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
+		warpSpeed = 50;
         dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
@@ -26,6 +29,7 @@ public class WarpGuideController : MonoBehaviour {
     void Start () {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
+		warpSpeed = 50;
         dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
@@ -80,7 +84,7 @@ public class WarpGuideController : MonoBehaviour {
         if (inSpeedWarp)
         {
             // send player flying towards this warp guide
-            player.GetComponent<Rigidbody>().velocity = player.transform.forward * 10;
+			player.GetComponent<Rigidbody>().velocity = player.transform.forward * warpSpeed;
             //inSpeedWarp = false;
 
             // note that we can't destroy this object until the player reaches it

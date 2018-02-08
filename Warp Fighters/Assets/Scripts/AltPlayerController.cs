@@ -98,10 +98,10 @@ public class AltPlayerController : MonoBehaviour {
         {
             transform.Rotate(new Vector3(1 * rotSpeedY, 0, 0));
         }*/
-        if (Input.GetAxis("Mouse Y") > 0)
+        /*if (Input.GetAxis("Mouse Y") > 0)
         {
             transform.Rotate(new Vector3(-1 * rotSpeedY, 0, 0));
-        }
+        }*/
 
 
 
