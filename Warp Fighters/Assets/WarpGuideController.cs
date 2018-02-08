@@ -9,6 +9,7 @@ public class WarpGuideController : MonoBehaviour {
     Vector3 offset;
 
     private float dist; // distance between guide and player
+    private bool inSpeedWarp;
 
     private Text debugText;
 
@@ -19,7 +20,7 @@ public class WarpGuideController : MonoBehaviour {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
         dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
-
+        inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
     }
 
@@ -28,7 +29,7 @@ public class WarpGuideController : MonoBehaviour {
         player = GameObject.Find("Player");
         offset = player.transform.position - transform.position;
         dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
-
+        inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
         SetDebugText();
@@ -140,6 +141,20 @@ public class WarpGuideController : MonoBehaviour {
             transform.eulerAngles = player.transform.eulerAngles;
         }*/
 
+        if (inSpeedWarp)
+        {
+            // send player flying towards this warp guide
+            player.GetComponent<Rigidbody>().velocity = player.transform.forward * 10;
+            //inSpeedWarp = false;
+
+            // note that we can't destroy this object until the player reaches it
+            // but if it takes too long (ie player may have hit something in the way), make them stop and destroy this anyways
+            // should probably also disable the warp guide's maintaining distance to player, otherwise it will move with the player
+            // also make it so that lifting right click does not make warp guide disappear under this flag
+
+            
+        }
+
         
     }
 
@@ -152,14 +167,29 @@ public class WarpGuideController : MonoBehaviour {
 
     void LateUpdate()
     {
-        
-        transform.position = player.transform.position + player.transform.forward * dist;
-        transform.forward = player.transform.forward;
+
+        if (!inSpeedWarp)
+        {
+            transform.position = player.transform.position + player.transform.forward * dist;
+            transform.forward = player.transform.forward;
+        }
 
         if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
         {
-            player.transform.position = transform.position;
-            Destroy(gameObject);
+
+            if (gameObject.tag == "WarpGuide")
+            {
+                player.transform.position = transform.position;
+                Destroy(gameObject);
+            } else
+            {
+                // switch flag to begin speed warping
+                inSpeedWarp = true;
+            }
+
+
+            
+            
         }
 
         if (Input.GetButtonUp("Fire2"))
