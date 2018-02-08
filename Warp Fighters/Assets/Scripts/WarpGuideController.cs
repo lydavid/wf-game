@@ -6,7 +6,7 @@ using UnityEngine;
 public class WarpGuideController : MonoBehaviour {
 
     GameObject player;
-    Vector3 offset;
+    //Vector3 offset;
 
 	public int warpSpeed;
 
@@ -18,9 +18,9 @@ public class WarpGuideController : MonoBehaviour {
     private void Reset()
     {
         player = GameObject.Find("Player");
-        offset = player.transform.position - transform.position;
+        //offset = player.transform.position - transform.position;
 		warpSpeed = 50;
-        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
+		dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
     }
@@ -28,9 +28,9 @@ public class WarpGuideController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         player = GameObject.Find("Player");
-        offset = player.transform.position - transform.position;
+        //offset = player.transform.position - transform.position;
 		warpSpeed = 50;
-        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
+		dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
@@ -69,7 +69,7 @@ public class WarpGuideController : MonoBehaviour {
         {
             //transform.forward = player.transform.forward;
             transform.position += transform.forward * 2;
-            dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
+			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
             //offset = player.transform.position - transform.position;
 
         }
@@ -77,7 +77,7 @@ public class WarpGuideController : MonoBehaviour {
         {
             //transform.forward = player.transform.forward;
             transform.position -= transform.forward * 2;
-            dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2)));
+			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
             //offset = player.transform.position - transform.position;
         }
 

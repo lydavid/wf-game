@@ -26,6 +26,9 @@ public class AltPlayerController : MonoBehaviour {
         rotSpeedX = 5;
         rotSpeedY = 1;
 
+		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
+
+
         // loads prefab from Resources folder at runtime
         warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
         warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
@@ -41,6 +44,8 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
+
+		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
         warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
         warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
@@ -93,12 +98,12 @@ public class AltPlayerController : MonoBehaviour {
         }
 
 
-        /* Turning along y-axis 
-        if (Input.GetAxis("Mouse Y") < 0)
+        /* Turning along y-axis */
+        /*if (Input.GetAxis("Mouse Y") < 0)
         {
             transform.Rotate(new Vector3(1 * rotSpeedY, 0, 0));
-        }*/
-        /*if (Input.GetAxis("Mouse Y") > 0)
+        }
+        if (Input.GetAxis("Mouse Y") > 0)
         {
             transform.Rotate(new Vector3(-1 * rotSpeedY, 0, 0));
         }*/
