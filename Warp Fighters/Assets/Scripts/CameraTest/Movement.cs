@@ -93,9 +93,12 @@ public class Movement : MonoBehaviour {
 
 		var mousePos = Input.mousePosition;
    		mousePos.z = 10; // select distance = 10 units from the camera
-   		Debug.Log(camera.ScreenToWorldPoint(mousePos));
+		Vector3 dir = camera.ScreenToWorldPoint(mousePos);
+   		Debug.Log(dir);
 
-		
+		body.transform.LookAt(dir);
+
+
 
 	}
 }
