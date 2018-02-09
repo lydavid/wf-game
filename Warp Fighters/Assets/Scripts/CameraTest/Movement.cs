@@ -24,15 +24,11 @@ public class Movement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//rb = GetComponent<Rigidbody>();
-		centroDaTela.x = 0.5f;
-        centroDaTela.y = 0.5f;
-        centroDaTela.z = 0f;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//FocoRaycast();
+
 		//RaycastHit hit;
 		//Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		//Vector3 pos = Camera.main.ScreenPointToRay(Input.mousePosition).GetPoint(20);
@@ -62,12 +58,6 @@ public class Movement : MonoBehaviour {
 		//body.transform.rotation= Quaternion.LookRotation(Vector3.forward,targetdir);
 
 	}
-
-	private void FocoRaycast(){
-        RaycastHit hitInfo;
-        Ray cameraRay = camera.ViewportPointToRay(centroDaTela);
-    }
-    
 
 	void updateState(){
 		float mH = Input.GetAxis("Horizontal");
