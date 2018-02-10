@@ -21,6 +21,10 @@ public class AltPlayerController : MonoBehaviour {
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
 
+
+    public Material standardWarpGuide;
+    public Material altWarpGuide;
+
     Rigidbody rb;
 
     private bool warpGuideToggleAvailable;
@@ -56,6 +60,13 @@ public class AltPlayerController : MonoBehaviour {
     {
         rb = GetComponent<Rigidbody>();
         angle = transform.eulerAngles;
+
+        foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
+        {
+            renderer.material.color = Color.blue;
+        }
+
+
     }
 
     // Use this for initialization
@@ -89,15 +100,24 @@ public class AltPlayerController : MonoBehaviour {
         if (Input.GetKeyDown("1"))
         {
             isSpeedWarp = false;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
-            
+            //GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
+            {
+                renderer.material.color = Color.blue;
+            }
+
         }
 
         // red = superspeed warp
         if (Input.GetKeyDown("2"))
         {
             isSpeedWarp = true;
-            GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            //GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
+            {
+                renderer.material.color = Color.red;
+            }
         }
 
         /* Movement */
@@ -192,7 +212,7 @@ public class AltPlayerController : MonoBehaviour {
         }
 
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
         Debug.DrawRay(transform.position, forward, Color.green);
 
 
@@ -203,13 +223,22 @@ public class AltPlayerController : MonoBehaviour {
 
             GameObject warpGuide;
 
-            if (isSpeedWarp)
+            warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
+            foreach (Renderer renderer in warpGuide.GetComponentsInChildren<Renderer>())
             {
-                warpGuide = Instantiate(warpGuideRedPrefab, pos, transform.rotation);
-            } else
-            {
-                warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
+                if (isSpeedWarp)
+                {
+                    renderer.material = altWarpGuide;
+                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(true);
+                } else
+                {
+                    renderer.material = standardWarpGuide;
+                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(false);
+                }
+                
+                    
             }
+
             warpGuideToggleAvailable = false;
             
         } else if (Input.GetButtonDown("Fire1") || (Input.GetButtonDown("Fire2") && !warpGuideToggleAvailable))

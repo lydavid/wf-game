@@ -11,14 +11,24 @@ public class WarpGuideController : MonoBehaviour {
 	public int warpSpeed;
     public int warpGuideSpeed;
 
+    public bool isSpeedWarpGuide; // whether this guide is a speed warp version or not (standard)
+
     private float dist; // distance between guide and player
-    private bool inSpeedWarp;
+
+
+    
+    private bool inSpeedWarp; // flag to indicate that player has entered speed warp
 
     float scroll;
 
     private bool warpGuideToggleAvailable;
 
     private Text debugText;
+
+    public void SetAsSpeedWarpGuide(bool speedWarpGuide)
+    {
+        isSpeedWarpGuide = speedWarpGuide;
+    }
 
     private void Reset()
     {
@@ -52,7 +62,7 @@ public class WarpGuideController : MonoBehaviour {
         if (Input.GetKeyDown("1"))
         {
 
-            GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            //GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
             foreach (Renderer variableName in GetComponentsInChildren<Renderer>())
             {
                 variableName.material.color = Color.blue;
@@ -62,8 +72,8 @@ public class WarpGuideController : MonoBehaviour {
         // red = superspeed warp
         if (Input.GetKeyDown("2"))
         {
-
-            GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            
+            //GetComponent<Renderer>().material.SetColor("_Color", Color.red);
             foreach (Renderer variableName in GetComponentsInChildren<Renderer>())
             {
                 variableName.material.color = Color.red;
@@ -94,7 +104,7 @@ public class WarpGuideController : MonoBehaviour {
             Vector3 dir = (transform.position - player.transform.position).normalized;
 
             player.GetComponent<Rigidbody>().velocity = dir * warpSpeed;
-            //inSpeedWarp = false;
+            inSpeedWarp = false;
             Destroy(gameObject);
             // note that we can't destroy this object until the player reaches it
             // but if it takes too long (ie player may have hit something in the way), make them stop and destroy this anyways
@@ -120,19 +130,15 @@ public class WarpGuideController : MonoBehaviour {
         {
             SetPlayerUpright();
 
-            if (gameObject.tag == "WarpGuide")
-            {
-                player.transform.position = transform.position;
-                Destroy(gameObject);
-            } else
+            if (isSpeedWarpGuide)
             {
                 // switch flag to begin speed warping
                 inSpeedWarp = true;
+            } else
+            {
+                player.transform.position = transform.position;
+                Destroy(gameObject);
             }
-
-
-            
-            
         }
 
         if (Input.GetButtonDown("Fire2") && warpGuideToggleAvailable)
@@ -157,6 +163,6 @@ public class WarpGuideController : MonoBehaviour {
         debugText.text = "Guide: (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + ")";
         debugText.text += "\nRot: (" + transform.eulerAngles.x + ", " + transform.eulerAngles.y + ", " + transform.eulerAngles.z + ")";
         debugText.text += "\nDist: " + dist;
-        debugText.text += " Scroll: " + scroll;
+        debugText.text += " inWarpSpeed: " + inSpeedWarp;
     }
 }
