@@ -84,7 +84,9 @@ public class WarpGuideController : MonoBehaviour {
         if (inSpeedWarp)
         {
             // send player flying towards this warp guide
-			player.GetComponent<Rigidbody>().velocity = player.transform.forward * warpSpeed;
+            Vector3 dir = (transform.position - player.transform.position).normalized;
+
+            player.GetComponent<Rigidbody>().velocity = dir * warpSpeed;
             //inSpeedWarp = false;
 
             // note that we can't destroy this object until the player reaches it
@@ -142,9 +144,10 @@ public class WarpGuideController : MonoBehaviour {
         SetDebugText();
     }
 
+    // makes player upright, but also maintaining player's turn direction ie y rotation)
     void SetPlayerUpright()
     {
-        player.transform.eulerAngles = new Vector3(0, 0, 0);
+        player.transform.eulerAngles = new Vector3(0, player.transform.eulerAngles.y, 0);
     }
 
     void SetDebugText()

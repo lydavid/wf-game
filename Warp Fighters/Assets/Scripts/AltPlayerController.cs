@@ -121,37 +121,27 @@ public class AltPlayerController : MonoBehaviour {
 
 
         /* Turning along x-axis */
-        if (Input.GetKey("4"))
+        if (Input.GetAxis("Mouse X") < 0)
         {
-            if (Input.GetAxis("Mouse X") < 0)
-            {
-                //transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 * rotSpeedX, transform.eulerAngles.z);
-            }
-            if (Input.GetAxis("Mouse X") > 0)
-            {
-                //transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 * rotSpeedX, transform.eulerAngles.z);
-            }
+            //transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 * rotSpeedX, transform.eulerAngles.z);
+        }
+        if (Input.GetAxis("Mouse X") > 0)
+        {
+            //transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 * rotSpeedX, transform.eulerAngles.z);
         }
 
-
         /* Turning along y-axis */
-        if (Input.GetKey("4"))
+        if (Input.GetAxis("Mouse Y") < 0)
         {
-            
-            
-
-            if (Input.GetAxis("Mouse Y") < 0)
-            {
-                //transform.Rotate(new Vector3(1 * rotSpeedX, 0, 0));
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x + 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
-            }
-            if (Input.GetAxis("Mouse Y") > 0)
-            { 
-                //transform.Rotate(new Vector3(-1 * rotSpeedX, 0, 0));
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x -1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
-            }
+            //transform.Rotate(new Vector3(1 * rotSpeedX, 0, 0));
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x + 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
+        }
+        if (Input.GetAxis("Mouse Y") > 0)
+        { 
+            //transform.Rotate(new Vector3(-1 * rotSpeedX, 0, 0));
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x -1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
         }
 
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
