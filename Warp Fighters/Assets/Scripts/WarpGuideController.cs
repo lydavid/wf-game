@@ -9,9 +9,12 @@ public class WarpGuideController : MonoBehaviour {
     //Vector3 offset;
 
 	public int warpSpeed;
+    public int warpGuideSpeed;
 
     private float dist; // distance between guide and player
     private bool inSpeedWarp;
+
+    float scroll;
 
     private Text debugText;
 
@@ -20,6 +23,7 @@ public class WarpGuideController : MonoBehaviour {
         player = GameObject.Find("Player");
         //offset = player.transform.position - transform.position;
 		warpSpeed = 50;
+        warpGuideSpeed = 2;
 		dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
@@ -30,7 +34,8 @@ public class WarpGuideController : MonoBehaviour {
         player = GameObject.Find("Player");
         //offset = player.transform.position - transform.position;
 		warpSpeed = 50;
-		dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
+        warpGuideSpeed = 2;
+        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
@@ -64,22 +69,20 @@ public class WarpGuideController : MonoBehaviour {
 
 
 
-
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        scroll = Input.GetAxis("Right Stick Y"); //Input.GetAxis("Mouse ScrollWheel");
+        transform.position -= transform.forward * warpGuideSpeed * scroll;
+        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
+        /*if (scroll > 0f) // forward
         {
-            //transform.forward = player.transform.forward;
-            transform.position += transform.forward * 2;
-			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
-            //offset = player.transform.position - transform.position;
+            transform.position -= transform.forward * warpGuideSpeed * scroll;
+            dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
 
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        else if (scroll < 0f) // backwards
         {
-            //transform.forward = player.transform.forward;
-            transform.position -= transform.forward * 2;
+            transform.position -= transform.forward * warpGuideSpeed * scroll;
 			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
-            //offset = player.transform.position - transform.position;
-        }
+        }*/
 
         if (inSpeedWarp)
         {
@@ -148,5 +151,6 @@ public class WarpGuideController : MonoBehaviour {
         debugText.text = "Guide: (" + transform.position.x + ", " + transform.position.y + ", " + transform.position.z + ")";
         debugText.text += "\nRot: (" + transform.eulerAngles.x + ", " + transform.eulerAngles.y + ", " + transform.eulerAngles.z + ")";
         debugText.text += "\nDist: " + dist;
+        debugText.text += " Scroll: " + scroll;
     }
 }

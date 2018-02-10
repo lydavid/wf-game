@@ -12,6 +12,9 @@ public class AltPlayerController : MonoBehaviour {
     public int rotSpeedX; // speed of rotating player with horizontal mouse axis
     public int rotSpeedY;
 
+    public bool usePC; // flag to determine whether to use PC setup or Controller
+
+    [Header("Jump")]
     [Range(1, 10)]
     public float jumpVelocity;
 
@@ -20,6 +23,7 @@ public class AltPlayerController : MonoBehaviour {
 
     Rigidbody rb;
 
+    [Header("Debug")]
     public Text debugText;
 
     private GameObject warpGuidePrefab; // stores location of prefab
@@ -35,6 +39,7 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
+        usePC = false;
 
 		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
@@ -60,6 +65,7 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
+        usePC = false;
 
 		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
@@ -125,30 +131,64 @@ public class AltPlayerController : MonoBehaviour {
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
 
+        /* === PC === */
 
-        /* Turning along x-axis */
-        if (Input.GetAxis("Mouse X") < 0)
+        if (usePC)
         {
-            //transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 * rotSpeedX, transform.eulerAngles.z);
+            /* Turning along x-axis */
+            if (Input.GetAxis("Mouse X") < 0)
+            {
+                //transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 * rotSpeedX, transform.eulerAngles.z);
+            }
+            if (Input.GetAxis("Mouse X") > 0)
+            {
+                //transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 * rotSpeedX, transform.eulerAngles.z);
+            }
+
+            /* Turning along y-axis */
+            if (Input.GetAxis("Mouse Y") < 0)
+            {
+                //transform.Rotate(new Vector3(1 * rotSpeedX, 0, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x + 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+            if (Input.GetAxis("Mouse Y") > 0)
+            {
+                //transform.Rotate(new Vector3(-1 * rotSpeedX, 0, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x - 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
         }
-        if (Input.GetAxis("Mouse X") > 0)
+        else
         {
-            //transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 * rotSpeedX, transform.eulerAngles.z);
+            /* === Controller === */
+
+            /* Turning along x-axis */
+            if (Input.GetAxis("Right Stick X") < 0)
+            {
+                //transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 1 * rotSpeedX, transform.eulerAngles.z);
+            }
+            if (Input.GetAxis("Right Stick X") > 0)
+            {
+                //transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 1 * rotSpeedX, transform.eulerAngles.z);
+            }
+
+            /* Turning along y-axis */
+            if (Input.GetAxis("Right Stick Y") < 0)
+            {
+                //transform.Rotate(new Vector3(1 * rotSpeedX, 0, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x - 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+            if (Input.GetAxis("Right Stick Y") > 0)
+            {
+                //transform.Rotate(new Vector3(-1 * rotSpeedX, 0, 0));
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x + 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
+            }
+
         }
 
-        /* Turning along y-axis */
-        if (Input.GetAxis("Mouse Y") < 0)
-        {
-            //transform.Rotate(new Vector3(1 * rotSpeedX, 0, 0));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x + 1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
-        }
-        if (Input.GetAxis("Mouse Y") > 0)
-        { 
-            //transform.Rotate(new Vector3(-1 * rotSpeedX, 0, 0));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x -1 * rotSpeedY, transform.eulerAngles.y, transform.eulerAngles.z);
-        }
 
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(transform.position, forward, Color.green);
