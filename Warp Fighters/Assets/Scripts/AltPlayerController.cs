@@ -103,6 +103,12 @@ public class AltPlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
         }
 
+        // allows us to click back into game
+        if (Input.GetMouseButtonDown(0))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -169,16 +175,7 @@ public class AltPlayerController : MonoBehaviour {
         /* Warp */
         // Warping is currently handled in the warp guide script
 
-        /* Implement Player gravity */
-        UseGravity();
-
         SetDebugText();
-    }
-
-    // Gravity script here
-    void UseGravity()
-    {
-        
     }
 
     void SetDebugText()

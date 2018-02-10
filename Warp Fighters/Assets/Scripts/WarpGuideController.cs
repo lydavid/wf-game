@@ -100,13 +100,6 @@ public class WarpGuideController : MonoBehaviour {
         
     }
 
-    private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles) {
-       Vector3 dir = point - pivot;
-       dir = Quaternion.Euler(angles) * dir; // rotate it
-       point = dir + pivot; // calculate rotated point
-       return point; // return it
-}
-
     void LateUpdate()
     {
 
