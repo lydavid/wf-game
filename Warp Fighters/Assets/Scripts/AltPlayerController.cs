@@ -89,6 +89,7 @@ public class AltPlayerController : MonoBehaviour {
         SetDebugText();
 
         Cursor.lockState = CursorLockMode.Locked;
+        player.GetComponent<Animator>().SetBool("isWarpGuideActive", false);
     }
 
     // Update is called once per frame
@@ -245,6 +246,7 @@ public class AltPlayerController : MonoBehaviour {
         {
             // allows warp guide to toggle on after warping or after disabling warp guide in a previous frame
             warpGuideToggleAvailable = true;
+            player.GetComponent<Animator>().SetBool("isWarpGuideActive", true);
         }
 
             /* Warp */

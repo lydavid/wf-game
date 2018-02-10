@@ -135,8 +135,14 @@ public class WarpGuideController : MonoBehaviour {
                 // switch flag to begin speed warping
                 inSpeedWarp = true;
             } else
-            {
+            {   
+                
+                //Plays warp audio
+                AudioSource audio = player.GetComponent<AudioSource>();
+                audio.Play();
+
                 player.transform.position = transform.position;
+                player.GetComponent<Animator>().SetBool("isWarpGuideActive", false);
                 Destroy(gameObject);
             }
         }
