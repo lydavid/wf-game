@@ -7,7 +7,6 @@ public class Movement : MonoBehaviour {
 	[Header("Properties")][SerializeField]
 	private float speed = 10f;
 	public GameObject body;
-	private Vector3 centroDaTela;
 	public Camera camera;
 
 	/*
@@ -29,19 +28,7 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//RaycastHit hit;
-		//Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		//Vector3 pos = Camera.main.ScreenPointToRay(Input.mousePosition).GetPoint(20);
-
-		//transform.LookAt(pos);
-
-		//float dist = 10.0f;
-		/* 
-		if (Physics.Raycast(ray, out hit)){
-			transform.LookAt(hit.point);
-		}else {
-			transform.LookAt(ray.origin + ray.direction * dist);
-		}*/
+		
 		updateState();
 		movePlayer();
 		/* 
@@ -52,10 +39,6 @@ public class Movement : MonoBehaviour {
 		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 0.15f);
 		transform.Translate(dir * speed * Time.deltaTime);*/
 		//Vector3 mousePositionVector3 = new Vector3(Input.mousePosition.x,Input.mousePosition.y,0);
-
-		//mousePositionVector3 = Camera.main.ScreenToWorldPoint(mousePositionVector3);
-		//Vector3 targetdir = mousePositionVector3 - body.transform.position;
-		//body.transform.rotation= Quaternion.LookRotation(Vector3.forward,targetdir);
 
 	}
 
