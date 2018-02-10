@@ -23,6 +23,8 @@ public class AltPlayerController : MonoBehaviour {
 
     Rigidbody rb;
 
+    private bool warpGuideToggleAvailable;
+
     [Header("Debug")]
     public Text debugText;
 
@@ -39,9 +41,9 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
-        usePC = false;
-
-		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
+        usePC = true;
+        warpGuideToggleAvailable = true;
+        debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
 
         // loads prefab from Resources folder at runtime
@@ -66,7 +68,7 @@ public class AltPlayerController : MonoBehaviour {
         rotSpeedX = 5;
         rotSpeedY = 1;
         usePC = true;
-
+        warpGuideToggleAvailable = true;
 		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
         warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
@@ -86,7 +88,7 @@ public class AltPlayerController : MonoBehaviour {
         // blue = instantaneous warp
         if (Input.GetKeyDown("1"))
         {
-            isSpeedWarp = true;
+            isSpeedWarp = false;
             GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
             
         }
@@ -195,7 +197,7 @@ public class AltPlayerController : MonoBehaviour {
 
 
         /* Warp Guide */
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && warpGuideToggleAvailable)
         {
             Vector3 pos = player.transform.position + transform.forward * init_dist;
 
@@ -208,14 +210,18 @@ public class AltPlayerController : MonoBehaviour {
             {
                 warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
             }
-
+            warpGuideToggleAvailable = false;
             
+        } else if (Input.GetButtonDown("Fire1") || (Input.GetButtonDown("Fire2") && !warpGuideToggleAvailable))
+        {
+            // allows warp guide to toggle on after warping or after disabling warp guide in a previous frame
+            warpGuideToggleAvailable = true;
         }
 
-        /* Warp */
-        // Warping is currently handled in the warp guide script
+            /* Warp */
+            // Warping is currently handled in the warp guide script
 
-        SetDebugText();
+            SetDebugText();
     }
 
     void SetDebugText()

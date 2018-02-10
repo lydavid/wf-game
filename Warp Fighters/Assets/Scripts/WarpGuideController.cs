@@ -16,16 +16,19 @@ public class WarpGuideController : MonoBehaviour {
 
     float scroll;
 
+    private bool warpGuideToggleAvailable;
+
     private Text debugText;
 
     private void Reset()
     {
         player = GameObject.Find("Player");
         //offset = player.transform.position - transform.position;
-		warpSpeed = 50;
-        warpGuideSpeed = 2;
+		warpSpeed = 100;
+        warpGuideSpeed = 20;
 		dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
+        warpGuideToggleAvailable = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
     }
 
@@ -33,10 +36,11 @@ public class WarpGuideController : MonoBehaviour {
     void Start () {
         player = GameObject.Find("Player");
         //offset = player.transform.position - transform.position;
-		warpSpeed = 50;
-        warpGuideSpeed = 2;
+		warpSpeed = 100;
+        warpGuideSpeed = 20;
         dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         inSpeedWarp = false;
+        warpGuideToggleAvailable = false;
         debugText = GameObject.Find("DebugTextGuide").GetComponent<Text>();
 
         SetDebugText();
@@ -69,20 +73,20 @@ public class WarpGuideController : MonoBehaviour {
 
 
 
-        scroll = Input.GetAxis("Right Stick Y"); //Input.GetAxis("Mouse ScrollWheel");
-        transform.position -= transform.forward * warpGuideSpeed * scroll;
-        dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
-        /*if (scroll > 0f) // forward
+        scroll = Input.GetAxis("Mouse ScrollWheel"); //Input.GetAxis("Right Stick Y");
+        //transform.position -= transform.forward * warpGuideSpeed * scroll;
+        //dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
+        if (scroll > 0f) // forward
         {
-            transform.position -= transform.forward * warpGuideSpeed * scroll;
+            transform.position += transform.forward * warpGuideSpeed * scroll;
             dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
 
         }
         else if (scroll < 0f) // backwards
         {
-            transform.position -= transform.forward * warpGuideSpeed * scroll;
+            transform.position += transform.forward * warpGuideSpeed * scroll;
 			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
-        }*/
+        }
 
         if (inSpeedWarp)
         {
@@ -91,7 +95,7 @@ public class WarpGuideController : MonoBehaviour {
 
             player.GetComponent<Rigidbody>().velocity = dir * warpSpeed;
             //inSpeedWarp = false;
-
+            Destroy(gameObject);
             // note that we can't destroy this object until the player reaches it
             // but if it takes too long (ie player may have hit something in the way), make them stop and destroy this anyways
             // should probably also disable the warp guide's maintaining distance to player, otherwise it will move with the player
@@ -112,7 +116,7 @@ public class WarpGuideController : MonoBehaviour {
             transform.forward = player.transform.forward;
         }
 
-        if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
+        if (Input.GetButtonDown("Fire1") && !Input.GetButtonDown("Fire2"))
         {
             SetPlayerUpright();
 
@@ -131,11 +135,13 @@ public class WarpGuideController : MonoBehaviour {
             
         }
 
-        if (Input.GetButtonUp("Fire2"))
+        if (Input.GetButtonDown("Fire2") && warpGuideToggleAvailable)
         {
             SetPlayerUpright();
             Destroy(gameObject);
         }
+
+        warpGuideToggleAvailable = true;
 
         SetDebugText();
     }
