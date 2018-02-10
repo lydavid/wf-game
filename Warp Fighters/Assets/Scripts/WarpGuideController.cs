@@ -116,6 +116,7 @@ public class WarpGuideController : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1") && !Input.GetButtonUp("Fire2"))
         {
+            SetPlayerUpright();
 
             if (gameObject.tag == "WarpGuide")
             {
@@ -134,10 +135,16 @@ public class WarpGuideController : MonoBehaviour {
 
         if (Input.GetButtonUp("Fire2"))
         {
+            SetPlayerUpright();
             Destroy(gameObject);
         }
 
         SetDebugText();
+    }
+
+    void SetPlayerUpright()
+    {
+        player.transform.eulerAngles = new Vector3(0, 0, 0);
     }
 
     void SetDebugText()

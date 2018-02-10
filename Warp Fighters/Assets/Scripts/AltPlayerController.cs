@@ -121,7 +121,7 @@ public class AltPlayerController : MonoBehaviour {
 
 
         /* Turning along x-axis */
-        if (Input.GetKey("3"))
+        if (Input.GetKey("4"))
         {
             if (Input.GetAxis("Mouse X") < 0)
             {
