@@ -12,6 +12,14 @@ public class AltPlayerController : MonoBehaviour {
     public int rotSpeedX; // speed of rotating player with horizontal mouse axis
     public int rotSpeedY;
 
+    [Range(1, 10)]
+    public float jumpVelocity;
+
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
+
+    Rigidbody rb;
+
     public Text debugText;
 
     private GameObject warpGuidePrefab; // stores location of prefab
@@ -33,6 +41,11 @@ public class AltPlayerController : MonoBehaviour {
         warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
         warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
         isSpeedWarp = false;
+    }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
     }
 
     // Use this for initialization
@@ -87,27 +100,50 @@ public class AltPlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
         }
 
-        /* Turning along x-axis */
-        if (Input.GetAxis("Mouse X") < 0)
+
+        if (Input.GetButtonDown("Jump"))
         {
-            transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
+            GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
         }
-        if (Input.GetAxis("Mouse X") > 0)
+
+        if (rb.velocity.y < 0)
         {
-            transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+
+
+        /* Turning along x-axis */
+        if (Input.GetKey("3"))
+        {
+            if (Input.GetAxis("Mouse X") < 0)
+            {
+                transform.Rotate(new Vector3(0, -1 * rotSpeedX, 0));
+            }
+            if (Input.GetAxis("Mouse X") > 0)
+            {
+                transform.Rotate(new Vector3(0, 1 * rotSpeedX, 0));
+            }
         }
 
 
         /* Turning along y-axis */
-        /*if (Input.GetAxis("Mouse Y") < 0)
+        if (Input.GetKey("4"))
         {
-            transform.Rotate(new Vector3(1 * rotSpeedY, 0, 0));
-        }
-        if (Input.GetAxis("Mouse Y") > 0)
-        {
-            transform.Rotate(new Vector3(-1 * rotSpeedY, 0, 0));
-        }*/
 
+            if (Input.GetAxis("Mouse Y") < 0)
+            {
+                transform.Rotate(new Vector3(1 * rotSpeedY, 0, 0));
+            }
+            if (Input.GetAxis("Mouse Y") > 0)
+            {
+                transform.Rotate(new Vector3(-1 * rotSpeedY, 0, 0));
+            }
+        }
 
 
         /* Warp Guide */
@@ -131,7 +167,16 @@ public class AltPlayerController : MonoBehaviour {
         /* Warp */
         // Warping is currently handled in the warp guide script
 
+        /* Implement Player gravity */
+        UseGravity();
+
         SetDebugText();
+    }
+
+    // Gravity script here
+    void UseGravity()
+    {
+        
     }
 
     void SetDebugText()
