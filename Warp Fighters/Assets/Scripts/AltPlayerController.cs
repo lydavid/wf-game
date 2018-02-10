@@ -65,7 +65,7 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
-        usePC = false;
+        usePC = true;
 
 		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
@@ -86,7 +86,7 @@ public class AltPlayerController : MonoBehaviour {
         // blue = instantaneous warp
         if (Input.GetKeyDown("1"))
         {
-            isSpeedWarp = false;
+            isSpeedWarp = true;
             GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
             
         }
