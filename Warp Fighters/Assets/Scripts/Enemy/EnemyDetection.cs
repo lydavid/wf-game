@@ -6,6 +6,7 @@ public class EnemyDetection : MonoBehaviour {
 
 	public GameObject player;
 	private Rigidbody rb;
+	public bool enemySpotted = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -14,6 +15,9 @@ public class EnemyDetection : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (enemySpotted){
+			transform.LookAt(player.transform);
+		}
 
 	}
 
@@ -29,7 +33,7 @@ public class EnemyDetection : MonoBehaviour {
         Debug.DrawRay(start, forward, Color.green);
 		Debug.DrawRay(start, left, Color.green);
 		Debug.DrawRay(start, right, Color.green);*/
-
+		Debug.Log("enemey spotted is: " + enemySpotted);
 		
 		for (float i = -30; i <= 30; i+=0.5f) {
 			Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
@@ -42,9 +46,33 @@ public class EnemyDetection : MonoBehaviour {
 				
 				if (hit.rigidbody == rb){
 					Debug.Log("Player hit!");
+					enemySpotted = true;
 					break;
 				}
 			}
+		}
+
+		bool playerThere = enemySpotted;
+		if (enemySpotted) {
+			for (float i = -30; i <= 30; i+=0.5f) {
+				Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
+				if (Physics.Raycast(start, dir, out hit)){
+				
+					if (hit.rigidbody == rb){
+						playerThere = true;
+						break;
+					}
+				}
+				if (i == 30) {
+					enemySpotted = false;
+				}
+			}
+		
+			
+		}
+
+		if(!playerThere){
+			enemySpotted=false;
 		}
 
 	}

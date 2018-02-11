@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour {
 	private bool moveToA = false;
 	private bool moveToB = true;
 	private bool wait = false;
+
 	
 	// Use this for initialization
 	void Start () {
@@ -16,7 +17,12 @@ public class EnemyMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		moveBetweenPoints();
+
+		bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
+		if (!enemySpotted) {
+			moveBetweenPoints();
+		}
+		
 	}
 
 	void moveBetweenPoints () {
