@@ -80,7 +80,7 @@ public class AltPlayerController : MonoBehaviour {
         rotSpeedY = 1;
         usePC = true;
         warpGuideToggleAvailable = true;
-		debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
+		//debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
         warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
         warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
