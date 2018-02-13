@@ -7,6 +7,7 @@ public class EnemyDetection : MonoBehaviour {
 	public GameObject player;
 	private Rigidbody rb;
 	public bool enemySpotted = false;
+	private bool playerThere = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -18,7 +19,6 @@ public class EnemyDetection : MonoBehaviour {
 		if (enemySpotted){
 			transform.LookAt(player.transform);
 		}
-
 	}
 
 	void FixedUpdate () {
@@ -33,24 +33,39 @@ public class EnemyDetection : MonoBehaviour {
         Debug.DrawRay(start, forward, Color.green);
 		Debug.DrawRay(start, left, Color.green);
 		Debug.DrawRay(start, right, Color.green);*/
-		Debug.Log("enemey spotted is: " + enemySpotted);
+		//Debug.Log("enemey spotted is: " + enemySpotted);
 		
 		for (float i = -30; i <= 30; i+=0.5f) {
 			Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
 			Debug.DrawRay(start, dir, Color.red);
 		}
-
+		
+		
 		for (float i = -30; i <= 30; i+=0.5f) {
 			Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
 			if (Physics.Raycast(start, dir, out hit)){
-				
+				if (hit.rigidbody){
+					Debug.Log(hit.rigidbody);
+				}
+			
 				if (hit.rigidbody == rb){
 					Debug.Log("Player hit!");
 					enemySpotted = true;
+					playerThere = true;
 					break;
 				}
 			}
+			if (i == 30) {
+				enemySpotted = false;
+				playerThere = false;
+			}
 		}
+
+		if(!playerThere){
+			enemySpotted=false;
+		}
+
+		/* 
 
 		bool playerThere = enemySpotted;
 		if (enemySpotted) {
@@ -65,15 +80,14 @@ public class EnemyDetection : MonoBehaviour {
 				}
 				if (i == 30) {
 					enemySpotted = false;
+					playerThere = false;
 				}
 			}
 		
 			
-		}
+		}*/
 
-		if(!playerThere){
-			enemySpotted=false;
-		}
+	
 
 	}
 }

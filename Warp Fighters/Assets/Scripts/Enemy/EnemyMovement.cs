@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
-	public float speed;
+	public float speed = 5.0f;
 	public Transform target, start;
 	private bool moveToA = false;
 	private bool moveToB = true;
@@ -25,6 +25,9 @@ public class EnemyMovement : MonoBehaviour {
 		
 	}
 
+	/*
+	Moves enemy between points A and B
+	 */
 	void moveBetweenPoints () {
 
 		float step = speed * Time.deltaTime;
@@ -33,10 +36,12 @@ public class EnemyMovement : MonoBehaviour {
 		}else{
 
 			if (moveToB){
+				transform.LookAt(target.transform);
 				transform.position = Vector3.MoveTowards(transform.position, target.position, step);
 			}
 
 			if (moveToA) {
+				transform.LookAt(start.transform);
 				transform.position = Vector3.MoveTowards(transform.position, start.position, step);
 				
 			}
