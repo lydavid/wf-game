@@ -44,10 +44,6 @@ public class EnemyDetection : MonoBehaviour {
 		for (float i = -30; i <= 30; i+=0.5f) {
 			Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
 			if (Physics.Raycast(start, dir, out hit)){
-				if (hit.rigidbody){
-					Debug.Log(hit.rigidbody);
-				}
-			
 				if (hit.rigidbody == rb){
 					Debug.Log("Player hit!");
 					enemySpotted = true;
