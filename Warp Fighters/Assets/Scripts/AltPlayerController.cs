@@ -45,13 +45,13 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
-        usePC = true;
+        usePC = false;
         warpGuideToggleAvailable = true;
         debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
 
         // loads prefab from Resources folder at runtime
-        warpGuidePrefab = (GameObject)Resources.Load("Prefabs/Warp Guide", typeof(GameObject));
+        warpGuidePrefab = (GameObject)Resources.Load("Resources/prefabs/Warp Guide", typeof(GameObject));
         warpGuideRedPrefab = (GameObject)Resources.Load("Prefabs/Warp Guide Red", typeof(GameObject));
         isSpeedWarp = false;
     }
@@ -78,7 +78,7 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
-        usePC = true;
+        usePC = false;
         warpGuideToggleAvailable = true;
 		//debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
@@ -98,7 +98,7 @@ public class AltPlayerController : MonoBehaviour {
 
         /* Change warp type/color */
         // blue = instantaneous warp
-        if (Input.GetKeyDown("1"))
+        if (Input.GetButtonDown("Left Bumper"))
         {
             isSpeedWarp = false;
             //GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
@@ -111,7 +111,7 @@ public class AltPlayerController : MonoBehaviour {
         }
 
         // red = superspeed warp
-        if (Input.GetKeyDown("2"))
+        if (Input.GetButtonDown("Right Bumper"))
         {
             isSpeedWarp = true;
             //GetComponent<Renderer>().material.SetColor("_Color", Color.red);

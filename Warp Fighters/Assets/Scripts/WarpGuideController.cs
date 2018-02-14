@@ -20,6 +20,7 @@ public class WarpGuideController : MonoBehaviour {
     private bool inSpeedWarp; // flag to indicate that player has entered speed warp
 
     float scroll;
+    float scroll1;
 
     private bool warpGuideToggleAvailable;
 
@@ -59,7 +60,7 @@ public class WarpGuideController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown("1"))
+        if (Input.GetButtonDown("Left Bumper"))
         {
 
             //GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
@@ -70,7 +71,7 @@ public class WarpGuideController : MonoBehaviour {
         }
 
         // red = superspeed warp
-        if (Input.GetKeyDown("2"))
+        if (Input.GetButtonDown("Right Bumper"))
         {
             
             //GetComponent<Renderer>().material.SetColor("_Color", Color.red);
@@ -83,18 +84,19 @@ public class WarpGuideController : MonoBehaviour {
 
 
 
-        scroll = Input.GetAxis("Mouse ScrollWheel"); //Input.GetAxis("Right Stick Y");
+        scroll = Input.GetAxis("Left Trigger"); //Input.GetAxis("Mouse ScrollWheel"); //
+        scroll1 = Input.GetAxis("Right Trigger");
         //transform.position -= transform.forward * warpGuideSpeed * scroll;
         //dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         if (scroll > 0f) // forward
         {
-            transform.position += transform.forward * warpGuideSpeed * scroll;
+            transform.position += transform.forward * scroll;
             dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
 
         }
-        else if (scroll < 0f) // backwards
+        else if (scroll1 > 0f) // backwards
         {
-            transform.position += transform.forward * warpGuideSpeed * scroll;
+            transform.position -= transform.forward * scroll1;
 			dist = Mathf.Round(Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.z - player.transform.position.z, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2)));
         }
 
