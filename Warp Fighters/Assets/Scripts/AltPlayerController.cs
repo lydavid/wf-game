@@ -249,10 +249,11 @@ public class AltPlayerController : MonoBehaviour {
             player.GetComponent<Animator>().SetBool("isWarpGuideActive", true);
         }
 
-            /* Warp */
-            // Warping is currently handled in the warp guide script
+        /* Warp */
+        // Warping is currently handled in the warp guide script
 
-            SetDebugText();
+
+        //SetDebugText();
     }
 
     void SetDebugText()
