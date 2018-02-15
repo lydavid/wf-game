@@ -4,50 +4,23 @@ using UnityEngine;
 
 public class MeshEffect : MonoBehaviour {
 
-    MeshFilter[] mfs;
-    List<GameObject> GOs = new List<GameObject>();
+    // parallel lists
+    List<GameObject> triangleMeshes = new List<GameObject>();
     List<Vector3> originalPositions = new List<Vector3>();
     List<Quaternion> originalRotations = new List<Quaternion>();
     List<bool> reachedDest = new List<bool>();
-    bool warpComplete = false;
-    bool inWarp = false;
 
-    private void Awake()
-    {
-        mfs = gameObject.GetComponentsInChildren<MeshFilter>();
-
-    }
+    bool warpComplete = false;  // indicates that object has just completed its warp
+    bool inWarp = false;  // indicates object is in warp
 
     // Use this for initialization
     void Start () {
-        //StartCoroutine(SplitMesh(true));
         
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown("4"))
-        {
 
-            foreach (MeshFilter mf in mfs)
-            {
-
-                Vector3[] vertices = mf.mesh.vertices;
-                Vector3[] normals = mf.mesh.normals;
-                int[] triangles = mf.mesh.triangles;
-
-                int i = 0;
-                while (i < vertices.Length / 3)
-                {
-                    vertices[i] += normals[i];
-                    vertices[i+1] += normals[i+1];
-                    vertices[i+2] += normals[i+2];
-                    i += 3;
-
-                }
-                mf.mesh.vertices = vertices;
-            }
-        }
 
         if (Input.GetKeyDown("space"))
         {
@@ -56,23 +29,26 @@ public class MeshEffect : MonoBehaviour {
         }
 
         
-        // moves each of the objects towards a destination if they are not there yet
-
+        // moves each of the triangle mesh objects towards a destination if they are not there yet
         if (!AllTrue(reachedDest)) {
             
             int i = 0;
-            while (i < GOs.Count)
+            while (i < triangleMeshes.Count)
             {
                 if (!reachedDest[i])
                 {
+                    // Move towards warp destination
                     Vector3 dest = originalPositions[i] + Vector3.forward * 10;
+                    triangleMeshes[i].transform.position = Vector3.MoveTowards(triangleMeshes[i].transform.position, dest, 1);
+
+                    // Rotate back towards original rotation before bursting
                     Quaternion rot = originalRotations[i];
-                    //Destroy(GOs[i].GetComponent<Rigidbody>());
-                    GOs[i].transform.position = Vector3.MoveTowards(GOs[i].transform.position, dest, 1);
-                    GOs[i].transform.rotation = Quaternion.RotateTowards(GOs[i].transform.rotation, rot, 360);
-                    if (GOs[i].transform.position == dest)
+                    triangleMeshes[i].transform.rotation = Quaternion.RotateTowards(triangleMeshes[i].transform.rotation, rot, 30);
+
+                    // Get rid of rigidbody once the triangle object reaches its destination
+                    if (triangleMeshes[i].transform.position == dest && triangleMeshes[i].transform.rotation == rot)
                     {
-                        Destroy(GOs[i].GetComponent<Rigidbody>());
+                        Destroy(triangleMeshes[i].GetComponent<Rigidbody>());
                         reachedDest[i] = true;
                     }
                 }
@@ -81,17 +57,18 @@ public class MeshEffect : MonoBehaviour {
 
         } else if (inWarp)
         {
+            // have reached our destination and currently still in warp, flag our warp as complete
             warpComplete = true;
         }
 
         // reactivate our actual character, move it to the warp location and delete all those mesh triangle objects
         if (inWarp && warpComplete)
         {
-            transform.position += new Vector3(10, 0, 0);
+            transform.position += new Vector3(0, 0, 10);
             GetComponent<MeshRenderer>().enabled = true;
-            foreach (GameObject GO in GOs)
+            foreach (GameObject triangleMesh in triangleMeshes)
             {
-                Destroy(GO);
+                Destroy(triangleMesh);
             }
             inWarp = false;
             warpComplete = false;
@@ -104,7 +81,6 @@ public class MeshEffect : MonoBehaviour {
     {
         if (lst.Count > 0)
         {
-            Debug.Log(lst.Count);
             foreach (bool e in lst)
             {
                 if (!e)
@@ -116,14 +92,9 @@ public class MeshEffect : MonoBehaviour {
         return true;
     }
 
-    // taken from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
+    // modified from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
     void SplitMesh()
     {
-
-        /*if (GetComponent<MeshFilter>() == null || GetComponent<SkinnedMeshRenderer>() == null)
-        {
-            yield return null;
-        }*/
 
         if (GetComponent<Collider>())
         {
@@ -149,7 +120,10 @@ public class MeshEffect : MonoBehaviour {
         {
             materials = GetComponent<SkinnedMeshRenderer>().materials;
         }
+
+        // make actual object invisible before we generate a copy of its mesh as objects and explode them
         GetComponent<MeshRenderer>().enabled = false;
+
         Vector3[] verts = M.vertices;
         Vector3[] normals = M.normals;
         Vector2[] uvs = M.uv;
@@ -185,29 +159,21 @@ public class MeshEffect : MonoBehaviour {
                 GO.AddComponent<MeshRenderer>().material = materials[submesh];
                 GO.AddComponent<MeshFilter>().mesh = mesh;
                 //GO.AddComponent<BoxCollider>();
-                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f), transform.position.y + Random.Range(0f, 0.5f), transform.position.z + Random.Range(-0.5f, 0.5f));
+                float variance = 2.0f;
+                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance, variance), transform.position.y + Random.Range(0, variance), transform.position.z + Random.Range(-variance, variance));
 
+                // track its current position and rotation
                 originalPositions.Add(GO.transform.position);
                 originalRotations.Add(GO.transform.rotation);
-                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(300, 500), explosionPos, 5);
-                //GO.AddComponent<Rigidbody>().AddForce(normals[i]);
+
+                // explode the triangle mesh objects
+                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(300, 500), explosionPos, 10);
                 
-                //Destroy(GO, 3);// + Random.Range(0.0f, 5.0f));
-                GOs.Add(GO);
-                //Debug.Log(GO);
+                // track the triangle mesh and flag that it has not reach it's destination
+                triangleMeshes.Add(GO);
                 reachedDest.Add(false);
-                //Debug.Log(reachedDest);
-                //Destroy(GO.GetComponent<Rigidbody>());
             }
         }
-
-        //GetComponent<Renderer>().enabled = false;
-
-        //yield return new WaitForSeconds(1.0f);
-        /*if (destroy == true)
-        {
-            Destroy(gameObject);
-        }*/
 
     }
 }
