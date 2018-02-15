@@ -13,6 +13,9 @@ public class MeshEffect : MonoBehaviour {
     bool warpComplete = false;  // indicates that object has just completed its warp
     bool inWarp = false;  // indicates object is in warp
 
+    private float spaceTimer;
+    private bool hasPressedSpace;
+
     // Use this for initialization
     void Start () {
         
@@ -26,40 +29,62 @@ public class MeshEffect : MonoBehaviour {
         {
             SplitMesh();
             inWarp = true;
+
+            hasPressedSpace = true;
+            spaceTimer = 0.6f;
         }
+
+
+
+        if (hasPressedSpace)
+        {
+            spaceTimer -= Time.deltaTime;
+            Debug.Log(spaceTimer);
+
+            if (spaceTimer <= 0f)
+            {
+                //do something
+                // moves each of the triangle mesh objects towards a destination if they are not there yet
+                if (!AllTrue(reachedDest))
+                {
+
+                    int i = 0;
+                    while (i < triangleMeshes.Count)
+                    {
+                        if (!reachedDest[i])
+                        {
+                            // Move towards warp destination
+                            Vector3 dest = originalPositions[i] + Vector3.forward * 10;
+                            triangleMeshes[i].transform.position = Vector3.MoveTowards(triangleMeshes[i].transform.position, dest, 1);
+
+                            // Rotate back towards original rotation before bursting
+                            Quaternion rot = originalRotations[i];
+                            triangleMeshes[i].transform.rotation = Quaternion.RotateTowards(triangleMeshes[i].transform.rotation, rot, 10);
+
+                            // Get rid of rigidbody once the triangle object reaches its destination
+                            if (triangleMeshes[i].transform.position == dest && triangleMeshes[i].transform.rotation == rot)
+                            {
+                                Destroy(triangleMeshes[i].GetComponent<Rigidbody>());
+                                reachedDest[i] = true;
+                            }
+                        }
+                        i++;
+                    }
+
+                }
+                else if (inWarp)
+                {
+                    // have reached our destination and currently still in warp, flag our warp as complete
+                    warpComplete = true;
+                    hasPressedSpace = false;
+                }
+
+                
+            }
+        }
+
 
         
-        // moves each of the triangle mesh objects towards a destination if they are not there yet
-        if (!AllTrue(reachedDest)) {
-            
-            int i = 0;
-            while (i < triangleMeshes.Count)
-            {
-                if (!reachedDest[i])
-                {
-                    // Move towards warp destination
-                    Vector3 dest = originalPositions[i] + Vector3.forward * 10;
-                    triangleMeshes[i].transform.position = Vector3.MoveTowards(triangleMeshes[i].transform.position, dest, 1);
-
-                    // Rotate back towards original rotation before bursting
-                    Quaternion rot = originalRotations[i];
-                    triangleMeshes[i].transform.rotation = Quaternion.RotateTowards(triangleMeshes[i].transform.rotation, rot, 30);
-
-                    // Get rid of rigidbody once the triangle object reaches its destination
-                    if (triangleMeshes[i].transform.position == dest && triangleMeshes[i].transform.rotation == rot)
-                    {
-                        Destroy(triangleMeshes[i].GetComponent<Rigidbody>());
-                        reachedDest[i] = true;
-                    }
-                }
-                i++;
-            }
-
-        } else if (inWarp)
-        {
-            // have reached our destination and currently still in warp, flag our warp as complete
-            warpComplete = true;
-        }
 
         // reactivate our actual character, move it to the warp location and delete all those mesh triangle objects
         if (inWarp && warpComplete)
@@ -160,14 +185,13 @@ public class MeshEffect : MonoBehaviour {
                 GO.AddComponent<MeshFilter>().mesh = mesh;
                 //GO.AddComponent<BoxCollider>();
                 float variance = 2.0f;
-                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance, variance), transform.position.y + Random.Range(0, variance), transform.position.z + Random.Range(-variance, variance));
-
+                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance*2, variance*2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance*2, variance*2));
                 // track its current position and rotation
                 originalPositions.Add(GO.transform.position);
                 originalRotations.Add(GO.transform.rotation);
 
                 // explode the triangle mesh objects
-                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(300, 500), explosionPos, 10);
+                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
                 
                 // track the triangle mesh and flag that it has not reach it's destination
                 triangleMeshes.Add(GO);
