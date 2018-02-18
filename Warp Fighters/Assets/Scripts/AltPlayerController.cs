@@ -78,7 +78,7 @@ public class AltPlayerController : MonoBehaviour {
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
-        usePC = false;
+        //usePC = false;
         warpGuideToggleAvailable = true;
 		//debugText = GameObject.Find("DebugTextPlayer").GetComponent<Text>();
 
@@ -139,7 +139,7 @@ public class AltPlayerController : MonoBehaviour {
         }
 
 
-        if (Input.GetButtonDown("Jump"))
+        /*if (Input.GetButtonDown("Jump"))
         {
             GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
         }
@@ -152,7 +152,7 @@ public class AltPlayerController : MonoBehaviour {
         else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-        }
+        }*/
 
         /* === PC === */
 
@@ -254,6 +254,11 @@ public class AltPlayerController : MonoBehaviour {
 
 
         //SetDebugText();
+    }
+
+    private void FixedUpdate()
+    {
+        //transform.position -= Vector3.up * 9.8f;
     }
 
     void SetDebugText()

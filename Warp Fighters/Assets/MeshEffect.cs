@@ -31,7 +31,7 @@ public class MeshEffect : MonoBehaviour {
             inWarp = true;
 
             hasPressedSpace = true;
-            spaceTimer = 0.6f;
+            spaceTimer = 0.4f;
         }
 
 
@@ -43,6 +43,7 @@ public class MeshEffect : MonoBehaviour {
 
             if (spaceTimer <= 0f)
             {
+                Time.timeScale = 1f;
                 //do something
                 // moves each of the triangle mesh objects towards a destination if they are not there yet
                 if (!AllTrue(reachedDest))
@@ -148,6 +149,7 @@ public class MeshEffect : MonoBehaviour {
 
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
         GetComponent<MeshRenderer>().enabled = false;
+        
 
         Vector3[] verts = M.vertices;
         Vector3[] normals = M.normals;
@@ -198,6 +200,8 @@ public class MeshEffect : MonoBehaviour {
                 reachedDest.Add(false);
             }
         }
+
+        Time.timeScale = 0.5f;
 
     }
 }
