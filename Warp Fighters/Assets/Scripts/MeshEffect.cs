@@ -44,7 +44,7 @@ public class MeshEffect : MonoBehaviour {
             if (spaceTimer <= 0f)
             {
                 // Resume normal time after brief time slow
-                Time.timeScale = 1f;
+                //Time.timeScale = 1f;
                 //do something
                 // moves each of the triangle mesh objects towards a destination if they are not there yet
                 if (!AllTrue(reachedDest))
@@ -57,7 +57,7 @@ public class MeshEffect : MonoBehaviour {
                         {
                             // Move towards warp destination
                             Vector3 dest = originalPositions[i] + Vector3.forward * 10;
-                            triangleMeshes[i].transform.position = Vector3.MoveTowards(triangleMeshes[i].transform.position, dest, 1);
+                            triangleMeshes[i].transform.position = Vector3.MoveTowards(triangleMeshes[i].transform.position, dest, 2);
 
                             // Rotate back towards original rotation before bursting
                             Quaternion rot = originalRotations[i];
@@ -184,9 +184,10 @@ public class MeshEffect : MonoBehaviour {
                 //GO.layer = LayerMask.NameToLayer("Particle");
                 GO.transform.position = transform.position;
                 GO.transform.rotation = transform.rotation;
-                GO.transform.localScale = transform.localScale;
+                GO.transform.localScale = transform.lossyScale;
                 GO.AddComponent<MeshRenderer>().material = materials[submesh];
                 GO.AddComponent<MeshFilter>().mesh = mesh;
+                GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                 //GO.AddComponent<BoxCollider>();
                 float variance = 2.0f;
                 Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance*2, variance*2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance*2, variance*2));
@@ -196,6 +197,8 @@ public class MeshEffect : MonoBehaviour {
 
                 // explode the triangle mesh objects
                 GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
+                //mesh.RecalculateNormals();
+                //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
                 
                 // track the triangle mesh and flag that it has not reach it's destination
                 triangleMeshes.Add(GO);
@@ -204,7 +207,7 @@ public class MeshEffect : MonoBehaviour {
         }
 
         // Slow down time
-        Time.timeScale = 0.5f;
+        //Time.timeScale = 0.5f;
 
     }
 }
