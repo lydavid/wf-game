@@ -43,6 +43,7 @@ public class MeshEffect : MonoBehaviour {
 
             if (spaceTimer <= 0f)
             {
+                // Resume normal time after brief time slow
                 Time.timeScale = 1f;
                 //do something
                 // moves each of the triangle mesh objects towards a destination if they are not there yet
@@ -177,12 +178,13 @@ public class MeshEffect : MonoBehaviour {
                 mesh.normals = newNormals;
                 mesh.uv = newUvs;
 
-                mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 };
+                mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 }; // comment out the last 3 ints for backface culling, somewhat improves performance
 
                 GameObject GO = new GameObject("Triangle " + (i / 3));
                 //GO.layer = LayerMask.NameToLayer("Particle");
                 GO.transform.position = transform.position;
                 GO.transform.rotation = transform.rotation;
+                GO.transform.localScale = transform.localScale;
                 GO.AddComponent<MeshRenderer>().material = materials[submesh];
                 GO.AddComponent<MeshFilter>().mesh = mesh;
                 //GO.AddComponent<BoxCollider>();
@@ -201,6 +203,7 @@ public class MeshEffect : MonoBehaviour {
             }
         }
 
+        // Slow down time
         Time.timeScale = 0.5f;
 
     }
