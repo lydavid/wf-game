@@ -96,6 +96,19 @@ public class AltPlayerController : MonoBehaviour {
     void Update()
     {
 
+        if (Input.GetKeyDown("escape"))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        // allows us to click back into game
+        if (Input.GetMouseButtonDown(0))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+
+
         /* Change warp type/color */
         // blue = instantaneous warp
         if (Input.GetButtonDown("Left Bumper"))
@@ -124,36 +137,55 @@ public class AltPlayerController : MonoBehaviour {
         /* Movement */
         float walk = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         float straffe = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-
         transform.Translate(straffe, 0, walk);
 
-        if (Input.GetKeyDown("escape"))
+        PlayerRotation();
+        
+        //Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
+        //Debug.DrawRay(transform.position, forward, Color.green);
+
+
+        /* Warp Guide */
+        if (Input.GetButtonDown("Fire2") && warpGuideToggleAvailable)
         {
-            Cursor.lockState = CursorLockMode.None;
+            Vector3 pos = player.transform.position + transform.forward * init_dist;
+
+            GameObject warpGuide;
+
+            warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
+            foreach (Renderer renderer in warpGuide.GetComponentsInChildren<Renderer>())
+            {
+                if (isSpeedWarp)
+                {
+                    renderer.material = altWarpGuide;
+                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(true);
+                } else
+                {
+                    renderer.material = standardWarpGuide;
+                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(false);
+                }
+                
+                    
+            }
+
+            warpGuideToggleAvailable = false;
+            
+        } else if (Input.GetButtonDown("Fire1") || (Input.GetButtonDown("Fire2") && !warpGuideToggleAvailable))
+        {
+            // allows warp guide to toggle on after warping or after disabling warp guide in a previous frame
+            warpGuideToggleAvailable = true;
+            player.GetComponent<Animator>().SetBool("isWarpGuideActive", true);
         }
 
-        // allows us to click back into game
-        if (Input.GetMouseButtonDown(0))
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        /* Warp */
+        // Warping is currently handled in the warp guide script
 
 
-        /*if (Input.GetButtonDown("Jump"))
-        {
-            GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
-        }
+        //SetDebugText();
+    }
 
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-
-        }
-        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
-        {
-            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-        }*/
-
+    void PlayerRotation()
+    {
         /* === PC === */
 
         if (usePC)
@@ -211,49 +243,6 @@ public class AltPlayerController : MonoBehaviour {
             }
 
         }
-
-
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
-        Debug.DrawRay(transform.position, forward, Color.green);
-
-
-        /* Warp Guide */
-        if (Input.GetButtonDown("Fire2") && warpGuideToggleAvailable)
-        {
-            Vector3 pos = player.transform.position + transform.forward * init_dist;
-
-            GameObject warpGuide;
-
-            warpGuide = Instantiate(warpGuidePrefab, pos, transform.rotation);
-            foreach (Renderer renderer in warpGuide.GetComponentsInChildren<Renderer>())
-            {
-                if (isSpeedWarp)
-                {
-                    renderer.material = altWarpGuide;
-                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(true);
-                } else
-                {
-                    renderer.material = standardWarpGuide;
-                    warpGuide.GetComponent<WarpGuideController>().SetAsSpeedWarpGuide(false);
-                }
-                
-                    
-            }
-
-            warpGuideToggleAvailable = false;
-            
-        } else if (Input.GetButtonDown("Fire1") || (Input.GetButtonDown("Fire2") && !warpGuideToggleAvailable))
-        {
-            // allows warp guide to toggle on after warping or after disabling warp guide in a previous frame
-            warpGuideToggleAvailable = true;
-            player.GetComponent<Animator>().SetBool("isWarpGuideActive", true);
-        }
-
-        /* Warp */
-        // Warping is currently handled in the warp guide script
-
-
-        //SetDebugText();
     }
 
     private void FixedUpdate()

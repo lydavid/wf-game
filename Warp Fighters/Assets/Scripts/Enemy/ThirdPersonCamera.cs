@@ -21,6 +21,7 @@ public class ThirdPersonCamera : MonoBehaviour {
     	float angle = player.transform.eulerAngles.y;
     	Quaternion rotation = Quaternion.Euler(0, angle, 0);
 		transform.position = player.transform.position - (rotation * offset);
-		transform.LookAt(player.transform);
-	}
+        transform.LookAt(player.transform);
+        
+    }
 }
