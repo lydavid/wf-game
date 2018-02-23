@@ -290,7 +290,7 @@ public class LevelGenerator : MonoBehaviour {
                         //Debug.Log(i + ","  + j + "," +  k);
                         if (!nonWalls[i, j, k])// || i == 0 || i == size - 1 || j == 0 || j == size - 1 || k == 0 || k == size -1)
                         {
-                            Vector3 pos = new Vector3(i, j, k * 2);
+                            Vector3 pos = new Vector3(i, j, k);
                             GameObject newCube = Instantiate(prefab, pos, Quaternion.identity);
                             count += 1;
                         }
