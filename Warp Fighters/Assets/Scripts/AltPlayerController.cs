@@ -41,7 +41,7 @@ public class AltPlayerController : MonoBehaviour {
     private void Reset()
     {
         player = GameObject.Find("Player");
-        speed = 15.0f;
+        speed = 1f;// 5.0f;
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;
@@ -74,7 +74,7 @@ public class AltPlayerController : MonoBehaviour {
     {
         
         player = GameObject.Find("Player");
-        speed = 15.0f;
+        speed = 1f;// 5.0f;
         init_dist = 10;
         rotSpeedX = 5;
         rotSpeedY = 1;

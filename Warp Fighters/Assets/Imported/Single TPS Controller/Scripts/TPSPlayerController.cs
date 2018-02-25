@@ -48,7 +48,7 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void AnimatePerson()
     {
-        animacao.SetInteger("Estado", state);
+        //animacao.SetInteger("Estado", state);
     }
 
     private void Control()
