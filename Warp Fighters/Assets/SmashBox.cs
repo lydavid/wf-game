@@ -7,22 +7,27 @@ public class SmashBox : MonoBehaviour {
     float duration; // after duration and smashed, delete all triangles then remove this object
     bool smashed;
     List<GameObject> triangles;
+    float range; // range player needs to be to interact with this, seems to be range from origin of this object (one of its corners)
+
 
 	// Use this for initialization
 	void Start () {
         smashed = false;
         triangles = new List<GameObject>();
         duration = 5f;
+        range = 1.5f;
 	}
 	
+
 	// Update is called once per frame
 	void Update () {
-		if (CheckCloseToTag("Player", 2) && !smashed)
+
+
+		if (CheckCloseToTag("Player", range) && !smashed)
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                SplitMesh();
-                //ReduceToTriangles();
+                ReduceToTriangles();
                 smashed = true;
             }
         }
@@ -40,25 +45,22 @@ public class SmashBox : MonoBehaviour {
         }
 	}
 
+
     bool CheckCloseToTag(string tag, float minimumDistance)
     {
         GameObject[] goWithTag = GameObject.FindGameObjectsWithTag(tag);
 
         for (int i = 0; i < goWithTag.Length; ++i)
         {
-            if (Vector3.Distance(transform.position, goWithTag[i].transform.position) <= minimumDistance)
+            if (Vector3.Distance(transform.GetComponent<Renderer>().bounds.center, goWithTag[i].transform.position) <= minimumDistance)
                 return true;
         }
 
         return false;
     }
 
-    void ReduceToTriangles()
-    {
-        //gameObject.GetComponent<MeshFilter>
-    }
 
-    void SplitMesh()
+    void ReduceToTriangles()
     {
 
         if (GetComponent<Collider>())
@@ -88,7 +90,6 @@ public class SmashBox : MonoBehaviour {
 
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
         GetComponent<MeshRenderer>().enabled = false;
-
 
         Vector3[] verts = M.vertices;
         Vector3[] normals = M.normals;
@@ -129,17 +130,13 @@ public class SmashBox : MonoBehaviour {
                 float variance = 2.0f;
                 Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
 
+                // track the objects to destroy later
                 triangles.Add(GO);
 
                 // explode the triangle mesh objects
                 GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
-                //mesh.RecalculateNormals();
-                //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
             }
         }
-
-        // Slow down time
-        //Time.timeScale = 0.5f;
 
     }
 }
