@@ -14,12 +14,12 @@ public class AltPlayerController : MonoBehaviour {
 
     public bool usePC; // flag to determine whether to use PC setup or Controller
 
-    [Header("Jump")]
+    /*[Header("Jump")]
     [Range(1, 10)]
     public float jumpVelocity;
 
     public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2f;
+    public float lowJumpMultiplier = 2f;*/
 
 
     public Material standardWarpGuide;
@@ -139,7 +139,7 @@ public class AltPlayerController : MonoBehaviour {
         float straffe = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
         transform.Translate(straffe, 0, walk);
 
-        PlayerRotation();
+        //PlayerRotation();
         
         //Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
         //Debug.DrawRay(transform.position, forward, Color.green);
