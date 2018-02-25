@@ -9,6 +9,8 @@ public class SmashBox : MonoBehaviour {
     List<GameObject> triangles;
     float range; // range player needs to be to interact with this, seems to be range from origin of this object (one of its corners)
 
+    public GameObject item;  // for some reason we can't retrieve this via Resources.Load
+
 
 	// Use this for initialization
 	void Start () {
@@ -16,11 +18,16 @@ public class SmashBox : MonoBehaviour {
         triangles = new List<GameObject>();
         duration = 5f;
         range = 1.5f;
-	}
-	
+        
+    }
 
-	// Update is called once per frame
-	void Update () {
+    private void Awake()
+    {
+        //item = (GameObject)Resources.Load("Prefabs/BlueWarpOrb", typeof(GameObject));
+    }
+
+    // Update is called once per frame
+    void Update () {
 
 
 		if (CheckCloseToTag("Player", range) && !smashed)
@@ -29,6 +36,7 @@ public class SmashBox : MonoBehaviour {
             {
                 ReduceToTriangles();
                 smashed = true;
+                Instantiate(item, gameObject.GetComponent<Renderer>().bounds.center, Quaternion.identity);
             }
         }
 
@@ -39,6 +47,7 @@ public class SmashBox : MonoBehaviour {
                 foreach(GameObject triangle in triangles) {
                     Destroy(triangle);
                 }
+                
                 Destroy(gameObject);
             }
             duration -= Time.deltaTime;
