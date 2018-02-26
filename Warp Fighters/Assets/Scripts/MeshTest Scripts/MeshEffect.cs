@@ -142,14 +142,16 @@ public class MeshEffect : MonoBehaviour {
         if (GetComponent<MeshRenderer>())
         {
             materials = GetComponent<MeshRenderer>().materials;
+            GetComponent<MeshRenderer>().enabled = false;
         }
         else if (GetComponent<SkinnedMeshRenderer>())
         {
             materials = GetComponent<SkinnedMeshRenderer>().materials;
+            GetComponent<SkinnedMeshRenderer>().enabled = false;
         }
 
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
-        GetComponent<MeshRenderer>().enabled = false;
+        
         
 
         Vector3[] verts = M.vertices;
