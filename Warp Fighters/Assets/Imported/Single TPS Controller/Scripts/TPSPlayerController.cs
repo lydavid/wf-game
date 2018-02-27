@@ -6,6 +6,7 @@ using System.Collections;
 public class TPSPlayerController : MonoBehaviour {
 
     public float speed = 3.0f;
+	public float gravity = 1.0f;
 
     //This variable indicates the current state of character.
     
@@ -44,6 +45,7 @@ public class TPSPlayerController : MonoBehaviour {
         Control();
         MovePerson();
         AnimatePerson();
+		Gravity ();
     }
 
     private void AnimatePerson()
@@ -137,4 +139,12 @@ public class TPSPlayerController : MonoBehaviour {
         if (state == 5) { transform.Translate(-speed * Time.deltaTime, 0, 0); }
     }
 
+	/*void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag("Terrain")) {
+			gameObject.transform.position = gameObject.transform.position + gameObject.transform.up;}
+	}*/
+
+	void Gravity () {
+		transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
+	}
 }

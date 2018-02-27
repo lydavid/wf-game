@@ -158,6 +158,7 @@ public class WarpGuideController : MonoBehaviour {
         warpGuideToggleAvailable = true;
 
         SetDebugText();
+
     }
 
     // makes player upright, but also maintaining player's turn direction ie y rotation)
@@ -173,4 +174,5 @@ public class WarpGuideController : MonoBehaviour {
         debugText.text += "\nDist: " + dist;
         debugText.text += " inWarpSpeed: " + inSpeedWarp;
     }
+		
 }
