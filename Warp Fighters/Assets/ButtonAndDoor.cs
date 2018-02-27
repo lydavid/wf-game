@@ -6,7 +6,6 @@ public class ButtonAndDoor : MonoBehaviour {
 
 	GameObject button;
 	GameObject door;
-	
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +27,8 @@ public class ButtonAndDoor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        
 		
 	}
 }
