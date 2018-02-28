@@ -6,7 +6,7 @@ public class ButtonPress : MonoBehaviour {
 
     //public bool buttonPressed;
 
-    GameObject door; // make sure that a corresponding door is the child of this gameobject
+    public GameObject door; // make sure that a corresponding door is the child of this gameobject
 
     //Animator animator;
 
@@ -15,7 +15,7 @@ public class ButtonPress : MonoBehaviour {
         //buttonPressed = false;
         //animator = GetComponent<Animator>();
 
-        door = gameObject.transform.GetChild(0).gameObject; // we assume that door is the one and only child of this button object
+        //door = gameObject.transform.GetChild(0).gameObject; // we assume that door is the one and only child of this button object
         Debug.Log(door.name);
 
 	}
