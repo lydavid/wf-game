@@ -23,7 +23,9 @@ public class BTSguide : MonoBehaviour {
 
 	void Update () {
 		UpdateStates();
-		float mw = Input.GetAxis("Mouse ScrollWheel");
+		//float mw = Input.GetAxis("Mouse ScrollWheel");
+		float mw = Input.GetAxis("D-Pad Y Axis");
+		//Debug.Log("dpad: " + Input.GetAxis("D-Pad Y Axis"));
 		WarpGuideAnimate(mw);
 		
 	}
@@ -34,7 +36,7 @@ public class BTSguide : MonoBehaviour {
 
 	void UpdateStates () {
 		
-		if (Input.GetButtonDown("Fire2")) {
+		if (Input.GetButtonDown("Fire2") || Input.GetButtonDown("Left Stick Click")) {
 			if (warpToggle) {
 				warpToggle = false;
 			} else {
@@ -52,12 +54,29 @@ public class BTSguide : MonoBehaviour {
 	}
 
 	void Warp () { // Handles which warp when warp key pressed
-		if (Input.GetButtonDown("Fire1") && warpToggle == true) {
-			if (warpState == 0) {
+
+		if (warpToggle == true) {
+
+			if (Input.GetButtonDown("A Button")) {
 				InstantWarp();
-			} else {
+			}
+			if (Input.GetButtonDown("B Button")) {
 				VelocityWarp();
 			}
+		}
+
+
+		if (Input.GetButtonDown("Fire1") ) {
+
+			if (warpToggle == true) {
+
+				if (warpState == 0) {
+					InstantWarp();
+				} else {
+					VelocityWarp();
+				}				
+			}
+			
 		}
 	}
 
@@ -72,6 +91,8 @@ public class BTSguide : MonoBehaviour {
 		//GetComponent<Rigidbody>().AddForce(dir * 10f);
         GetComponent<Rigidbody>().velocity = dir * 50f;
 		//GetComponent<Rigidbody>().velocity = 10*transform.forward;
+		warpGuide.SetActive(false);
+		warpToggle = false;
 	}
 
 	void WarpGuideAnimate(float mouseWheel) {

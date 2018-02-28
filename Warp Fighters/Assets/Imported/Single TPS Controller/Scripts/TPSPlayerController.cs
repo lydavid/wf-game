@@ -26,6 +26,8 @@ public class TPSPlayerController : MonoBehaviour {
         animacao = GetComponentInChildren<Animator>();
         state = 0;
         horizontal = transform.eulerAngles.y;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update ()
@@ -63,6 +65,30 @@ public class TPSPlayerController : MonoBehaviour {
         04 = Walking Right
         05 = Walking Left
         */
+        
+        float xAxis = Input.GetAxis("Right Stick X");
+        float yAxis = Input.GetAxis("Right Stick Y");
+
+        if (xAxis == 0 && yAxis == 0) {
+            state = 0;
+        }
+
+        if (xAxis < 0 && Mathf.Abs(xAxis) > Mathf.Abs(yAxis)) {
+            state = 5;
+        }
+
+        if (yAxis < 0 && Mathf.Abs(yAxis) > Mathf.Abs(xAxis)) {
+            state = 1;
+        }
+
+        if (xAxis > 0 && Mathf.Abs(xAxis) > Mathf.Abs(yAxis)) {
+            state = 4;
+        }
+
+        if (yAxis > 0 && Mathf.Abs(yAxis) > Mathf.Abs(xAxis)) {
+            state = 3;
+        }
+
 
         if (Input.GetKeyDown("w"))
         {
@@ -127,7 +153,8 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void MovePerson()
     {
-        var mouseHorizontal = Input.GetAxis("Mouse X");
+        //var mouseHorizontal = Input.GetAxis("Mouse X");
+        var mouseHorizontal = Input.GetAxis("Left Stick X");
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
         transform.rotation = Quaternion.AngleAxis(horizontal, Vector3.up);
 
