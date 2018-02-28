@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
-	public float speed = 5.0f;
-	public Transform target, start;
-	private bool moveToA = false;
-	private bool moveToB = true;
-	private bool wait = false;
+
+    public float speed = 5.0f;  // movement speed of enemy
+    public Transform start, target;  // positions to move between
+
+    private bool moveToA = false;
+    private bool moveToB = true;
+    private bool wait = false;
+
 
     public bool chasingPlayer; // will be contorlled from EnemyDetection
     public bool coolingOff;
 
+    //public enum EnemyMoveState { patroling, chasingPlayer, coolingOff };
+    //public EnemyMoveState enemyMoveState;
 	
 	// Use this for initialization
 	void Start () {
         chasingPlayer = false;
         coolingOff = false;
+
+        //enemyMoveState = EnemyMoveState.patroling;
 	}
 	
 	// Update is called once per frame
