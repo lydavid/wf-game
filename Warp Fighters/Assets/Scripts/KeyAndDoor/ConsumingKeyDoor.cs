@@ -32,12 +32,12 @@ public class ConsumingKeyDoor : MonoBehaviour {
         }
 	}
 
-    private void OnCollisionEnter(Collision other)
+    /*private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
             // consume one of the keys in player's stash
             other.gameObject.GetComponent<CollectedKeysManager>().ConsumeKey(doorType);
         }
-    }
+    }*/
 }
