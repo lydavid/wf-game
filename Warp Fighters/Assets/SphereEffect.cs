@@ -99,8 +99,8 @@ public class SphereEffect : MonoBehaviour {
                 GO.AddComponent<BoxCollider>();
 
                 float variance = 2.0f;
-                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
-
+                //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
+                Vector3 explosionPos = center;
 
                 // explode the triangle mesh objects
                 if (GO.GetComponent<BoxCollider>().GetComponent<Renderer>().bounds.center.x >= center.x)
@@ -108,6 +108,7 @@ public class SphereEffect : MonoBehaviour {
                     //Debug.Log(GO.GetComponent<MeshCollider>().GetComponent<Renderer>().bounds.center);
                     //Debug.Log(center.x);
                     //Debug.Log("---");
+
                     GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
                     //GO.AddComponent<Rigidbody>().AddForce(GO.transform.up * 10);
                 }
@@ -120,7 +121,7 @@ public class SphereEffect : MonoBehaviour {
         }
 
         // Slow down time
-        //Time.timeScale = 0.5f;
+        Time.timeScale = 0.5f;
 
     }
 }
