@@ -24,7 +24,16 @@ public class BTSguide : MonoBehaviour {
 	void Update () {
 		UpdateStates();
 		//float mw = Input.GetAxis("Mouse ScrollWheel");
-		float mw = Input.GetAxis("D-Pad Y Axis");
+		float mw = 0;
+		var rt = Input.GetAxis("Right Trigger");
+		var lt = Input.GetAxis("Left Trigger");
+
+		if (lt == 0) {
+			mw = rt;
+		}else if (rt == 0) {
+			mw = -1*lt;
+		}
+	
 		WarpGuideAnimate(mw);
 		
 	}
