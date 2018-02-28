@@ -13,16 +13,26 @@ public class EnemyDetection : MonoBehaviour {
 
     int count = 0;
     EnemyMovement enemyMovement;
-	
-	// Use this for initialization
-	void Start () {
+    Vector3 knockBackForce;
+    bool coolOff; // indicates that the enemy should cool off before hunting for player again
+
+    // Use this for initialization
+    void Start () {
 		rb = player.GetComponent<Rigidbody>();
         arcSize = 30;
         enemyMovement = GetComponent<EnemyMovement>();
-	}
+        coolOff = false;
+        
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (coolOff)
+        {
+
+        }
 
 
         if (!enemyMovement.chasingPlayer)
@@ -126,9 +136,39 @@ public class EnemyDetection : MonoBehaviour {
 
     void ChasePlayer()
     {
+        float step = enemyMovement.speed * Time.deltaTime;
+        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, step);
+        transform.LookAt(player.transform);
+
+
 
 
         // some condition to revert away from chasing player
-        enemyMovement.chasingPlayer = false;
+        //enemyMovement.chasingPlayer = false;
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+
+        if (other.gameObject.tag == "Player")
+        {
+
+            Debug.Log("Attacked!");
+
+            // knockback the player and damage them
+            knockBackForce = transform.forward * 20;
+            player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
+
+            Debug.Log(knockBackForce);
+
+            // bounce off player to give them a breather
+
+            // or simply revert back to its original movement set
+            //enemyMovement.chasingPlayer = false; // nope, this way, it will automatically redetect the player
+            // instead move it into another state where it does a full turnaround and return to StartPoint A
+
+            // consider a state machine for all of this code
+            coolOff = true;
+        }
     }
 }
