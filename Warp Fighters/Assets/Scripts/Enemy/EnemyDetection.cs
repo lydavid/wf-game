@@ -15,6 +15,7 @@ public class EnemyDetection : MonoBehaviour {
     EnemyMovement enemyMovement;
     Vector3 knockBackForce;
     bool coolOff; // indicates that the enemy should cool off before hunting for player again
+    float coolOffTime;
 
     // Use this for initialization
     void Start () {
@@ -22,6 +23,7 @@ public class EnemyDetection : MonoBehaviour {
         arcSize = 30;
         enemyMovement = GetComponent<EnemyMovement>();
         coolOff = false;
+        coolOffTime = 3.0f;
         
 
     }
@@ -36,7 +38,7 @@ public class EnemyDetection : MonoBehaviour {
             //coolOff = false;
         }*/
 
-        if (!enemyMovement.coolingOff)
+        if (!coolOff)
         {
 
 
@@ -136,6 +138,13 @@ public class EnemyDetection : MonoBehaviour {
             {
                 ChasePlayer();
             }
+        } else
+        {
+            coolOffTime -= Time.deltaTime;
+            if (coolOffTime <= 0)
+            {
+                coolOff = false; // finished cooling off after time expires
+            } 
         }
     }
 
@@ -175,9 +184,11 @@ public class EnemyDetection : MonoBehaviour {
 
             // consider a state machine for all of this code
             //coolOff = true;
-            enemyMovement.coolingOff = true;
+            //enemyMovement.coolingOff = true;
             enemySpotted = false;
             enemyMovement.chasingPlayer = false;
+            coolOff = true;
+            coolOffTime = 3.0f;
         }
     }
 }

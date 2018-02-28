@@ -16,32 +16,35 @@ public class EnemyMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         chasingPlayer = false;
+        coolingOff = false;
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
 
-        if (coolingOff)
+        /*if (coolingOff)
         {
-            ReturnToStart();
+            //ReturnToStart();
+            moveBetweenPoints();
 
         }
         else
         {
 
-            bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
-            if (!enemySpotted)
-            {
-                moveBetweenPoints();
-            }
+            
 
+        }*/
+        bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
+        if (!enemySpotted)
+        {
+            moveBetweenPoints();
         }
 
-        
-		
-	}
 
-    void ReturnToStart()
+
+    }
+
+    /*void ReturnToStart()
     {
         float step = speed * Time.deltaTime;
         transform.LookAt(start.transform);
@@ -51,7 +54,7 @@ public class EnemyMovement : MonoBehaviour {
         {
             coolingOff = false;
         }
-    }
+    }*/
 
 
 	/*
