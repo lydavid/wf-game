@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WarpGuideCollide : MonoBehaviour {
 
+	public bool guideHit = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,8 +15,20 @@ public class WarpGuideCollide : MonoBehaviour {
 	void Update () {
 		
 	}
+
 	
 	void OnCollisionEnter (Collision c) {
-		Debug.Log("Entered");
+		if (c.gameObject.tag == "Wall") {
+			Debug.Log("Hit Wall");
+			guideHit = true;
+		}
 	}
+
+	 
+	void OnCollisionExit(Collision c) {
+		if (c.gameObject.tag == "Wall"){
+			Debug.Log("awoll");
+			guideHit = false;
+		}
+    }
 }

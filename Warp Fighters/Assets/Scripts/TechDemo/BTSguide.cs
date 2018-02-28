@@ -12,7 +12,7 @@ public class BTSguide : MonoBehaviour {
 
 	// distance of warpguide from player/camera, should be min 4 or 5
 	private float curCamDist = 4f;
-	private const float minCamDist = 4f;
+	private const float minCamDist = 3f;
 	private const float maxCamDist = 100f;
 	
 
@@ -91,9 +91,21 @@ public class BTSguide : MonoBehaviour {
 			Vector3 mousePoint = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, 
 																	Input.mousePosition.y, 
 																	curCamDist));
+
+			
+									
 			//Debug.Log(mousePoint);
 			warpGuide.SetActive(true);
-			warpGuide.transform.position = mousePoint;
+			bool guideHit = warpGuide.GetComponentInChildren<WarpGuideCollide>().guideHit;
+			// edit with collision contact point
+			if (!guideHit){
+				warpGuide.transform.position = mousePoint;
+			} else {
+				warpGuide.transform.position = warpGuide.transform.position;
+				if (mouseWheel < 0) {
+					warpGuide.transform.position = mousePoint;
+				}
+			}
 			RotateWarpGuide();
 		} else {
 			warpGuide.SetActive(false);
