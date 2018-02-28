@@ -66,8 +66,8 @@ public class TPSPlayerController : MonoBehaviour {
         05 = Walking Left
         */
         
-        float xAxis = Input.GetAxis("Right Stick X");
-        float yAxis = Input.GetAxis("Right Stick Y");
+        float xAxis = Input.GetAxis("Left Stick X");
+        float yAxis = Input.GetAxis("Left Stick Y");
 
         if (xAxis == 0 && yAxis == 0) {
             state = 0;
@@ -154,7 +154,7 @@ public class TPSPlayerController : MonoBehaviour {
     private void MovePerson()
     {
         //var mouseHorizontal = Input.GetAxis("Mouse X");
-        var mouseHorizontal = Input.GetAxis("Left Stick X");
+        var mouseHorizontal = Input.GetAxis("Right Stick X");
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
         transform.rotation = Quaternion.AngleAxis(horizontal, Vector3.up);
 

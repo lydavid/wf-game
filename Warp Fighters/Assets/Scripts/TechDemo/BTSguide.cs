@@ -10,10 +10,10 @@ public class BTSguide : MonoBehaviour {
 	private bool warpToggle = false;
 	private int warpState = 0; // 0 = instant warp, 1 = velocity warp
 
-	// distance of warpguide from player/camera, should be min 4 or 5
-	private float curCamDist = 4f;
+	// distance of warpguide from player/camera
+	private float curCamDist = 5f;
 	private const float minCamDist = 3f;
-	private const float maxCamDist = 100f;
+	private const float maxCamDist = 25f;
 	
 
 	void Start () {
@@ -25,7 +25,6 @@ public class BTSguide : MonoBehaviour {
 		UpdateStates();
 		//float mw = Input.GetAxis("Mouse ScrollWheel");
 		float mw = Input.GetAxis("D-Pad Y Axis");
-		//Debug.Log("dpad: " + Input.GetAxis("D-Pad Y Axis"));
 		WarpGuideAnimate(mw);
 		
 	}
@@ -36,11 +35,12 @@ public class BTSguide : MonoBehaviour {
 
 	void UpdateStates () {
 		
-		if (Input.GetButtonDown("Fire2") || Input.GetButtonDown("Left Stick Click")) {
+		if (Input.GetButtonDown("Fire2") || Input.GetButtonDown("Right Stick Click")) {
 			if (warpToggle) {
 				warpToggle = false;
 			} else {
 				warpToggle = true;
+				curCamDist = 5f;
 			}
 		}
 
