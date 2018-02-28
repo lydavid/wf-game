@@ -88,7 +88,9 @@ public class BTSguide : MonoBehaviour {
 		// If warp guide on
 		if (warpToggle) {
 			curCamDist += mouseWheel;
-			Vector3 mousePoint = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, curCamDist));
+			Vector3 mousePoint = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, 
+																	Input.mousePosition.y, 
+																	curCamDist));
 			//Debug.Log(mousePoint);
 			warpGuide.SetActive(true);
 			warpGuide.transform.position = mousePoint;
