@@ -9,11 +9,13 @@ public class ButtonPress : MonoBehaviour {
     public GameObject door; // make sure that a corresponding door is the child of this gameobject
 
     //Animator animator;
+    Animator anim;
 
 	// Use this for initialization
 	void Start () {
         //buttonPressed = false;
         //animator = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
 
         //door = gameObject.transform.GetChild(0).gameObject; // we assume that door is the one and only child of this button object
         Debug.Log(door.name);
@@ -30,6 +32,8 @@ public class ButtonPress : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
             //gameObject.GetComponent<Animator>().Play("ButtonPressAnimation");
+            anim.SetBool("ButtonPressed", true);
+
             Debug.Log("enter");
             //buttonPressed = true;
             //animator.SetBool("buttonPressed", true);
@@ -41,6 +45,7 @@ public class ButtonPress : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
+            anim.SetBool("ButtonPressed", false);
             //gameObject.GetComponent<Animator>().Play("ButtonPressAnimation");
             Debug.Log("exit");
             //buttonPressed = false;
