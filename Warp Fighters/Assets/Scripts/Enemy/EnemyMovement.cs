@@ -9,21 +9,34 @@ public class EnemyMovement : MonoBehaviour {
 	private bool moveToB = true;
 	private bool wait = false;
 
+    public bool chasingPlayer; // will be contorlled from EnemyDetection
+
 	
 	// Use this for initialization
 	void Start () {
-		
+        chasingPlayer = false;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 
-		bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
-		if (!enemySpotted) {
-			moveBetweenPoints();
-		}
+        if (!chasingPlayer)
+        {
+
+            bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
+            if (!enemySpotted)
+            {
+                moveBetweenPoints();
+            }
+            else
+            {
+                chasingPlayer = true;
+            }
+
+        }
 		
 	}
+
 
 	/*
 	Moves enemy between points A and B
