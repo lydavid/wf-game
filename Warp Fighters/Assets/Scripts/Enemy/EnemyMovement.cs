@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour {
 	private bool wait = false;
 
     public bool chasingPlayer; // will be contorlled from EnemyDetection
+    public bool coolingOff;
 
 	
 	// Use this for initialization
@@ -20,7 +21,12 @@ public class EnemyMovement : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () {
 
-        if (!chasingPlayer)
+        if (coolingOff)
+        {
+            ReturnToStart();
+
+        }
+        else
         {
 
             bool enemySpotted = gameObject.GetComponent<EnemyDetection>().enemySpotted;
@@ -28,14 +34,24 @@ public class EnemyMovement : MonoBehaviour {
             {
                 moveBetweenPoints();
             }
-            else
-            {
-                chasingPlayer = true;
-            }
 
         }
+
+        
 		
 	}
+
+    void ReturnToStart()
+    {
+        float step = speed * Time.deltaTime;
+        transform.LookAt(start.transform);
+        transform.position = Vector3.MoveTowards(transform.position, start.position, step);
+
+        if (transform.position == start.position)
+        {
+            coolingOff = false;
+        }
+    }
 
 
 	/*

@@ -29,108 +29,114 @@ public class EnemyDetection : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (coolOff)
+        /*if (coolOff)
+        {
+            //transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z);
+            //enemyMovement.chasingPlayer = false;
+            //coolOff = false;
+        }*/
+
+        if (!enemyMovement.coolingOff)
         {
 
-        }
 
-
-        if (!enemyMovement.chasingPlayer)
-        {
-
-
-            RaycastHit hit;
-            //Vector3 up = transform.TransformDirection(Vector3.up) * 100;
-            Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
-            Vector3 start = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-
-            /* 
-            Vector3 right = Quaternion.Euler(0, 30, 0) * forward;
-            Vector3 left = Quaternion.Euler(0, -30, 0) * forward;
-            Debug.DrawRay(start, forward, Color.green);
-            Debug.DrawRay(start, left, Color.green);
-            Debug.DrawRay(start, right, Color.green);*/
-            //Debug.Log("enemey spotted is: " + enemySpotted);
-
-            for (float i = -arcSize; i <= arcSize; i += 0.5f)
-            {
-                Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
-                Debug.DrawRay(start, dir, Color.red);
-            }
-
-
-            for (float i = -arcSize; i <= arcSize; i += 0.5f)
+            if (!enemyMovement.chasingPlayer)
             {
 
-                Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
 
-                if (Physics.Raycast(start, dir, out hit))
+                RaycastHit hit;
+                //Vector3 up = transform.TransformDirection(Vector3.up) * 100;
+                Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
+                Vector3 start = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+
+                /* 
+                Vector3 right = Quaternion.Euler(0, 30, 0) * forward;
+                Vector3 left = Quaternion.Euler(0, -30, 0) * forward;
+                Debug.DrawRay(start, forward, Color.green);
+                Debug.DrawRay(start, left, Color.green);
+                Debug.DrawRay(start, right, Color.green);*/
+                //Debug.Log("enemey spotted is: " + enemySpotted);
+
+                for (float i = -arcSize; i <= arcSize; i += 0.5f)
                 {
-
-                    if (hit.rigidbody == rb)
-                    {
-
-                        Debug.Log("Player hit! " + count);
-                        count += 1;
-
-                        enemySpotted = true;
-                        playerThere = true;
-
-                        enemyMovement.chasingPlayer = true; // indicate to EnemyMovement script to stop its default movement so that this enemy can give chase
-                                                            //transform.LookAt(player.transform);
-
-                        break;
-                    }
+                    Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
+                    Debug.DrawRay(start, dir, Color.red);
                 }
 
-                /*if (i == arcSize) {
-                    enemySpotted = false;
-                    //playerThere = false;
-                }*/
-            }
 
-            /*if (enemySpotted)
-            {
-                transform.LookAt(player.transform);
-                enemySpotted = false;
-            }*/
+                for (float i = -arcSize; i <= arcSize; i += 0.5f)
+                {
 
-
-
-
-
-            if (!playerThere)
-            {
-                enemySpotted = false;
-            }
-
-            /* 
-
-            bool playerThere = enemySpotted;
-            if (enemySpotted) {
-                for (float i = -30; i <= 30; i+=0.5f) {
                     Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
-                    if (Physics.Raycast(start, dir, out hit)){
 
-                        if (hit.rigidbody == rb){
+                    if (Physics.Raycast(start, dir, out hit))
+                    {
+
+                        if (hit.rigidbody == rb)
+                        {
+
+                            Debug.Log("Player hit! " + count);
+                            count += 1;
+
+                            enemySpotted = true;
                             playerThere = true;
+
+                            enemyMovement.chasingPlayer = true; // indicate to EnemyMovement script to stop its default movement so that this enemy can give chase
+                                                                //transform.LookAt(player.transform);
+
                             break;
                         }
                     }
-                    if (i == 30) {
+
+                    /*if (i == arcSize) {
                         enemySpotted = false;
-                        playerThere = false;
-                    }
+                        //playerThere = false;
+                    }*/
                 }
 
+                /*if (enemySpotted)
+                {
+                    transform.LookAt(player.transform);
+                    enemySpotted = false;
+                }*/
 
-            }*/
 
-        } else
-        {
-            ChasePlayer();
+
+
+
+                if (!playerThere)
+                {
+                    enemySpotted = false;
+                }
+
+                /* 
+
+                bool playerThere = enemySpotted;
+                if (enemySpotted) {
+                    for (float i = -30; i <= 30; i+=0.5f) {
+                        Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
+                        if (Physics.Raycast(start, dir, out hit)){
+
+                            if (hit.rigidbody == rb){
+                                playerThere = true;
+                                break;
+                            }
+                        }
+                        if (i == 30) {
+                            enemySpotted = false;
+                            playerThere = false;
+                        }
+                    }
+
+
+                }*/
+
+            }
+            else
+            {
+                ChasePlayer();
+            }
         }
-
     }
 
 
@@ -168,7 +174,10 @@ public class EnemyDetection : MonoBehaviour {
             // instead move it into another state where it does a full turnaround and return to StartPoint A
 
             // consider a state machine for all of this code
-            coolOff = true;
+            //coolOff = true;
+            enemyMovement.coolingOff = true;
+            enemySpotted = false;
+            enemyMovement.chasingPlayer = false;
         }
     }
 }
