@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum EnemyMoveState { patroling, chasingPlayer, coolingOff };
+
+
 public class BasicEnemyController : MonoBehaviour {
 
-    // movement
+
+    [Header("Movement")]
     public float speed = 5.0f;  // movement speed of enemy
     public Transform start, target;  // positions to move between
 
@@ -13,50 +18,38 @@ public class BasicEnemyController : MonoBehaviour {
     private bool wait = false;
 
 
-
-
-    public bool chasingPlayer; // will be contorlled from EnemyDetection
-    public bool coolingOff;
-
-
-
+    [Header("Detection")]
     public GameObject player;
     public int arcSize;
 
     private Rigidbody rb;
-    public bool enemySpotted = false;
-    private bool playerThere = false;
 
-    int count = 0;
 
-    Vector3 knockBackForce;
-    bool coolOff; // indicates that the enemy should cool off before hunting for player again
-    float coolOffTime;
+    [Header("Combat")]
+    public Vector3 knockBackForce;
+    public float coolOffTime;
 
-    public enum EnemyMoveState { patroling, chasingPlayer, coolingOff };
+    [Header("State Machine")]
     public EnemyMoveState enemyMoveState;
+
+    [Header("Debug")]
+    int count = 0;
 
 
     // Use this for initialization
     void Start()
     {
-        //chasingPlayer = false;
-        //coolingOff = false;
-
-
         rb = player.GetComponent<Rigidbody>();
         arcSize = 30;
-
-        //coolOff = false;
         coolOffTime = 3.0f;
-
         enemyMoveState = EnemyMoveState.patroling;
     }
+
 
     // Update is called once per frame
     void Update()
     {
-
+        // State machine to control enemy actions
         switch (enemyMoveState)
         {
             case EnemyMoveState.patroling:
@@ -73,78 +66,11 @@ public class BasicEnemyController : MonoBehaviour {
                 break;
 
             default: break;
-        }
-        // put everything in lateupdate and a statemachine in Update
-
-
-
-        
+        }        
     }
 
 
-
-    void LookForPlayer()
-    {
-
-        RaycastHit hit;
-        //Vector3 up = transform.TransformDirection(Vector3.up) * 100;
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
-        Vector3 start = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-
-        for (float i = -arcSize; i <= arcSize; i += 0.5f)
-        {
-            Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
-            Debug.DrawRay(start, dir, Color.red);
-        }
-
-
-        for (float i = -arcSize; i <= arcSize; i += 0.5f)
-        {
-
-            Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
-
-            if (Physics.Raycast(start, dir, out hit))
-            {
-
-                if (hit.rigidbody == rb)
-                {
-
-                    Debug.Log("Player hit! " + count);
-                    count += 1;
-
-                    //enemySpotted = true;
-                    //playerThere = true;
-
-                    enemyMoveState = EnemyMoveState.chasingPlayer;
-
-                    break;
-                }
-            }
-
-
-        }
-
-
-        /*if (!playerThere)
-        {
-            enemySpotted = false;
-        }*/
-
-
-    }
-
-    void CoolOff()
-    {
-        coolOffTime -= Time.deltaTime;
-        if (coolOffTime <= 0)
-        {
-            enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
-        }
-    }
-
-    /*
-	Moves enemy between points A and B
-	 */
+	/* Moves enemy between start and target */
     void MoveBetweenPoints()
     {
 
@@ -193,6 +119,7 @@ public class BasicEnemyController : MonoBehaviour {
         }
     }
 
+
     IEnumerator Pause()
     {
         yield return new WaitForSecondsRealtime(2);
@@ -200,18 +127,54 @@ public class BasicEnemyController : MonoBehaviour {
     }
 
 
+    /* Detect player with a series of raycast in an arc shape */
+    void LookForPlayer()
+    {
+
+        RaycastHit hit;
+        //Vector3 up = transform.TransformDirection(Vector3.up) * 100;
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
+        Vector3 start = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+
+        for (float i = -arcSize; i <= arcSize; i += 0.5f)
+        {
+            Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
+            Debug.DrawRay(start, dir, Color.red);
+        }
+
+
+        for (float i = -arcSize; i <= arcSize; i += 0.5f)
+        {
+
+            Vector3 dir = Quaternion.Euler(0, i, 0) * forward;
+
+            if (Physics.Raycast(start, dir, out hit))
+            {
+
+                if (hit.rigidbody == rb)
+                {
+                    enemyMoveState = EnemyMoveState.chasingPlayer;
+
+                    Debug.Log("Player hit! " + count);
+                    count += 1;
+
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /* Persue the player until it hits the player or the player hits it 
+       perhaps there should be another condition to stop persuit like if player moves out of its zone
+     */
     void ChasePlayer()
     {
         float step = speed * Time.deltaTime;
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, step);
         transform.LookAt(player.transform);
-
-
-
-
-        // some condition to revert away from chasing player
-        //enemyMovement.chasingPlayer = false;
     }
+
 
     private void OnCollisionEnter(Collision other)
     {
@@ -227,20 +190,19 @@ public class BasicEnemyController : MonoBehaviour {
 
             Debug.Log(knockBackForce);
 
-            // bounce off player to give them a breather
-
-            // or simply revert back to its original movement set
-            //enemyMovement.chasingPlayer = false; // nope, this way, it will automatically redetect the player
-            // instead move it into another state where it does a full turnaround and return to StartPoint A
-
-            // consider a state machine for all of this code
-            //coolOff = true;
-            //enemyMovement.coolingOff = true;
-            //enemySpotted = false;
-            //chasingPlayer = false;
-            //coolOff = true;
             enemyMoveState = EnemyMoveState.coolingOff;
             coolOffTime = 3.0f;
+        }
+    }
+
+
+    /* Does nothing for a period of time to give player a breather */
+    void CoolOff()
+    {
+        coolOffTime -= Time.deltaTime;
+        if (coolOffTime <= 0)
+        {
+            enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
         }
     }
 }
