@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround };
+public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround, flyingToDeath, waitToDestroy };
 
 
 public class BasicEnemyController : MonoBehaviour {
@@ -55,6 +55,8 @@ public class BasicEnemyController : MonoBehaviour {
     public bool ableToBeDamaged;
 
 
+    List<GameObject> GOs = new List<GameObject>();
+
     // Use this for initialization
     void Start()
     {
@@ -71,7 +73,7 @@ public class BasicEnemyController : MonoBehaviour {
         ableToDamagePlayer = true;
         initiatedAttack = false;
 
-        healthPoints = 2;
+        healthPoints = 1;
         ableToBeDamaged = true;
     }
 
@@ -106,6 +108,12 @@ public class BasicEnemyController : MonoBehaviour {
             case EnemyMoveState.warpBackToGround:
                 WarpBackToGround();
                 break;
+
+            case EnemyMoveState.waitToDestroy:
+                WaitToDestroy();
+                break;
+
+
 
             default: break;
         }        
@@ -285,6 +293,8 @@ public class BasicEnemyController : MonoBehaviour {
     private void OnCollisionEnter(Collision other)
     {
 
+        
+
         if (other.gameObject.tag == "Player")
         {
 
@@ -349,6 +359,12 @@ public class BasicEnemyController : MonoBehaviour {
 
             }
 
+        } else
+        {
+            if (enemyMoveState == EnemyMoveState.flyingToDeath && other.gameObject.layer != 9)
+            {
+                ExplodeOnImpact();
+            }
         }
     }
 
@@ -383,9 +399,127 @@ public class BasicEnemyController : MonoBehaviour {
     void Damage()
     {
         healthPoints -= 1;
+
+        // let's delay it from dying until it bounces into something
+        // then make it explode into triangles
         if (healthPoints <= 0)
         {
+            //Destroy(gameObject);
+            enemyMoveState = EnemyMoveState.flyingToDeath;
+        }
+    }
+
+    void ExplodeOnImpact()
+    {
+        SplitMesh();
+
+        waitTime = 3.0f;
+        enemyMoveState = EnemyMoveState.waitToDestroy;
+
+        
+    }
+
+    void WaitToDestroy()
+    {
+        waitTime -= Time.deltaTime;
+        if (waitTime <= 0)
+        {
+            foreach (GameObject GO in GOs)
+            {
+                Destroy(GO);
+            }
             Destroy(gameObject);
         }
+    }
+
+    // modified from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
+    void SplitMesh()
+    {
+
+        if (GetComponent<Collider>())
+        {
+            GetComponent<Collider>().enabled = false;
+        }
+
+        Mesh M = new Mesh();
+        if (GetComponent<MeshFilter>())
+        {
+            M = GetComponent<MeshFilter>().mesh;
+        }
+        else if (GetComponent<SkinnedMeshRenderer>())
+        {
+            M = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+        }
+
+        Material[] materials = new Material[0];
+        if (GetComponent<MeshRenderer>())
+        {
+            materials = GetComponent<MeshRenderer>().materials;
+            GetComponent<MeshRenderer>().enabled = false;
+        }
+        else if (GetComponent<SkinnedMeshRenderer>())
+        {
+            materials = GetComponent<SkinnedMeshRenderer>().materials;
+            GetComponent<SkinnedMeshRenderer>().enabled = false;
+        }
+
+        // make actual object invisible before we generate a copy of its mesh as objects and explode them
+
+
+
+        Vector3[] verts = M.vertices;
+        Vector3[] normals = M.normals;
+        Vector2[] uvs = M.uv;
+        for (int submesh = 0; submesh < M.subMeshCount; submesh++)
+        {
+
+            int[] indices = M.GetTriangles(submesh);
+
+            for (int i = 0; i < indices.Length; i += 3)
+            {
+                Vector3[] newVerts = new Vector3[3];
+                Vector3[] newNormals = new Vector3[3];
+                Vector2[] newUvs = new Vector2[3];
+                for (int n = 0; n < 3; n++)
+                {
+                    int index = indices[i + n];
+                    newVerts[n] = verts[index];
+                    newUvs[n] = uvs[index];
+                    newNormals[n] = normals[index];
+                }
+
+                Mesh mesh = new Mesh();
+                mesh.vertices = newVerts;
+                mesh.normals = newNormals;
+                mesh.uv = newUvs;
+
+                mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 }; // comment out the last 3 ints for backface culling, somewhat improves performance
+
+                GameObject GO = new GameObject("Triangle " + (i / 3));
+                //GO.layer = LayerMask.NameToLayer("Particle");
+                GO.transform.position = transform.position;
+                GO.transform.rotation = transform.rotation;
+                GO.transform.localScale = transform.lossyScale;
+                GO.AddComponent<MeshRenderer>().material = materials[submesh];
+                GO.AddComponent<MeshFilter>().mesh = mesh;
+                GO.layer = 8; // it's own layer, prevents it from colliding with other objects
+                //GO.AddComponent<BoxCollider>();
+                float variance = 2.0f;
+                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
+
+                GOs.Add(GO);
+
+                // explode the triangle mesh objects
+                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
+                //mesh.RecalculateNormals();
+                //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
+
+
+            }
+        }
+
+        // Slow down time
+        //Time.timeScale = 0.5f;
+
     }
 }
