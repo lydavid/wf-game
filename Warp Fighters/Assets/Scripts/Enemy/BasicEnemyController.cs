@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum EnemyMoveState { patroling, chasingPlayer, coolingOff };
+public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround };
 
 
 public class BasicEnemyController : MonoBehaviour {
@@ -21,6 +21,7 @@ public class BasicEnemyController : MonoBehaviour {
     [Header("Detection")]
     public GameObject player;
     public int arcSize;
+    public int sightRange;
 
     private Rigidbody rb;
 
@@ -29,20 +30,33 @@ public class BasicEnemyController : MonoBehaviour {
     public Vector3 knockBackForce;
     public float coolOffTime;
 
+    Rigidbody selfRigidbody;
+
     [Header("State Machine")]
     public EnemyMoveState enemyMoveState;
 
     [Header("Debug")]
     int count = 0;
 
+    public float waitTime;
+    Vector3 originalPos;
+
+    Material origMaterial;
+    public Material alertedColor;
+    public Material attackColor;
 
     // Use this for initialization
     void Start()
     {
         rb = player.GetComponent<Rigidbody>();
         arcSize = 30;
+        sightRange = 30;
         coolOffTime = 3.0f;
         enemyMoveState = EnemyMoveState.patroling;
+
+        selfRigidbody = GetComponent<Rigidbody>();
+
+        origMaterial = GetComponent<Renderer>().material;
     }
 
 
@@ -65,6 +79,18 @@ public class BasicEnemyController : MonoBehaviour {
                 CoolOff();
                 break;
 
+            case EnemyMoveState.warpAtPlayer:
+                WarpAtPlayer();
+                break;
+
+            case EnemyMoveState.waiting:
+                Waiting();
+                break;
+
+            case EnemyMoveState.warpBackToGround:
+                WarpBackToGround();
+                break;
+
             default: break;
         }        
     }
@@ -73,6 +99,8 @@ public class BasicEnemyController : MonoBehaviour {
 	/* Moves enemy between start and target */
     void MoveBetweenPoints()
     {
+
+        //transform.rotation = Quaternion.identity;
 
         float step = speed * Time.deltaTime;
         if (wait)
@@ -133,7 +161,7 @@ public class BasicEnemyController : MonoBehaviour {
 
         RaycastHit hit;
         //Vector3 up = transform.TransformDirection(Vector3.up) * 100;
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 100;
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * sightRange;
         Vector3 start = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
 
         for (float i = -arcSize; i <= arcSize; i += 0.5f)
@@ -155,8 +183,8 @@ public class BasicEnemyController : MonoBehaviour {
                 {
                     enemyMoveState = EnemyMoveState.chasingPlayer;
 
-                    Debug.Log("Player hit! " + count);
-                    count += 1;
+                    //Debug.Log("Player hit! " + count);
+                    //count += 1;
 
                     break;
                 }
@@ -170,9 +198,55 @@ public class BasicEnemyController : MonoBehaviour {
      */
     void ChasePlayer()
     {
+        GetComponent<Renderer>().material = alertedColor;
+
         float step = speed * Time.deltaTime;
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, step);
         transform.LookAt(player.transform);
+
+        if (Vector3.Distance(player.transform.position, transform.position) < sightRange)
+        {
+            enemyMoveState = EnemyMoveState.warpAtPlayer;
+        }
+    }
+
+
+    /* Enemy speed warps towards player */
+    void WarpAtPlayer()
+    {
+
+        originalPos = transform.position;
+
+        float magnitude = 30.0f; // should be same as sightRange and 
+        transform.LookAt(player.transform);
+        Debug.Log(transform.forward * magnitude);
+        gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * magnitude, ForceMode.Impulse);
+        //enemyMoveState = EnemyMoveState.coolingOff;
+
+        // change to a waiting state while waiting for enemy to collide with player or not
+        enemyMoveState = EnemyMoveState.waiting;
+        waitTime = 1.5f;
+    }
+
+
+    void WarpBackToGround()
+    {
+
+        selfRigidbody.velocity = Vector3.zero;
+        selfRigidbody.angularVelocity = Vector3.zero;
+        //float magnitude = 20.0f;
+        //transform.LookAt(originalPos);
+        //gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * magnitude, ForceMode.Impulse);
+
+        if (moveToA)
+        {
+            transform.position = start.transform.position;
+
+        } else
+        {
+            transform.position = target.transform.position;
+        }
+        enemyMoveState = EnemyMoveState.patroling;
     }
 
 
@@ -182,13 +256,20 @@ public class BasicEnemyController : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
 
+            // TODO: Actual attack animation
+            // Change color of enemy to indicate enemy has attacked player
+            GetComponent<Renderer>().material = attackColor;
+
+
             Debug.Log("Attacked!");
 
             // knockback the player and damage them
             knockBackForce = transform.forward * 20;
             player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
 
-            Debug.Log(knockBackForce);
+            // knockback self a bit
+            Vector3 selfKnockBackForce = -knockBackForce / 2;
+            GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
 
             enemyMoveState = EnemyMoveState.coolingOff;
             coolOffTime = 3.0f;
@@ -196,13 +277,26 @@ public class BasicEnemyController : MonoBehaviour {
     }
 
 
+    void Waiting()
+    {
+        waitTime -= Time.deltaTime;
+        if (waitTime <= 0)
+        {
+            enemyMoveState = EnemyMoveState.patroling;
+        }
+    }
+
+
     /* Does nothing for a period of time to give player a breather */
     void CoolOff()
     {
+        //player.GetComponent<Rigidbody>().AddForce();
         coolOffTime -= Time.deltaTime;
         if (coolOffTime <= 0)
         {
-            enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
+            enemyMoveState = EnemyMoveState.warpBackToGround;
+            //enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
+            GetComponent<Renderer>().material = origMaterial;
         }
     }
 }
