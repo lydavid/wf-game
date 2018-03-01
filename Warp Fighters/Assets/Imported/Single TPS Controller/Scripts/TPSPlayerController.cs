@@ -6,7 +6,7 @@ using System.Collections;
 public class TPSPlayerController : MonoBehaviour {
 
     public float speed = 3.0f;
-	public float gravity = 1.0f;
+	public float gravity = 3.0f;
 
     //This variable indicates the current state of character.
     
