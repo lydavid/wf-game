@@ -44,6 +44,7 @@ public class BasicEnemyController : MonoBehaviour {
     Material origMaterial;
     public Material alertedColor;
     public Material attackColor;
+    public Material coolingColor;
 
     // Use this for initialization
     void Start()
@@ -271,6 +272,9 @@ public class BasicEnemyController : MonoBehaviour {
             Vector3 selfKnockBackForce = -knockBackForce / 2;
             GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
 
+            // dmg the player
+            player.GetComponent<HPManager>().Damage(1);
+
             enemyMoveState = EnemyMoveState.coolingOff;
             coolOffTime = 3.0f;
         }
@@ -290,6 +294,7 @@ public class BasicEnemyController : MonoBehaviour {
     /* Does nothing for a period of time to give player a breather */
     void CoolOff()
     {
+        GetComponent<Renderer>().material = coolingColor;
         //player.GetComponent<Rigidbody>().AddForce();
         coolOffTime -= Time.deltaTime;
         if (coolOffTime <= 0)
