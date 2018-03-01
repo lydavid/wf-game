@@ -24,9 +24,9 @@ public class CollectibleKey : MonoBehaviour {
         {
 
             Debug.Log("Player entered");
+            this.gameObject.SetActive(false);
             // indicate on the Player that they have collected this
             other.gameObject.GetComponent<CollectedKeysManager>().AddKey(keyType);
-
             // destroy this object
             Destroy(gameObject);
 
