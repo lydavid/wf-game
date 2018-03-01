@@ -15,6 +15,11 @@ public class HPManager : MonoBehaviour {
         healthPoints = 5;
 	}
 
+    void OnCollisionEnter (Collision hit) {
+        if (hit.gameObject.tag == "Terrain") {
+            SceneManager.LoadScene("GameOver");
+        }
+    }
 
     public void Damage(int damage)
     {
