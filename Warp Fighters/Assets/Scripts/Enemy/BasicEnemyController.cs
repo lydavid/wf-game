@@ -42,11 +42,18 @@ public class BasicEnemyController : MonoBehaviour {
     Vector3 originalPos;
 
     Material origMaterial;
-    public Material alertedColor;
-    public Material attackColor;
-    public Material coolingColor;
+    public Material alertedColor;  // orange when it's persuing the player
+    public Material attackColor;  // blue when it's dealing dmg to the player
+    public Material damagedColor; // red when it's receiving dmg from the player
 
     public bool ableToDamagePlayer; // use this to restrict enemy from hitting player multiple times in its single warp
+
+
+    public bool initiatedAttack;
+
+    public int healthPoints;
+    public bool ableToBeDamaged;
+
 
     // Use this for initialization
     void Start()
@@ -62,6 +69,10 @@ public class BasicEnemyController : MonoBehaviour {
         origMaterial = GetComponent<Renderer>().material;
 
         ableToDamagePlayer = true;
+        initiatedAttack = false;
+
+        healthPoints = 2;
+        ableToBeDamaged = true;
     }
 
 
@@ -220,6 +231,8 @@ public class BasicEnemyController : MonoBehaviour {
     void WarpAtPlayer()
     {
 
+        initiatedAttack = true;
+
         originalPos = transform.position;
 
         float magnitude = 30.0f; // should be same as sightRange and 
@@ -237,6 +250,7 @@ public class BasicEnemyController : MonoBehaviour {
     void WarpBackToGround()
     {
 
+        // Make it stop flying around
         selfRigidbody.velocity = Vector3.zero;
         selfRigidbody.angularVelocity = Vector3.zero;
         //float magnitude = 20.0f;
@@ -251,43 +265,90 @@ public class BasicEnemyController : MonoBehaviour {
         {
             transform.position = target.transform.position;
         }
+
+        /*float step = speed * Time.deltaTime;
+        transform.LookAt(originalPos);
+        transform.position = Vector3.MoveTowards(transform.position, originalPos, step);
+
+        if (transform.position == originalPos)
+        {
+
+            enemyMoveState = EnemyMoveState.patroling;
+        }*/
         enemyMoveState = EnemyMoveState.patroling;
     }
 
 
+    // differentiate whether this enemy is attacking the player or being attacked by the player
+    // whoever initiates attack with deal dmg to the other
+    // if both initiates attack, they should bounce off
     private void OnCollisionEnter(Collision other)
     {
 
         if (other.gameObject.tag == "Player")
         {
 
-            if (ableToDamagePlayer)
+            if (initiatedAttack && !player.GetComponent<AttackManager>().initiatedAttack) // and player did not
             {
 
-                // TODO: Actual attack animation
-                // Change color of enemy to indicate enemy has attacked player
-                GetComponent<Renderer>().material = attackColor;
 
 
-                Debug.Log("Attacked!");
+                if (ableToDamagePlayer)
+                {
 
-                // knockback the player and damage them
-                knockBackForce = transform.forward * 20;
-                player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
+                    // TODO: Actual attack animation
+                    // Change color of enemy to indicate enemy has attacked player
+                    GetComponent<Renderer>().material = attackColor;
 
-                // knockback self a bit
-                Vector3 selfKnockBackForce = -knockBackForce / 2;
-                GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
 
-                // dmg the player
-                player.GetComponent<HPManager>().Damage(1);
+                    Debug.Log("Attacked!");
 
-                enemyMoveState = EnemyMoveState.coolingOff;
-                coolOffTime = 3.0f;
+                    // knockback the player and damage them
+                    knockBackForce = transform.forward * 20;
+                    player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
 
-                ableToDamagePlayer = false;
+                    // knockback self a bit
+                    Vector3 selfKnockBackForce = -knockBackForce / 2;
+                    GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
+
+                    // dmg the player
+                    player.GetComponent<HPManager>().Damage(1);
+
+                    // change state
+                    enemyMoveState = EnemyMoveState.coolingOff;
+                    coolOffTime = 3.0f;
+
+                    ableToDamagePlayer = false;
+                    initiatedAttack = false;
+
+                }
+
 
             }
+            else if (player.GetComponent<AttackManager>().initiatedAttack)// && !initiatedAttack)
+            {
+                if (ableToBeDamaged)
+                {
+                    // knockback self
+                    Vector3 selfKnockBackForce = player.GetComponent<Rigidbody>().velocity;
+                    GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
+
+                    // knockback player a bit
+                    Vector3 playerKnockBackForce = -selfKnockBackForce / 2;
+                    player.GetComponent<Rigidbody>().AddForce(playerKnockBackForce, ForceMode.Impulse);
+
+                    enemyMoveState = EnemyMoveState.coolingOff;
+                    coolOffTime = 3.0f;
+                    Damage();
+                    ableToBeDamaged = false;
+                }
+            }
+            else
+            {
+                // otherwise both bounce back without damage
+
+            }
+
         }
     }
 
@@ -305,15 +366,26 @@ public class BasicEnemyController : MonoBehaviour {
     /* Does nothing for a period of time to give player a breather */
     void CoolOff()
     {
-        GetComponent<Renderer>().material = coolingColor;
+        GetComponent<Renderer>().material = origMaterial;
         //player.GetComponent<Rigidbody>().AddForce();
         coolOffTime -= Time.deltaTime;
         if (coolOffTime <= 0)
         {
             enemyMoveState = EnemyMoveState.warpBackToGround;
             //enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
-            GetComponent<Renderer>().material = origMaterial;
+            //GetComponent<Renderer>().material = origMaterial;
             ableToDamagePlayer = true;
+            ableToBeDamaged = true;
+        }
+    }
+
+
+    void Damage()
+    {
+        healthPoints -= 1;
+        if (healthPoints <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }
