@@ -37,7 +37,7 @@ public class ButtonPress : MonoBehaviour {
             anim.SetBool("ButtonPressed", true);
             doorAnim.SetBool("DoorOpen", true);
 
-            Debug.Log("enter");
+           // Debug.Log("enter");
             //buttonPressed = true;
             //animator.SetBool("buttonPressed", true);
             //door.SetActive(false);
@@ -51,7 +51,7 @@ public class ButtonPress : MonoBehaviour {
             anim.SetBool("ButtonPressed", false);
             doorAnim.SetBool("DoorOpen", false);
             //gameObject.GetComponent<Animator>().Play("ButtonPressAnimation");
-            Debug.Log("exit");
+           // Debug.Log("exit");
             //buttonPressed = false;
             //animator.SetBool("buttonPressed", false);
             //door.SetActive(true);

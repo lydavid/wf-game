@@ -22,6 +22,8 @@ public class CollectibleKey : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
+
+            Debug.Log("Player entered");
             // indicate on the Player that they have collected this
             other.gameObject.GetComponent<CollectedKeysManager>().AddKey(keyType);
 
