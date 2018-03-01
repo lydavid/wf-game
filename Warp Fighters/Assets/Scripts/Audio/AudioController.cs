@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioController : MonoBehaviour {
-
-	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {
+	
+	
+	public AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {
 		AudioSource audio = obj.AddComponent<AudioSource>();
 		audio.clip = clip;
 		audio.loop = loop;
@@ -12,5 +13,4 @@ public class AudioController : MonoBehaviour {
 		audio.volume = volume;
 		return audio;
 	}
-
 }
