@@ -314,7 +314,7 @@ public class BasicEnemyController : MonoBehaviour {
                     Debug.Log("Attacked!");
 
                     // knockback the player and damage them
-                    knockBackForce = transform.forward * 20;
+                    knockBackForce = GetComponent<Rigidbody>().velocity;//transform.forward * 20;
                     player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
 
                     // knockback self a bit
@@ -335,7 +335,7 @@ public class BasicEnemyController : MonoBehaviour {
 
 
             }
-            else if (player.GetComponent<AttackManager>().initiatedAttack)// && !initiatedAttack)
+            else if (player.GetComponent<AttackManager>().initiatedAttack && !initiatedAttack)
             {
                 if (ableToBeDamaged)
                 {
@@ -356,6 +356,17 @@ public class BasicEnemyController : MonoBehaviour {
             else
             {
                 // otherwise both bounce back without damage
+
+                // Knockback self
+                Vector3 selfKnockBackForce = player.GetComponent<Rigidbody>().velocity;
+                GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
+
+                // knockback player
+                Vector3 playerKnockBackForce = GetComponent<Rigidbody>().velocity;
+                player.GetComponent<Rigidbody>().AddForce(playerKnockBackForce, ForceMode.Impulse);
+
+                enemyMoveState = EnemyMoveState.coolingOff;
+                coolOffTime = 3.0f;
 
             }
 
