@@ -388,6 +388,7 @@ public class BasicEnemyController : MonoBehaviour {
         waitTime -= Time.deltaTime;
         if (waitTime <= 0)
         {
+            GetComponent<Renderer>().material = origMaterial;
             enemyMoveState = EnemyMoveState.patroling;
         }
     }
