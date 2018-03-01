@@ -11,8 +11,6 @@ public class RestartGame : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		restartBtn.onClick.AddListener(TaskOnClick);
-		//Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
     }
 
     void TaskOnClick()

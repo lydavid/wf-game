@@ -6,11 +6,15 @@ using UnityEngine;
 public class PlayerAudio : MonoBehaviour {
 
 	public AudioClip instantWarpClip;
-	public GameObject Helper;
+	public AudioClip bgmClip;
+	//public GameObject Helper;
+
+
+	private AudioSource bgmAudio;
 
 	// Use this for initialization
 	void Start () {
-
+		bgmAudio.Play();
 	}
 	
 	// Update is called once per frame
@@ -19,7 +23,20 @@ public class PlayerAudio : MonoBehaviour {
 	}
 
 	void Awake () {
-		AudioSource instantWarpAudio = Helper.GetComponent<AudioController>().AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
+		AudioSource instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
+		bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.05f);
 	}
+
+	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {
+		AudioSource audio = obj.AddComponent<AudioSource>();
+		audio.clip = clip;
+		audio.loop = loop;
+		audio.playOnAwake = playOnAwake;
+		audio.volume = volume;
+		return audio;
+	}
+
+
+
 }
 
