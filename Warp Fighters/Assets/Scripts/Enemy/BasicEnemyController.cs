@@ -368,6 +368,9 @@ public class BasicEnemyController : MonoBehaviour {
                 enemyMoveState = EnemyMoveState.coolingOff;
                 coolOffTime = 3.0f;
 
+                initiatedAttack = false;
+                player.GetComponent<AttackManager>().initiatedAttack = false;
+
             }
 
         } else
