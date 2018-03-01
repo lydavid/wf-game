@@ -35,12 +35,14 @@ public class BTSguide : MonoBehaviour {
 		}
 	
 		WarpGuideAnimate(mw);
+
+		Warp();
 		
 	}
 
-	void FixedUpdate () {
+	/*void FixedUpdate () {
 		Warp();
-	}
+	}*/
 
 	void UpdateStates () {
 		
