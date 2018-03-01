@@ -24,7 +24,7 @@ public class PlayerAudio : MonoBehaviour {
 
 	void Awake () {
 		AudioSource instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
-		bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.05f);
+		bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.02f);
 	}
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {

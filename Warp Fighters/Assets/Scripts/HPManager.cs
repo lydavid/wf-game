@@ -30,4 +30,5 @@ public class HPManager : MonoBehaviour {
             SceneManager.LoadScene("GameOver");
         }
     }
+
 }
