@@ -46,6 +46,8 @@ public class BasicEnemyController : MonoBehaviour {
     public Material attackColor;
     public Material coolingColor;
 
+    public bool ableToDamagePlayer; // use this to restrict enemy from hitting player multiple times in its single warp
+
     // Use this for initialization
     void Start()
     {
@@ -58,6 +60,8 @@ public class BasicEnemyController : MonoBehaviour {
         selfRigidbody = GetComponent<Rigidbody>();
 
         origMaterial = GetComponent<Renderer>().material;
+
+        ableToDamagePlayer = true;
     }
 
 
@@ -257,26 +261,33 @@ public class BasicEnemyController : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
 
-            // TODO: Actual attack animation
-            // Change color of enemy to indicate enemy has attacked player
-            GetComponent<Renderer>().material = attackColor;
+            if (ableToDamagePlayer)
+            {
+
+                // TODO: Actual attack animation
+                // Change color of enemy to indicate enemy has attacked player
+                GetComponent<Renderer>().material = attackColor;
 
 
-            Debug.Log("Attacked!");
+                Debug.Log("Attacked!");
 
-            // knockback the player and damage them
-            knockBackForce = transform.forward * 20;
-            player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
+                // knockback the player and damage them
+                knockBackForce = transform.forward * 20;
+                player.GetComponent<Rigidbody>().AddForce(knockBackForce, ForceMode.Impulse);
 
-            // knockback self a bit
-            Vector3 selfKnockBackForce = -knockBackForce / 2;
-            GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
+                // knockback self a bit
+                Vector3 selfKnockBackForce = -knockBackForce / 2;
+                GetComponent<Rigidbody>().AddForce(selfKnockBackForce, ForceMode.Impulse);
 
-            // dmg the player
-            player.GetComponent<HPManager>().Damage(1);
+                // dmg the player
+                player.GetComponent<HPManager>().Damage(1);
 
-            enemyMoveState = EnemyMoveState.coolingOff;
-            coolOffTime = 3.0f;
+                enemyMoveState = EnemyMoveState.coolingOff;
+                coolOffTime = 3.0f;
+
+                ableToDamagePlayer = false;
+
+            }
         }
     }
 
@@ -302,6 +313,7 @@ public class BasicEnemyController : MonoBehaviour {
             enemyMoveState = EnemyMoveState.warpBackToGround;
             //enemyMoveState = EnemyMoveState.patroling; // finished cooling off after time expires
             GetComponent<Renderer>().material = origMaterial;
+            ableToDamagePlayer = true;
         }
     }
 }
