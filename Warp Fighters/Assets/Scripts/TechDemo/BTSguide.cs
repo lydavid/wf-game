@@ -23,10 +23,26 @@ public class BTSguide : MonoBehaviour {
 
 	void Update () {
 		UpdateStates();
-		//float mw = Input.GetAxis("Mouse ScrollWheel");
-		float mw = 0;
-		var rt = Input.GetAxis("Right Trigger");
-		var lt = Input.GetAxis("Left Trigger");
+        //float mw = Input.GetAxis("Mouse ScrollWheel");
+        float alt_mw = Input.GetAxis("Mouse ScrollWheel");
+
+        float rt = 0;
+        float lt = 0;
+
+        if (alt_mw > 0)
+        {
+            rt = alt_mw;
+        } else if (alt_mw < 0)
+        {
+            lt = Mathf.Abs(alt_mw);
+        } else
+        {
+            rt = Input.GetAxis("Right Trigger");
+            lt = Input.GetAxis("Left Trigger");
+        }
+
+        float mw = 0;
+		
 
 		if (lt == 0) {
 			mw = rt;
@@ -46,7 +62,7 @@ public class BTSguide : MonoBehaviour {
 
 	void UpdateStates () {
 		
-		if (Input.GetButtonDown("Fire2") || Input.GetButtonDown("Right Stick Click")) {
+		if (Input.GetMouseButtonDown(2) || Input.GetButtonDown("Right Stick Click")) { // Input.GetButtonDown("Fire2")
 			if (warpToggle) {
 				warpToggle = false;
 			} else {
@@ -68,16 +84,16 @@ public class BTSguide : MonoBehaviour {
 
 		if (warpToggle == true) {
 
-			if (Input.GetButtonDown("A Button")) {
+			if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0)) {
 				InstantWarp();
 			}
-			if (Input.GetButtonDown("B Button")) {
+			if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1)) {
 				VelocityWarp();
 			}
 		}
 
 
-		if (Input.GetButtonDown("Fire1") ) {
+		/*if (Input.GetButtonDown("Fire1") ) {
 
 			if (warpToggle == true) {
 
@@ -88,7 +104,7 @@ public class BTSguide : MonoBehaviour {
 				}				
 			}
 			
-		}
+		}*/
 	}
 
 	void InstantWarp () {

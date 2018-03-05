@@ -65,11 +65,11 @@ public class TPSPlayerController : MonoBehaviour {
         04 = Walking Right
         05 = Walking Left
         */
-        
-        float xAxis = Input.GetAxis("Left Stick X");
-        float yAxis = Input.GetAxis("Left Stick Y");
 
-        if (xAxis == 0 && yAxis == 0) {
+        //float xAxis = Input.GetAxis("Left Stick X");
+        //float yAxis = Input.GetAxis("Left Stick Y");
+
+        /*if (xAxis == 0 && yAxis == 0) {
             state = 0;
         }
 
@@ -87,10 +87,20 @@ public class TPSPlayerController : MonoBehaviour {
 
         if (yAxis > 0 && Mathf.Abs(yAxis) > Mathf.Abs(xAxis)) {
             state = 3;
-        }
+        }*/
+
+        float mH = Input.GetAxis("Horizontal");
+        float mV = Input.GetAxis("Vertical");
+        /*if (mH < 0) { state = 4; }
+        else if (mH > 0) { state = 3; }
+        else if (mV < 0) { state = 2; }
+        else if (mV > 0) { state = 1; }
+        else { state = 0; }*/
+
+        transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
 
 
-        if (Input.GetKeyDown("w"))
+        /*if (Input.GetKeyDown("w"))
         {
             state = 1;
         }
@@ -147,23 +157,39 @@ public class TPSPlayerController : MonoBehaviour {
             if (Input.GetKey("s")) { state = 3; }
             if (Input.GetKey("d")) { state = 4; }
             if (Input.GetKey("w")) { state = 1; }
-        }
+        }*/
 
     }
 
     private void MovePerson()
     {
-        //var mouseHorizontal = Input.GetAxis("Mouse X");
-        var mouseHorizontal = Input.GetAxis("Right Stick X");
+        float mouseHorizontal = 0;
+
+        if (Input.GetAxis("Mouse X") != 0)
+        {
+            mouseHorizontal = Input.GetAxis("Mouse X");
+        }
+
+        if (Input.GetAxis("Right Stick X") != 0)
+        {
+            mouseHorizontal = Input.GetAxis("Right Stick X");
+        }
+
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
         transform.rotation = Quaternion.AngleAxis(horizontal, Vector3.up);
 
-        if (state == 0) { transform.Translate(0, 0, 0); }
+        /*if (state == 0) { transform.Translate(0, 0, 0); }
         if (state == 1) { transform.Translate(0, 0, speed * Time.deltaTime); }
         if (state == 2) { transform.Translate(0, 0, (speed + 5.0f) * Time.deltaTime); }
         if (state == 3) { transform.Translate(0, 0, -speed * Time.deltaTime); }
         if (state == 4) { transform.Translate(speed * Time.deltaTime, 0, 0); }
-        if (state == 5) { transform.Translate(-speed * Time.deltaTime, 0, 0); }
+        if (state == 5) { transform.Translate(-speed * Time.deltaTime, 0, 0); }*/
+
+        /*if (state == 0) { transform.Translate(0, 0, 0); }
+        if (state == 1) { transform.Translate(0, 0, speed * Time.deltaTime); }
+        if (state == 2) { transform.Translate(0, 0, -speed * Time.deltaTime); }
+        if (state == 3) { transform.Translate(speed * Time.deltaTime, 0, 0); }
+        if (state == 4) { transform.Translate(-speed * Time.deltaTime, 0, 0); }*/
     }
 
 	/*void OnTriggerEnter(Collider other) {
