@@ -14,10 +14,14 @@ public class HumanBullet : MonoBehaviour {
     public GameObject body;
     public GameObject bullet;
 
+    bool bulletMode;
+
     void Start()
     {
         orb = GameObject.Find("Orb");
         magnitude = 5000;
+
+        bulletMode = false;
     }
 
 
@@ -31,7 +35,7 @@ public class HumanBullet : MonoBehaviour {
         //Debug.Log(orb.transform.localEulerAngles);
         //forward = new Vector3(forward.x, 330, forward.y);
 
-        Debug.Log(forward);
+        //Debug.Log(forward);
         Debug.DrawRay(transform.position, forward, Color.green);
         //Debug.DrawRay(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)));
         /*Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -46,16 +50,43 @@ public class HumanBullet : MonoBehaviour {
             GetComponent<Rigidbody>().AddForce(forward);
             body.SetActive(false);
             bullet.SetActive(true);
+            bulletMode = true;
         }
+
+
     }
+
+    /*private void FixedUpdate()
+    {
+        GetComponent<Rigidbody>().AddForce(Physics.gravity);
+    }*/
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer != 9 && other.gameObject.tag != "Player")
+        //if (other.gameObject.layer != 9 && other.gameObject.tag != "Player")
+        //{
+        if (bulletMode)
         {
             bullet.SetActive(false);
             body.SetActive(true);
+
+            // only need to do this if collision was from above
+            float yPos = transform.position.y - other.transform.position.y;
+            // or from side
+            float xPos = Mathf.Abs(transform.position.x - other.transform.position.x);
+            if (yPos > 0 || xPos > 0)
+            {
+
+                // Set the player to be above ground
+                //float yPos = Mathf.Abs(other.transform.position.y - transform.position.y);
+                // for now we use 2 which is about the heigh of this gameObject, to prevent it from spawning through the ground after warp
+                transform.position = new Vector3(transform.position.x, Mathf.Ceil(yPos + transform.position.y + 2), transform.position.z);
+
+            }
+            
+            bulletMode = false;
         }
+        //}
     }
 
 

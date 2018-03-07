@@ -10,17 +10,15 @@ public class AttackManager : MonoBehaviour {
 	void Start () {
         initiatedAttack = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
 
         // should match up with the velocity warp button
-        if (Input.GetButtonDown("B Button"))
+        if (Input.GetButtonDown("B Button") || Input.GetKeyDown("space"))
         {
             initiatedAttack = true;
-        }
-
-        if (gameObject.GetComponent<Rigidbody>().velocity == Vector3.zero)
+        } else if (gameObject.GetComponent<Rigidbody>().velocity == Vector3.zero)
         {
             initiatedAttack = false;
         }
