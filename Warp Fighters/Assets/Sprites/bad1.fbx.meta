@@ -287,6 +287,47 @@ ModelImporter:
     4300076: pasted__pCylinder4
     4300078: pasted__pasted__pCylinder4
     4300080: pasted__pasted__pCylinder4
+    6400000: pasted__pasted__pCylinder1
+    6400002: pasted__pasted__pCylinder1 1
+    6400004: pasted__pasted__pCylinder4
+    6400006: pasted__pasted__pCylinder4 1
+    6400008: pasted__pasted__pCylinder4 2
+    6400010: pasted__pasted__pPyramid1
+    6400012: pasted__pasted__pPyramid1 1
+    6400014: pasted__pasted__pPyramid2
+    6400016: pasted__pasted__pPyramid5
+    6400018: pasted__pasted__pPyramid5 1
+    6400020: pasted__pCube3
+    6400022: pasted__pCube3 1
+    6400024: pasted__pCube3 2
+    6400026: pasted__pCube4
+    6400028: pasted__pCylinder1
+    6400030: pasted__pCylinder3
+    6400032: pasted__pCylinder4
+    6400034: pasted__pCylinder4 1
+    6400036: pasted__pCylinder4 2
+    6400038: pasted__pCylinder4 3
+    6400040: pasted__pCylinder4 4
+    6400042: pasted__pCylinder4 5
+    6400044: pasted__pPyramid1
+    6400046: pasted__pPyramid1 1
+    6400048: pasted__pPyramid1 2
+    6400050: pasted__pPyramid1 3
+    6400052: pasted__pPyramid2
+    6400054: pasted__pPyramid2 1
+    6400056: pasted__pPyramid2 2
+    6400058: pasted__pPyramid5
+    6400060: pCube1
+    6400062: pCube2
+    6400064: pCube3
+    6400066: pCube4
+    6400068: pCylinder2
+    6400070: pCylinder3
+    6400072: pCylinder4
+    6400074: pPyramid1
+    6400076: pPyramid3
+    6400078: pSphere1
+    6400080: pTorus1
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -320,7 +361,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
