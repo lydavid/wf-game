@@ -14,7 +14,7 @@ public class HumanBullet : MonoBehaviour {
     public GameObject body;
     public GameObject bullet;
 
-    bool bulletMode;
+    public bool bulletMode;
 
     void Start()
     {
