@@ -14,10 +14,16 @@ public class BTSguide : MonoBehaviour {
 	private float curCamDist = 5f;
 	private const float minCamDist = 3f;
 	private const float maxCamDist = 25f;
-	
 
-	void Start () {
-	
+    PlayerAudio playerAudio;
+
+
+    PlayerSettings playerSettings;
+
+
+    void Start () {
+        playerAudio = GetComponent<PlayerAudio>();
+        playerSettings = GetComponent<PlayerSettings>();
 	}
 
 
@@ -85,10 +91,12 @@ public class BTSguide : MonoBehaviour {
 		if (warpToggle == true) {
 
 			if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0)) {
+                playerAudio.instantWarpAudio.Play();
 				InstantWarp();
 			}
 			if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1)) {
-				VelocityWarp();
+                playerAudio.velocityWarpAudio.Play();
+                VelocityWarp();
 			}
 		}
 
@@ -114,10 +122,16 @@ public class BTSguide : MonoBehaviour {
 	}
 
 	void VelocityWarp () {
-		Vector3 dir = (warpGuide.transform.position - transform.position).normalized;
-		//GetComponent<Rigidbody>().AddForce(dir * 10f);
-        GetComponent<Rigidbody>().velocity = dir * 50f;
-		//GetComponent<Rigidbody>().velocity = 10*transform.forward;
+
+        if (!playerSettings.humanBulletOn)
+        {
+            Vector3 dir = (warpGuide.transform.position - transform.position).normalized;
+            //GetComponent<Rigidbody>().AddForce(dir * 10f);
+            GetComponent<Rigidbody>().velocity = dir * 50f;
+            //GetComponent<Rigidbody>().velocity = 10*transform.forward;
+        } // otherwise we let another script handle the warping
+
+
 		warpGuide.SetActive(false);
 		warpToggle = false;
 	}

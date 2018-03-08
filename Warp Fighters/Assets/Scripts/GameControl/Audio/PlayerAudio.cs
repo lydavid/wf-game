@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// Maybe rename to PlayerAudioManager
+// Set up all the AudioClip and AudioSource in this script and allow for other scripts to call them from here.
 public class PlayerAudio : MonoBehaviour {
 
 	public AudioClip instantWarpClip;
 	public AudioClip bgmClip;
+    public AudioClip velocityWarpClip;
 	//public GameObject Helper;
 
 
 	private AudioSource bgmAudio;
+    public AudioSource instantWarpAudio;
+    public AudioSource velocityWarpAudio;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
 		bgmAudio.Play();
 	}
 	
@@ -23,8 +28,9 @@ public class PlayerAudio : MonoBehaviour {
 	}
 
 	void Awake () {
-		AudioSource instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
-		bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.02f);
+		instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
+        velocityWarpAudio = AddAudio(gameObject, velocityWarpClip, false, false, 0.2f);
+        bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.02f);
 	}
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {

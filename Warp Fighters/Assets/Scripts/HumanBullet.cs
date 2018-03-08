@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// A substitute for the velocity warp
 public class HumanBullet : MonoBehaviour {
 
     [SerializeField]
@@ -16,44 +17,50 @@ public class HumanBullet : MonoBehaviour {
 
     public bool bulletMode;
 
+    PlayerSettings playerSettings;
+
     void Start()
     {
         orb = GameObject.Find("Orb");
         magnitude = 5000;
 
         bulletMode = false;
+
+        playerSettings = GetComponent<PlayerSettings>();
     }
 
 
     void Update()
     {
-        Vector3 forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
-        // forward is a mixture of x and z
-
-        // now we need to change y according to the angle of the orb (it's x rot seems to rep the up/down look angle
-        //Debug.Log(transform.TransformDirection(Vector3.forward));
-        //Debug.Log(orb.transform.localEulerAngles);
-        //forward = new Vector3(forward.x, 330, forward.y);
-
-        //Debug.Log(forward);
-        Debug.DrawRay(transform.position, forward, Color.green);
-        //Debug.DrawRay(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)));
-        /*Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-            print("I'm looking at " + hit.transform.name);
-        else
-            print("I'm looking at nothing!");
-        */
-        if (Input.GetKeyDown("space"))
+        if (playerSettings.humanBulletOn)
         {
-            GetComponent<Rigidbody>().AddForce(forward);
-            body.SetActive(false);
-            bullet.SetActive(true);
-            bulletMode = true;
+            Vector3 forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
+                                                                // forward is a mixture of x and z
+
+            // now we need to change y according to the angle of the orb (it's x rot seems to rep the up/down look angle
+            //Debug.Log(transform.TransformDirection(Vector3.forward));
+            //Debug.Log(orb.transform.localEulerAngles);
+            //forward = new Vector3(forward.x, 330, forward.y);
+
+            //Debug.Log(forward);
+            Debug.DrawRay(transform.position, forward, Color.green);
+            //Debug.DrawRay(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)));
+            /*Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+                print("I'm looking at " + hit.transform.name);
+            else
+                print("I'm looking at nothing!");
+            */
+            if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1))
+            {
+                GetComponent<Rigidbody>().AddForce(forward);
+                body.SetActive(false);
+                bullet.SetActive(true);
+                bulletMode = true;
+            }
+
         }
-
-
     }
 
     /*private void FixedUpdate()
