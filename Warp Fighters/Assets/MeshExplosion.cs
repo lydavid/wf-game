@@ -141,7 +141,8 @@ public class MeshExplosion : MonoBehaviour {
                     //GO.AddComponent<BoxCollider>();
                     float variance = 2.0f;
                     Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
-
+                    //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 4, -variance * 2), transform.position.y, transform.position.z);
+                    //Vector3 explosionPos = Vector3.zero;
                     GOs.Add(GO);
 
                     // explode the triangle mesh objects
