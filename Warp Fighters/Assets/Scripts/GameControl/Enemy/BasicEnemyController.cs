@@ -83,15 +83,18 @@ public class BasicEnemyController : MonoBehaviour {
     void Update()
     {
 
-        if (!cannotMove)
-        {
 
             // State machine to control enemy actions
             switch (enemyMoveState)
             {
                 case EnemyMoveState.patroling:
-                    MoveBetweenPoints();
-                    LookForPlayer();
+
+                    // prevents patrolling and consequently the rest of movement actions for testing
+                    if (!cannotMove)
+                    {
+                        MoveBetweenPoints();
+                        LookForPlayer();
+                    }
                     break;
 
                 case EnemyMoveState.chasingPlayer:
@@ -122,7 +125,6 @@ public class BasicEnemyController : MonoBehaviour {
 
                 default: break;
             }
-        }
     }
 
 
