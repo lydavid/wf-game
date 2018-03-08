@@ -29,6 +29,7 @@ public class BasicEnemyController : MonoBehaviour {
     [Header("Combat")]
     public Vector3 knockBackForce;
     public float coolOffTime;
+    public int healthPoints;
 
     Rigidbody selfRigidbody;
 
@@ -36,27 +37,23 @@ public class BasicEnemyController : MonoBehaviour {
     public EnemyMoveState enemyMoveState;
 
     [Header("Debug")]
-    int count = 0;
-
+    //int count = 0;
     public float waitTime;
     Vector3 originalPos;
 
+    [Header("Materials")]
     Material origMaterial;
     public Material alertedColor;  // orange when it's persuing the player
     public Material attackColor;  // blue when it's dealing dmg to the player
     public Material damagedColor; // red when it's receiving dmg from the player
 
+    [Header("Flags")]
     public bool ableToDamagePlayer; // use this to restrict enemy from hitting player multiple times in its single warp
-
     public bool cannotMove;
-
     public bool initiatedAttack;
-
-    public int healthPoints;
     public bool ableToBeDamaged;
 
-
-    List<GameObject> GOs = new List<GameObject>();
+    
 
     // Use this for initialization
     void Start()
@@ -162,7 +159,8 @@ public class BasicEnemyController : MonoBehaviour {
                 if (transform.rotation.y != 270)
                 {
                     // i could use a loop to slowly roate x angles at a time
-                    transform.rotation = Quaternion.Euler(0, 270, 0);
+                    //transform.rotation = Quaternion.Euler(0, 270, 0);
+                    //transform.LookAt(start.transform);
                 }
 
             }
@@ -173,7 +171,8 @@ public class BasicEnemyController : MonoBehaviour {
                 wait = true;
                 if (transform.rotation.y != 90)
                 {
-                    transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //transform.rotation = Quaternion.Euler(0, 90, 0);
+                    //transform.LookAt(target.transform);
                 }
             }
         }
@@ -230,7 +229,8 @@ public class BasicEnemyController : MonoBehaviour {
      */
     void ChasePlayer()
     {
-        GetComponent<Renderer>().material = alertedColor;
+        //GetComponent<Renderer>().material = alertedColor;
+        ChangeColorOfChildren(alertedColor);
 
         float step = speed * Time.deltaTime;
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, step);
@@ -265,7 +265,7 @@ public class BasicEnemyController : MonoBehaviour {
 
     void WarpBackToGround()
     {
-
+        ChangeColorOfChildren(origMaterial);
         // Make it stop flying around
         selfRigidbody.velocity = Vector3.zero;
         selfRigidbody.angularVelocity = Vector3.zero;
@@ -275,11 +275,13 @@ public class BasicEnemyController : MonoBehaviour {
 
         if (moveToA)
         {
-            transform.position = start.transform.position;
+            transform.position = target.transform.position;
+            transform.LookAt(start);
 
         } else
         {
-            transform.position = target.transform.position;
+            transform.position = start.transform.position;
+            transform.LookAt(target);
         }
 
         /*float step = speed * Time.deltaTime;
@@ -316,7 +318,8 @@ public class BasicEnemyController : MonoBehaviour {
 
                     // TODO: Actual attack animation
                     // Change color of enemy to indicate enemy has attacked player
-                    GetComponent<Renderer>().material = attackColor;
+                    //GetComponent<Renderer>().material = attackColor;
+                    ChangeColorOfChildren(attackColor);
 
 
                     Debug.Log("Attacked!");
@@ -396,7 +399,8 @@ public class BasicEnemyController : MonoBehaviour {
         waitTime -= Time.deltaTime;
         if (waitTime <= 0)
         {
-            GetComponent<Renderer>().material = origMaterial;
+            //GetComponent<Renderer>().material = origMaterial;
+            ChangeColorOfChildren(origMaterial);
             enemyMoveState = EnemyMoveState.patroling;
         }
     }
@@ -405,7 +409,13 @@ public class BasicEnemyController : MonoBehaviour {
     /* Does nothing for a period of time to give player a breather */
     void CoolOff()
     {
-        GetComponent<Renderer>().material = origMaterial;
+        //GetComponent<Renderer>().material = origMaterial;
+
+
+
+        //ChangeColorOfChildren(origMaterial);
+
+
         //player.GetComponent<Rigidbody>().AddForce();
         coolOffTime -= Time.deltaTime;
         if (coolOffTime <= 0)
@@ -422,6 +432,7 @@ public class BasicEnemyController : MonoBehaviour {
     void Damage()
     {
         healthPoints -= 1;
+        ChangeColorOfChildren(damagedColor);
 
         // let's delay it from dying until it bounces into something
         // then make it explode into triangles
@@ -434,9 +445,11 @@ public class BasicEnemyController : MonoBehaviour {
 
     void ExplodeOnImpact()
     {
-        SplitMesh();
-
+        //SplitMesh();
         waitTime = 3.0f;
+        GetComponent<MeshExplosion>().SplitMesh(waitTime);
+
+        
         enemyMoveState = EnemyMoveState.waitToDestroy;
 
         
@@ -444,125 +457,46 @@ public class BasicEnemyController : MonoBehaviour {
 
     void WaitToDestroy()
     {
-        waitTime -= Time.deltaTime;
-        if (waitTime <= 0)
-        {
-            foreach (GameObject GO in GOs)
-            {
-                Destroy(GO);
-            }
-            Destroy(gameObject);
-        }
-    }
 
-    // modified from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
-    void SplitMesh()
+    }
+    
+
+    void ChangeColorOfChildren(Material newMat)
     {
-
-        if (GetComponent<Collider>())
+        foreach (Renderer ren in GetComponentsInChildren<Renderer>())
         {
-            GetComponent<Collider>().enabled = false;
+            ren.material = newMat;
         }
+        //Debug.Log("hello0");
 
+        /*for (int i = 0; i < transform.childCount; i++)
+        {
 
-        List<Mesh> M = new List<Mesh>();
-        //Mesh[] M = new Mesh[0];
-        //if (GetComponent<MeshFilter>())
-        //{
-        foreach (MeshFilter mf in GetComponentsInChildren<MeshFilter>())
-        {
-            M.Add(mf.mesh);
-        }
-            //M = GetComponentsInChildren<MeshFilter>().mesh;
-        /*}
-        else if (GetComponent<SkinnedMeshRenderer>())
-        {
-            M = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+            if (transform.GetChild(i).GetComponent<Renderer>())
+            {
+                //Debug.Log(i);
+                transform.GetChild(i).GetComponent<Renderer>().material = newMat;
+            }
         }*/
 
-        //Material[] materials = new Material[0];
-        /*if (GetComponent<MeshRenderer>())
+        //RecursiveChildrenFind(transform, newMat);
+
+    }
+
+    void RecursiveChildrenFind(Transform par, Material newMat)
+    {
+        Debug.Log(par.name);
+        if (par.GetComponent<Renderer>())
         {
-            materials = GetComponent<MeshRenderer>().materials;
-            GetComponent<MeshRenderer>().enabled = false;
+            par.GetComponent<Renderer>().material = newMat;
         }
-        else if (GetComponent<SkinnedMeshRenderer>())
+        if (par.childCount > 0)
         {
-            materials = GetComponent<SkinnedMeshRenderer>().materials;
-            GetComponent<SkinnedMeshRenderer>().enabled = false;
-        }*/
-
-        List<Material[]> materials = new List<Material[]>();
-
-        foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>()) {
-            materials.Add(mr.materials);
-            mr.enabled = false;
-        }
-
-        // make actual object invisible before we generate a copy of its mesh as objects and explode them
-        int maxTriangles = 500;
-        int trianglesCount = 0;
-
-        for (int j = 0; j < M.Count; j++)
-        {
-            if (trianglesCount > maxTriangles)
+            foreach (Transform child in par)
             {
-                break;
+                RecursiveChildrenFind(child, newMat);
             }
-
-            Vector3[] verts = M[j].vertices;
-            Vector3[] normals = M[j].normals;
-            Vector2[] uvs = M[j].uv;
-            for (int submesh = 0; submesh < M[j].subMeshCount; submesh++)
-            {
-
-                int[] indices = M[j].GetTriangles(submesh);
-
-                for (int i = 0; i < indices.Length; i += 3)
-                {
-                    Vector3[] newVerts = new Vector3[3];
-                    Vector3[] newNormals = new Vector3[3];
-                    Vector2[] newUvs = new Vector2[3];
-                    for (int n = 0; n < 3; n++)
-                    {
-                        int index = indices[i + n];
-                        newVerts[n] = verts[index];
-                        newUvs[n] = uvs[index];
-                        newNormals[n] = normals[index];
-                    }
-
-                    Mesh mesh = new Mesh();
-                    mesh.vertices = newVerts;
-                    mesh.normals = newNormals;
-                    mesh.uv = newUvs;
-
-                    mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 }; // comment out the last 3 ints for backface culling, somewhat improves performance
-
-                    GameObject GO = new GameObject("Triangle " + (i / 3));
-                    //GO.layer = LayerMask.NameToLayer("Particle");
-                    GO.transform.position = transform.position;
-                    GO.transform.rotation = transform.rotation;
-                    GO.transform.localScale = transform.lossyScale;
-                    GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
-                    GO.AddComponent<MeshFilter>().mesh = mesh;
-                    //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
-                    //GO.AddComponent<BoxCollider>();
-                    float variance = 2.0f;
-                    Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
-
-                    GOs.Add(GO);
-
-                    // explode the triangle mesh objects
-                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
-                    //mesh.RecalculateNormals();
-                    //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
-                    trianglesCount += 1;
-
-                }
-            }
-
-            // Slow down time
-            //Time.timeScale = 0.5f;
         }
     }
+
 }
