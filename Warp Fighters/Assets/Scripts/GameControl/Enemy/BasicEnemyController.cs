@@ -426,7 +426,7 @@ public class BasicEnemyController : MonoBehaviour {
 
         } else
         {
-            if (enemyMoveState == EnemyMoveState.flyingToDeath && other.gameObject.layer != 9)
+            if (enemyMoveState == EnemyMoveState.flyingToDeath)// && other.gameObject.layer != 9)
             {
                 ExplodeOnImpact();
             }
