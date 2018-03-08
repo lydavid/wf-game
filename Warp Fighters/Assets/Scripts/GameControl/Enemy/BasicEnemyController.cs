@@ -48,6 +48,7 @@ public class BasicEnemyController : MonoBehaviour {
 
     public bool ableToDamagePlayer; // use this to restrict enemy from hitting player multiple times in its single warp
 
+    public bool cannotMove;
 
     public bool initiatedAttack;
 
@@ -81,42 +82,47 @@ public class BasicEnemyController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        // State machine to control enemy actions
-        switch (enemyMoveState)
+
+        if (!cannotMove)
         {
-            case EnemyMoveState.patroling:
-                MoveBetweenPoints();
-                LookForPlayer();
-                break;
 
-            case EnemyMoveState.chasingPlayer:
-                ChasePlayer();
-                break;
+            // State machine to control enemy actions
+            switch (enemyMoveState)
+            {
+                case EnemyMoveState.patroling:
+                    MoveBetweenPoints();
+                    LookForPlayer();
+                    break;
 
-            case EnemyMoveState.coolingOff:
-                CoolOff();
-                break;
+                case EnemyMoveState.chasingPlayer:
+                    ChasePlayer();
+                    break;
 
-            case EnemyMoveState.warpAtPlayer:
-                WarpAtPlayer();
-                break;
+                case EnemyMoveState.coolingOff:
+                    CoolOff();
+                    break;
 
-            case EnemyMoveState.waiting:
-                Waiting();
-                break;
+                case EnemyMoveState.warpAtPlayer:
+                    WarpAtPlayer();
+                    break;
 
-            case EnemyMoveState.warpBackToGround:
-                WarpBackToGround();
-                break;
+                case EnemyMoveState.waiting:
+                    Waiting();
+                    break;
 
-            case EnemyMoveState.waitToDestroy:
-                WaitToDestroy();
-                break;
+                case EnemyMoveState.warpBackToGround:
+                    WarpBackToGround();
+                    break;
+
+                case EnemyMoveState.waitToDestroy:
+                    WaitToDestroy();
+                    break;
 
 
 
-            default: break;
-        }        
+                default: break;
+            }
+        }
     }
 
 
@@ -456,18 +462,24 @@ public class BasicEnemyController : MonoBehaviour {
             GetComponent<Collider>().enabled = false;
         }
 
-        Mesh M = new Mesh();
-        if (GetComponent<MeshFilter>())
+
+        List<Mesh> M = new List<Mesh>();
+        //Mesh[] M = new Mesh[0];
+        //if (GetComponent<MeshFilter>())
+        //{
+        foreach (MeshFilter mf in GetComponentsInChildren<MeshFilter>())
         {
-            M = GetComponent<MeshFilter>().mesh;
+            M.Add(mf.mesh);
         }
+            //M = GetComponentsInChildren<MeshFilter>().mesh;
+        /*}
         else if (GetComponent<SkinnedMeshRenderer>())
         {
             M = GetComponent<SkinnedMeshRenderer>().sharedMesh;
-        }
+        }*/
 
-        Material[] materials = new Material[0];
-        if (GetComponent<MeshRenderer>())
+        //Material[] materials = new Material[0];
+        /*if (GetComponent<MeshRenderer>())
         {
             materials = GetComponent<MeshRenderer>().materials;
             GetComponent<MeshRenderer>().enabled = false;
@@ -476,65 +488,79 @@ public class BasicEnemyController : MonoBehaviour {
         {
             materials = GetComponent<SkinnedMeshRenderer>().materials;
             GetComponent<SkinnedMeshRenderer>().enabled = false;
+        }*/
+
+        List<Material[]> materials = new List<Material[]>();
+
+        foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>()) {
+            materials.Add(mr.materials);
+            mr.enabled = false;
         }
 
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
+        int maxTriangles = 500;
+        int trianglesCount = 0;
 
-
-
-        Vector3[] verts = M.vertices;
-        Vector3[] normals = M.normals;
-        Vector2[] uvs = M.uv;
-        for (int submesh = 0; submesh < M.subMeshCount; submesh++)
+        for (int j = 0; j < M.Count; j++)
         {
-
-            int[] indices = M.GetTriangles(submesh);
-
-            for (int i = 0; i < indices.Length; i += 3)
+            if (trianglesCount > maxTriangles)
             {
-                Vector3[] newVerts = new Vector3[3];
-                Vector3[] newNormals = new Vector3[3];
-                Vector2[] newUvs = new Vector2[3];
-                for (int n = 0; n < 3; n++)
-                {
-                    int index = indices[i + n];
-                    newVerts[n] = verts[index];
-                    newUvs[n] = uvs[index];
-                    newNormals[n] = normals[index];
-                }
-
-                Mesh mesh = new Mesh();
-                mesh.vertices = newVerts;
-                mesh.normals = newNormals;
-                mesh.uv = newUvs;
-
-                mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 }; // comment out the last 3 ints for backface culling, somewhat improves performance
-
-                GameObject GO = new GameObject("Triangle " + (i / 3));
-                //GO.layer = LayerMask.NameToLayer("Particle");
-                GO.transform.position = transform.position;
-                GO.transform.rotation = transform.rotation;
-                GO.transform.localScale = transform.lossyScale;
-                GO.AddComponent<MeshRenderer>().material = materials[submesh];
-                GO.AddComponent<MeshFilter>().mesh = mesh;
-                GO.layer = 8; // it's own layer, prevents it from colliding with other objects
-                //GO.AddComponent<BoxCollider>();
-                float variance = 2.0f;
-                Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
-
-                GOs.Add(GO);
-
-                // explode the triangle mesh objects
-                GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
-                //mesh.RecalculateNormals();
-                //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
-
-
+                break;
             }
+
+            Vector3[] verts = M[j].vertices;
+            Vector3[] normals = M[j].normals;
+            Vector2[] uvs = M[j].uv;
+            for (int submesh = 0; submesh < M[j].subMeshCount; submesh++)
+            {
+
+                int[] indices = M[j].GetTriangles(submesh);
+
+                for (int i = 0; i < indices.Length; i += 3)
+                {
+                    Vector3[] newVerts = new Vector3[3];
+                    Vector3[] newNormals = new Vector3[3];
+                    Vector2[] newUvs = new Vector2[3];
+                    for (int n = 0; n < 3; n++)
+                    {
+                        int index = indices[i + n];
+                        newVerts[n] = verts[index];
+                        newUvs[n] = uvs[index];
+                        newNormals[n] = normals[index];
+                    }
+
+                    Mesh mesh = new Mesh();
+                    mesh.vertices = newVerts;
+                    mesh.normals = newNormals;
+                    mesh.uv = newUvs;
+
+                    mesh.triangles = new int[] { 0, 1, 2, 2, 1, 0 }; // comment out the last 3 ints for backface culling, somewhat improves performance
+
+                    GameObject GO = new GameObject("Triangle " + (i / 3));
+                    //GO.layer = LayerMask.NameToLayer("Particle");
+                    GO.transform.position = transform.position;
+                    GO.transform.rotation = transform.rotation;
+                    GO.transform.localScale = transform.lossyScale;
+                    GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
+                    GO.AddComponent<MeshFilter>().mesh = mesh;
+                    //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
+                                  //GO.AddComponent<BoxCollider>();
+                    float variance = 2.0f;
+                    Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
+
+                    GOs.Add(GO);
+
+                    // explode the triangle mesh objects
+                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
+                    //mesh.RecalculateNormals();
+                    //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
+                    trianglesCount += 1;
+
+                }
+            }
+
+            // Slow down time
+            //Time.timeScale = 0.5f;
         }
-
-        // Slow down time
-        //Time.timeScale = 0.5f;
-
     }
 }
