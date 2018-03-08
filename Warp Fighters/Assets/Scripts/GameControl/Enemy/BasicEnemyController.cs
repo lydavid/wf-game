@@ -64,7 +64,9 @@ public class BasicEnemyController : MonoBehaviour {
     public bool initiatedAttack;
     public bool ableToBeDamaged;
 
-    
+    // for guard type only
+    Vector3 originalPosition;
+    Quaternion originalRotation;
 
     // Use this for initialization
     void Start()
@@ -84,6 +86,11 @@ public class BasicEnemyController : MonoBehaviour {
 
         healthPoints = 1;
         ableToBeDamaged = true;
+
+        // for guard type only
+        originalPosition = transform.position;
+        Debug.Log(originalPosition);
+        originalRotation = transform.rotation;
     }
 
 
@@ -99,7 +106,10 @@ public class BasicEnemyController : MonoBehaviour {
                 // prevents patrolling and consequently the rest of movement actions for testing
                 //if (!cannotMove)
                 //{
-                MoveBetweenPoints();
+                if (enemyType != EnemyType.a_guard)
+                {
+                    MoveBetweenPoints();
+                }
                 LookForPlayer();
                 //}
                 break;
@@ -223,8 +233,13 @@ public class BasicEnemyController : MonoBehaviour {
                 if (hit.rigidbody == rb)
                 {
 
-
-                    enemyMoveState = EnemyMoveState.chasingPlayer;
+                    if (enemyType != EnemyType.a_guard)
+                    {
+                        enemyMoveState = EnemyMoveState.chasingPlayer;
+                    } else
+                    {
+                        enemyMoveState = EnemyMoveState.warpAtPlayer;
+                    }
 
                     //Debug.Log("Player hit! " + count);
                     //count += 1;
@@ -261,7 +276,7 @@ public class BasicEnemyController : MonoBehaviour {
 
         initiatedAttack = true;
 
-        originalPos = transform.position;
+        //originalPos = transform.position;
 
         float magnitude = 30.0f; // should be same as sightRange and 
         transform.LookAt(player.transform);
@@ -286,15 +301,27 @@ public class BasicEnemyController : MonoBehaviour {
         //transform.LookAt(originalPos);
         //gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * magnitude, ForceMode.Impulse);
 
-        if (moveToA)
+        if (enemyType != EnemyType.a_guard)
         {
-            transform.position = target.transform.position;
-            transform.LookAt(start);
+
+            if (moveToA)
+            {
+                transform.position = target.transform.position;
+                transform.LookAt(start);
+
+            }
+            else
+            {
+                transform.position = start.transform.position;
+                transform.LookAt(target);
+            }
 
         } else
         {
-            transform.position = start.transform.position;
-            transform.LookAt(target);
+
+            transform.position = originalPosition;
+            
+            transform.rotation = originalRotation;
         }
 
         /*float step = speed * Time.deltaTime;
@@ -414,7 +441,10 @@ public class BasicEnemyController : MonoBehaviour {
         {
             //GetComponent<Renderer>().material = origMaterial;
             //ChangeColorOfChildren(origMaterial);
-            enemyMoveState = EnemyMoveState.patroling;
+
+
+            //enemyMoveState = EnemyMoveState.patroling;
+            enemyMoveState = EnemyMoveState.coolingOff;
         }
     }
 
