@@ -24,11 +24,13 @@ public class RespawnOnGround : MonoBehaviour {
         if (other.gameObject.layer == 9)
         {
             lastGroundPosition = transform.position;
-            Debug.Log(lastGroundPosition);
+            //Debug.Log(lastGroundPosition);
+
         } else if (other.gameObject.tag == "BottomPlane")
         {
             // Respawn player at last ground position
             transform.position = lastGroundPosition;
+
             // Remove any velocity in case player had warped off from there
             GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
