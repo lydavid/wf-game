@@ -5,6 +5,8 @@ using UnityEngine;
 // Adapted from MeshEffect script but applies to all Meshes, including mesh of children
 public class MeshExplosion : MonoBehaviour {
 
+    public bool selfControl; // should be false on enemies, true on simple objects like destructible cubes
+
     List<GameObject> GOs = new List<GameObject>();
     float waitTime;
     bool setToDestroy;
@@ -13,6 +15,7 @@ public class MeshExplosion : MonoBehaviour {
     void Start () {
         waitTime = 0;
         setToDestroy = false;
+
 	}
 	
 	// Update is called once per frame
@@ -21,10 +24,27 @@ public class MeshExplosion : MonoBehaviour {
         if (setToDestroy)
         {
             WaitToDestroy();
-            Debug.Log(waitTime);
+            //Debug.Log(waitTime);
         }
 		
 	}
+
+    private void OnCollisionEnter(Collision other)
+    {
+        // in control of its own collision and not touching Ground
+        if (selfControl && other.gameObject.layer != 9)
+        {
+            // check existence
+            if (other.gameObject.GetComponent<AttackManager>())
+            {
+                // check player attacked it
+                if (other.gameObject.GetComponent<AttackManager>().initiatedAttack) {
+                    SplitMesh(3.0f);
+                }
+            }
+            
+        }
+    }
 
     // modified from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
     public void SplitMesh(float waitTime)

@@ -5,8 +5,19 @@ using UnityEngine;
 
 public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround, flyingToDeath, waitToDestroy };
 
+/*
+ * Guard: Stands still, if player passes through its sight, it will warp attack them, then return. Take them out from behind or beside them.
+ * Patrol: Moves back and forth between two points, engaging player if they enter its sight. Dodge their attack and counter attack them while they cool off.
+ * Boss: ???
+ * 
+ */
+public enum EnemyType { a_guard, b_patrol, c_boss };
+
 
 public class BasicEnemyController : MonoBehaviour {
+
+    [Header("Type")]
+    public EnemyType enemyType;
 
 
     [Header("Movement")]
@@ -79,49 +90,48 @@ public class BasicEnemyController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        
+        // State machine to control enemy actions
+        switch (enemyMoveState)
+        {
+            case EnemyMoveState.patroling:
 
+                // prevents patrolling and consequently the rest of movement actions for testing
+                //if (!cannotMove)
+                //{
+                MoveBetweenPoints();
+                LookForPlayer();
+                //}
+                break;
 
-            // State machine to control enemy actions
-            switch (enemyMoveState)
-            {
-                case EnemyMoveState.patroling:
+            case EnemyMoveState.chasingPlayer:
+                ChasePlayer();
+                break;
 
-                    // prevents patrolling and consequently the rest of movement actions for testing
-                    if (!cannotMove)
-                    {
-                        MoveBetweenPoints();
-                        LookForPlayer();
-                    }
-                    break;
+            case EnemyMoveState.coolingOff:
+                CoolOff();
+                break;
 
-                case EnemyMoveState.chasingPlayer:
-                    ChasePlayer();
-                    break;
+            case EnemyMoveState.warpAtPlayer:
+                WarpAtPlayer();
+                break;
 
-                case EnemyMoveState.coolingOff:
-                    CoolOff();
-                    break;
+            case EnemyMoveState.waiting:
+                Waiting();
+                break;
 
-                case EnemyMoveState.warpAtPlayer:
-                    WarpAtPlayer();
-                    break;
+            case EnemyMoveState.warpBackToGround:
+                WarpBackToGround();
+                break;
 
-                case EnemyMoveState.waiting:
-                    Waiting();
-                    break;
+            case EnemyMoveState.waitToDestroy:
+                WaitToDestroy();
+                break;
 
-                case EnemyMoveState.warpBackToGround:
-                    WarpBackToGround();
-                    break;
-
-                case EnemyMoveState.waitToDestroy:
-                    WaitToDestroy();
-                    break;
-
-
-
-                default: break;
-            }
+            default: break;
+        }
+        
+        
     }
 
 
@@ -212,6 +222,8 @@ public class BasicEnemyController : MonoBehaviour {
 
                 if (hit.rigidbody == rb)
                 {
+
+
                     enemyMoveState = EnemyMoveState.chasingPlayer;
 
                     //Debug.Log("Player hit! " + count);
@@ -230,7 +242,7 @@ public class BasicEnemyController : MonoBehaviour {
     void ChasePlayer()
     {
         //GetComponent<Renderer>().material = alertedColor;
-        ChangeColorOfChildren(alertedColor);
+        //ChangeColorOfChildren(alertedColor);
 
         float step = speed * Time.deltaTime;
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, step);
@@ -263,9 +275,10 @@ public class BasicEnemyController : MonoBehaviour {
     }
 
 
+    // Teleports back to either start or target position depending on which one it reached last
     void WarpBackToGround()
     {
-        ChangeColorOfChildren(origMaterial);
+        //ChangeColorOfChildren(origMaterial);
         // Make it stop flying around
         selfRigidbody.velocity = Vector3.zero;
         selfRigidbody.angularVelocity = Vector3.zero;
@@ -319,7 +332,7 @@ public class BasicEnemyController : MonoBehaviour {
                     // TODO: Actual attack animation
                     // Change color of enemy to indicate enemy has attacked player
                     //GetComponent<Renderer>().material = attackColor;
-                    ChangeColorOfChildren(attackColor);
+                    //ChangeColorOfChildren(attackColor);
 
 
                     Debug.Log("Attacked!");
@@ -400,7 +413,7 @@ public class BasicEnemyController : MonoBehaviour {
         if (waitTime <= 0)
         {
             //GetComponent<Renderer>().material = origMaterial;
-            ChangeColorOfChildren(origMaterial);
+            //ChangeColorOfChildren(origMaterial);
             enemyMoveState = EnemyMoveState.patroling;
         }
     }
@@ -432,7 +445,7 @@ public class BasicEnemyController : MonoBehaviour {
     void Damage()
     {
         healthPoints -= 1;
-        ChangeColorOfChildren(damagedColor);
+        //ChangeColorOfChildren(damagedColor);
 
         // let's delay it from dying until it bounces into something
         // then make it explode into triangles
@@ -443,60 +456,29 @@ public class BasicEnemyController : MonoBehaviour {
         }
     }
 
+
     void ExplodeOnImpact()
     {
-        //SplitMesh();
         waitTime = 3.0f;
         GetComponent<MeshExplosion>().SplitMesh(waitTime);
-
         
         enemyMoveState = EnemyMoveState.waitToDestroy;
-
-        
     }
+
 
     void WaitToDestroy()
     {
-
+        // Does nothing but await its fate.
     }
     
 
-    void ChangeColorOfChildren(Material newMat)
+    /*void ChangeColorOfChildren(Material newMat)
     {
         foreach (Renderer ren in GetComponentsInChildren<Renderer>())
         {
             ren.material = newMat;
         }
-        //Debug.Log("hello0");
 
-        /*for (int i = 0; i < transform.childCount; i++)
-        {
-
-            if (transform.GetChild(i).GetComponent<Renderer>())
-            {
-                //Debug.Log(i);
-                transform.GetChild(i).GetComponent<Renderer>().material = newMat;
-            }
-        }*/
-
-        //RecursiveChildrenFind(transform, newMat);
-
-    }
-
-    void RecursiveChildrenFind(Transform par, Material newMat)
-    {
-        Debug.Log(par.name);
-        if (par.GetComponent<Renderer>())
-        {
-            par.GetComponent<Renderer>().material = newMat;
-        }
-        if (par.childCount > 0)
-        {
-            foreach (Transform child in par)
-            {
-                RecursiveChildrenFind(child, newMat);
-            }
-        }
-    }
+    }*/
 
 }

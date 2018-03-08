@@ -14,10 +14,12 @@ public class StartGame : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
 		if (Input.GetButtonDown("Menu Button"))
         {
 			audio.Play();
-            SceneManager.LoadScene("Alpha");
+            SceneManager.LoadScene("JonLevel");
 
         }
 	}
