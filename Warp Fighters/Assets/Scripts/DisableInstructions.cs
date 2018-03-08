@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class DisableInstructions : MonoBehaviour {
 
-    GameObject inst;
+    public GameObject inst;
 
     bool isEnabled;
 
 	// Use this for initialization
 	void Start () {
-        inst = GameObject.FindGameObjectsWithTag("Instructions")[0];
+        //inst = GameObject.FindGameObjectsWithTag("Instructions")[0];
         isEnabled = true;
 	}
 	
