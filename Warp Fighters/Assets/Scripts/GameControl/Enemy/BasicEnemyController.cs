@@ -546,7 +546,7 @@ public class BasicEnemyController : MonoBehaviour {
                     GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
-                                  //GO.AddComponent<BoxCollider>();
+                    //GO.AddComponent<BoxCollider>();
                     float variance = 2.0f;
                     Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
 
