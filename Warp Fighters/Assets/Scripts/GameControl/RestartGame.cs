@@ -15,7 +15,7 @@ public class RestartGame : MonoBehaviour {
 
     void TaskOnClick()
     {
-        SceneManager.LoadScene("Alpha");
+        SceneManager.LoadScene("JonLevel");
 	}
 	
 	// Update is called once per frame

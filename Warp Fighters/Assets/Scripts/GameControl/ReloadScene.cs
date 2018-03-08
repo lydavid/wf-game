@@ -14,9 +14,9 @@ public class ReloadScene : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetButtonDown("Menu Button"))
+        if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter"))
         {
-            SceneManager.LoadScene("Alpha");
+            SceneManager.LoadScene("JonLevel");
 
         }
 	}
