@@ -80,7 +80,7 @@ public class HumanBullet : MonoBehaviour {
         //{
         if (bulletMode)
         {
-            rb.velocity = new Vector3(3, 3, 3);
+            rb.velocity = new Vector3(3, 3, 3); //stops the player from flying everywhere
             
             bullet.SetActive(false);
             body.SetActive(true);

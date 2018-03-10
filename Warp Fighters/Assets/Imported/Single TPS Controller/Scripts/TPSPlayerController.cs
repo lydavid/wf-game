@@ -13,7 +13,7 @@ public class TPSPlayerController : MonoBehaviour {
     private int state;
 
     //Define the turning speed.
-    private float turnSpeed = 4.0f;
+    private float turnSpeed = 2.5f;
     
 
     private float horizontal;

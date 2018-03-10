@@ -5,7 +5,7 @@ using System.Collections;
 public class CameraOrbit : MonoBehaviour {
 
     private float vertical;
-    private float turnSpeed = 4.0f;
+    private float turnSpeed = 2.5f;
     void Start ()
     {
         vertical = transform.eulerAngles.x;
