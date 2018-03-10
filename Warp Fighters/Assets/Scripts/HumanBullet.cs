@@ -19,6 +19,8 @@ public class HumanBullet : MonoBehaviour {
 
     PlayerSettings playerSettings;
 
+    Rigidbody rb;
+
     void Start()
     {
         orb = GameObject.Find("Orb");
@@ -27,6 +29,9 @@ public class HumanBullet : MonoBehaviour {
         bulletMode = false;
 
         playerSettings = GetComponent<PlayerSettings>();
+
+        rb = GetComponent<Rigidbody>();
+        
     }
 
 
@@ -53,8 +58,9 @@ public class HumanBullet : MonoBehaviour {
                 print("I'm looking at nothing!");
             */
             if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1))
-            {
-                GetComponent<Rigidbody>().AddForce(forward);
+            {   
+ 
+                rb.AddForce(forward);
                 body.SetActive(false);
                 bullet.SetActive(true);
                 bulletMode = true;
@@ -74,6 +80,8 @@ public class HumanBullet : MonoBehaviour {
         //{
         if (bulletMode)
         {
+            rb.velocity = new Vector3(3, 3, 3);
+            
             bullet.SetActive(false);
             body.SetActive(true);
 
