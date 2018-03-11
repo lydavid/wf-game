@@ -5,39 +5,38 @@ using UnityEngine;
 public class CameraClipping : MonoBehaviour {
 
 	private Vector3 minPosition;
-	private Vector3 maxPosition;
-
-	private GameObject camOrbit;
+	private Vector3 maxPosition; // position where camera is usuallly e.g when game starts
 	private GameObject player;
-	private float startTime;
-    private float distance;
-	private float speed = 1.0f;
+	private bool inCollision = false;
+
+
+	private Rigidbody rb;
 
 	// Use this for initialization
 	void Start () {
-		
-		camOrbit = GameObject.Find("CameraOrbitX");
-		player = GameObject.FindGameObjectWithTag("Player");
-		maxPosition = camOrbit.transform.position;
-		minPosition = player.transform.position;
-		startTime = Time.time;
-		distance = Vector3.Distance(minPosition, maxPosition);
+		rb = GetComponent<Rigidbody>();
+		maxPosition = transform.localPosition;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		MoveCameraBack();
+
 	}
 	
-	/* 
-	void OnCollisionEnter (Collision hit) {
-		Debug.Log("Cam Hit");
-	}*/
+	
+	void OnCollisionStay (Collision hit) {
+		inCollision = true;
+		transform.position = Vector3.Lerp(transform.position, transform.position + transform.forward, 0.05f);
+	}
 
-	void OnTriggerEnter (Collider other) {
-		Debug.Log("Cam Hit");
-		float distCovered = (Time.time - startTime) * speed;
-        float fracJourney = distCovered / distance;
-        transform.position = Vector3.Lerp(minPosition, maxPosition, fracJourney);
+	void OnCollisionExit () {
+		inCollision = false;
+	}
+		
+	void MoveCameraBack () {
+		if (!inCollision) {
+			transform.localPosition = Vector3.Lerp(transform.localPosition, maxPosition, 0.01f);
+		}
 	}
 }
