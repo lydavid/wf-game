@@ -28,8 +28,7 @@ public class CameraClipping : MonoBehaviour {
 	void Update () {
 		
 	}
-
-
+	
 	/* 
 	void OnCollisionEnter (Collision hit) {
 		Debug.Log("Cam Hit");
