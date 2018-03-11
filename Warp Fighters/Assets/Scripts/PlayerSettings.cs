@@ -10,13 +10,14 @@ public class PlayerSettings : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        humanBulletOn = false;
+        humanBulletOn = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
         // Toggles human bullet mode for velocity warp
+        /* 
 		if (Input.GetKeyDown("."))
         {
             if (!humanBulletOn)
@@ -26,6 +27,6 @@ public class PlayerSettings : MonoBehaviour {
             {
                 humanBulletOn = false;
             }
-        }
+        }*/
 	}
 }
