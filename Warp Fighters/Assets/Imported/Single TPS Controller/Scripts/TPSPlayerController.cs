@@ -12,18 +12,21 @@ public class TPSPlayerController : MonoBehaviour {
     
     private int state;
 
+    // 0 for PC, 1 for xbox controller
+    private int controlState = 0;
+
     //Define the turning speed.
     private float turnSpeed = 2.5f;
     
 
     private float horizontal;
 
-    private Animator animacao;
+    //private Animator animacao;
 
 
     void Start ()
     {
-        animacao = GetComponentInChildren<Animator>();
+        //animacao = GetComponentInChildren<Animator>();
         state = 0;
         horizontal = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -32,7 +35,22 @@ public class TPSPlayerController : MonoBehaviour {
 
     void Update ()
     {
-        if (Input.GetKeyDown("escape"))
+        MouseToggleInGame();
+        Controller();
+        Control();
+        MovePerson();
+        AnimatePerson();
+		Gravity ();
+    }
+
+
+    /*
+     * Use Esc Key to show cursor
+     * Click game screen to hide cursor
+     */
+    private void MouseToggleInGame () 
+    {
+         if (Input.GetKeyDown("escape"))
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -44,15 +62,38 @@ public class TPSPlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        Control();
-        MovePerson();
-        AnimatePerson();
-		Gravity ();
     }
 
     private void AnimatePerson()
     {
         //animacao.SetInteger("Estado", state);
+    }
+
+    private void Controller () {
+
+        float mH = Input.GetAxis("Horizontal");
+        float mV = Input.GetAxis("Vertical");
+
+        // keypad or numpad 1 for pc, 2 for xbox controller
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) 
+        {
+            controlState = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            controlState = 1;
+        }
+
+        if (controlState == 0) 
+        {
+            transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+        }
+
+        if (controlState == 1) 
+        {
+            transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+        }
     }
 
     private void Control()
@@ -65,99 +106,12 @@ public class TPSPlayerController : MonoBehaviour {
         04 = Walking Right
         05 = Walking Left
         */
-
-        //float xAxis = Input.GetAxis("Left Stick X");
-        //float yAxis = Input.GetAxis("Left Stick Y");
-
-        /*if (xAxis == 0 && yAxis == 0) {
-            state = 0;
-        }
-
-        if (xAxis < 0 && Mathf.Abs(xAxis) > Mathf.Abs(yAxis)) {
-            state = 5;
-        }
-
-        if (yAxis < 0 && Mathf.Abs(yAxis) > Mathf.Abs(xAxis)) {
-            state = 1;
-        }
-
-        if (xAxis > 0 && Mathf.Abs(xAxis) > Mathf.Abs(yAxis)) {
-            state = 4;
-        }
-
-        if (yAxis > 0 && Mathf.Abs(yAxis) > Mathf.Abs(xAxis)) {
-            state = 3;
-        }*/
-
-        float mH = Input.GetAxis("Horizontal");
-        float mV = Input.GetAxis("Vertical");
+        
         /*if (mH < 0) { state = 4; }
         else if (mH > 0) { state = 3; }
         else if (mV < 0) { state = 2; }
         else if (mV > 0) { state = 1; }
         else { state = 0; }*/
-
-        transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
-
-
-        /*if (Input.GetKeyDown("w"))
-        {
-            state = 1;
-        }
-        if (Input.GetKeyUp("w") && state == 1)
-        {
-            state = 0;
-            if (Input.GetKey("s")) { state = 3; }
-            if (Input.GetKey("a")) { state = 5; }
-            if (Input.GetKey("d")) { state = 4; }
-        }
-        if (Input.GetKeyUp("w") && state == 2)
-        {
-            state = 0;
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && state == 1)
-        {
-            state = 2;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && state == 2) { state = 1; }
-                
-        if (Input.GetKeyDown("s"))
-        {
-            state = 3;
-        }
-        if (Input.GetKeyUp("s") && state == 3)
-        {
-            state = 0;
-            if (Input.GetKey("a")) { state = 5; }
-            if (Input.GetKey("d")) { state = 4; }
-            if (Input.GetKey("w")) { state = 1; }
-        }
-
-        if (Input.GetKeyDown("d"))
-        {
-            state = 4;
-        }
-        if (Input.GetKeyUp("d") && state == 4)
-        {
-            state = 0;
-            if (Input.GetKey("s")) { state = 3; }
-            if (Input.GetKey("a")) { state = 5; }
-            if (Input.GetKey("w")) { state = 1; }
-
-        }
-
-        if (Input.GetKeyDown("a"))
-        {
-            state = 5;
-        }
-        if (Input.GetKeyUp("a") && state == 5)
-        {
-            state = 0;
-            if (Input.GetKey("s")) { state = 3; }
-            if (Input.GetKey("d")) { state = 4; }
-            if (Input.GetKey("w")) { state = 1; }
-        }*/
 
     }
 
@@ -177,13 +131,6 @@ public class TPSPlayerController : MonoBehaviour {
 
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
         transform.rotation = Quaternion.AngleAxis(horizontal, Vector3.up);
-
-        /*if (state == 0) { transform.Translate(0, 0, 0); }
-        if (state == 1) { transform.Translate(0, 0, speed * Time.deltaTime); }
-        if (state == 2) { transform.Translate(0, 0, (speed + 5.0f) * Time.deltaTime); }
-        if (state == 3) { transform.Translate(0, 0, -speed * Time.deltaTime); }
-        if (state == 4) { transform.Translate(speed * Time.deltaTime, 0, 0); }
-        if (state == 5) { transform.Translate(-speed * Time.deltaTime, 0, 0); }*/
 
         /*if (state == 0) { transform.Translate(0, 0, 0); }
         if (state == 1) { transform.Translate(0, 0, speed * Time.deltaTime); }
