@@ -27,7 +27,7 @@ public class CameraClipping : MonoBehaviour {
 	
 	void OnCollisionStay (Collision hit) {
 		inCollision = true;
-		transform.position = Vector3.Lerp(transform.position, transform.position + transform.forward, 0.05f);
+		transform.position = Vector3.Lerp(transform.position, transform.position + transform.forward, 0.04f);
 	}
 
 	void OnCollisionExit () {
@@ -36,7 +36,7 @@ public class CameraClipping : MonoBehaviour {
 		
 	void MoveCameraBack () {
 		if (!inCollision) {
-			transform.localPosition = Vector3.Lerp(transform.localPosition, maxPosition, 0.01f);
+			transform.localPosition = Vector3.Lerp(transform.localPosition, maxPosition, 0.02f);
 		}
 	}
 }
