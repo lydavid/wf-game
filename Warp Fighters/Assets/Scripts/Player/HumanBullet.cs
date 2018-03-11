@@ -21,9 +21,10 @@ public class HumanBullet : MonoBehaviour {
 
     Rigidbody rb;
 
+    private Vector3 forward; 
     void Start()
     {
-        orb = GameObject.Find("Orb");
+        orb = GameObject.Find("CameraOrbitX");
         magnitude = 5000;
 
         bulletMode = false;
@@ -39,7 +40,7 @@ public class HumanBullet : MonoBehaviour {
     {
         if (playerSettings.humanBulletOn)
         {
-            Vector3 forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
+            forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
                                                                 // forward is a mixture of x and z
 
             // now we need to change y according to the angle of the orb (it's x rot seems to rep the up/down look angle
@@ -57,6 +58,8 @@ public class HumanBullet : MonoBehaviour {
             else
                 print("I'm looking at nothing!");
             */
+
+            /* 
             if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1))
             {   
  
@@ -64,9 +67,17 @@ public class HumanBullet : MonoBehaviour {
                 body.SetActive(false);
                 bullet.SetActive(true);
                 bulletMode = true;
-            }
+            }*/
 
         }
+    }
+
+    public void ShootMe () 
+    {
+        rb.AddForce(forward);
+        body.SetActive(false);
+        bullet.SetActive(true);
+        bulletMode = true;
     }
 
     /*private void FixedUpdate()

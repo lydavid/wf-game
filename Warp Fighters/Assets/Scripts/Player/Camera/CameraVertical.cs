@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class CameraOrbit : MonoBehaviour {
+public class CameraVertical : MonoBehaviour {
 
     private float vertical;
     private float turnSpeed = 2.5f;

@@ -22,11 +22,12 @@ public class TPSPlayerController : MonoBehaviour {
     private float horizontal;
 
     //private Animator animacao;
-
+    HumanBullet humanBullet;
 
     void Start ()
     {
         //animacao = GetComponentInChildren<Animator>();
+        humanBullet = GetComponent<HumanBullet>(); 
         state = 0;
         horizontal = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,7 +38,6 @@ public class TPSPlayerController : MonoBehaviour {
     {
         MouseToggleInGame();
         Controller();
-        Control();
         MovePerson();
         AnimatePerson();
 		Gravity ();
@@ -74,6 +74,13 @@ public class TPSPlayerController : MonoBehaviour {
         float mH = Input.GetAxis("Horizontal");
         float mV = Input.GetAxis("Vertical");
 
+        transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+
+        if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("B Button")) {
+            humanBullet.ShootMe();
+        }
+
+        /* 
         // keypad or numpad 1 for pc, 2 for xbox controller
         if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) 
         {
@@ -87,13 +94,20 @@ public class TPSPlayerController : MonoBehaviour {
 
         if (controlState == 0) 
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                
+            }
             transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
-        }
-
-        if (controlState == 1) 
+        } 
+        else if (controlState == 1) 
         {
+            if (Input.GetButtonDown("B Button")) 
+            {
+                humanBullet.ShootMe();
+            }
             transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
-        }
+        }*/
     }
 
     private void Control()
