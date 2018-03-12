@@ -39,9 +39,7 @@ public class Pause : MonoBehaviour {
 		Time.timeScale = 0;
 		foreach(MonoBehaviour script in playerScripts)
      	{
-			if (script.gameObject.name != "DrawHearts") {
-				script.enabled = false;
-			}
+			script.enabled = false;
      	}
 		foreach(AudioSource audio in playerAudio)
      	{
