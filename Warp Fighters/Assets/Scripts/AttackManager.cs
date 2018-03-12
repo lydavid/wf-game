@@ -15,7 +15,7 @@ public class AttackManager : MonoBehaviour {
     void Update() {
 
         // should match up with the velocity warp button
-        if (Input.GetButtonDown("B Button") || Input.GetMouseButton(1))
+        if (Input.GetButtonDown("A Button") || Input.GetMouseButton(0))
         {
             initiatedAttack = true;
         } else if (gameObject.GetComponent<Rigidbody>().velocity == Vector3.zero)
