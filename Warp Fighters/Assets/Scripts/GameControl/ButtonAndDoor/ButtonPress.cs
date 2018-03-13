@@ -29,7 +29,7 @@ public class ButtonPress : MonoBehaviour {
 		
 	}
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
