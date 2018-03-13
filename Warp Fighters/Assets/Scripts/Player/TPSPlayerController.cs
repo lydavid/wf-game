@@ -77,7 +77,11 @@ public class TPSPlayerController : MonoBehaviour {
         transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
 
         if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("B Button")) {
-            humanBullet.ShootMe();
+            if (GetComponent<WarpLimiter>().canWarp)
+            {
+                humanBullet.ShootMe();
+                GetComponent<WarpLimiter>().ConsumeCharge();
+            }
         }
 
         /* 
