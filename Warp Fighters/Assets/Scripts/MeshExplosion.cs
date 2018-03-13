@@ -11,7 +11,7 @@ public class MeshExplosion : MonoBehaviour {
     float waitTime;
     bool setToDestroy;
 
-    Vector3 playerPos;
+    Vector3 hittedObjectPos; // position of object that hit this, whether the player or wall, should not count grounds
 
     // Use this for initialization
     void Start () {
@@ -34,10 +34,10 @@ public class MeshExplosion : MonoBehaviour {
     private void OnCollisionEnter(Collision other)
     {
 
-        // Get position of player
-        if (other.gameObject.tag == "Player")
+        // Get position of object we collided into for our explosion origin
+        if (other.gameObject.layer != 9)
         {
-            playerPos = other.transform.position;
+            hittedObjectPos = other.transform.position;
         }
 
         // in control of its own collision and not touching Ground
@@ -101,11 +101,15 @@ public class MeshExplosion : MonoBehaviour {
         }
 
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
-        int maxTriangles = 300;
+        int maxTriangles = 500;
         int trianglesCount = 0;
+
+        //int maxTrianglesFromOneChild = 25;
+        //int maxTrianglesFromOneChildCount = 0;
 
         for (int j = 0; j < M.Count; j++)
         {
+            //maxTrianglesFromOneChildCount = 0;
             if (trianglesCount > maxTriangles)
             {
                 break;
@@ -116,6 +120,8 @@ public class MeshExplosion : MonoBehaviour {
             Vector2[] uvs = M[j].uv;
             for (int submesh = 0; submesh < M[j].subMeshCount; submesh++)
             {
+
+
 
                 int[] indices = M[j].GetTriangles(submesh);
 
@@ -154,14 +160,19 @@ public class MeshExplosion : MonoBehaviour {
                     //Vector3 explosionPos = Vector3.zero;
 
                     // Explodes in a circle around the player, looks much cooler than the other ones
-                    Vector3 explosionPos = new Vector3(playerPos.x + Random.Range(-variance * 2, variance * 2), playerPos.y + Random.Range(-variance * 2, variance * 2), playerPos.z + Random.Range(-variance * 2, variance * 2));
+                    Vector3 explosionPos = new Vector3(hittedObjectPos.x + Random.Range(-variance * 2, variance * 2), hittedObjectPos.y + Random.Range(-variance * 2, variance * 2), hittedObjectPos.z + Random.Range(-variance * 2, variance * 2));
                     GOs.Add(GO);
 
                     // explode the triangle mesh objects
-                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(800, 1000), explosionPos, 25);
+                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(100, 1000), explosionPos, 25);
                     //mesh.RecalculateNormals();
                     //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
                     trianglesCount += 1;
+                    /*maxTrianglesFromOneChildCount += 1;
+                    if (maxTrianglesFromOneChildCount >= maxTrianglesFromOneChild)
+                    {
+                        break;
+                    }*/
 
                 }
             }
