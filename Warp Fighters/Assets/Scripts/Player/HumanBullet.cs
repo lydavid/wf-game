@@ -74,6 +74,7 @@ public class HumanBullet : MonoBehaviour {
 
     public void ShootMe () 
     {
+        rb.velocity = new Vector3(0,0,0);
         rb.AddForce(forward);
         body.SetActive(false);
         bullet.SetActive(true);

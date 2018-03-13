@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class StartGame : MonoBehaviour {
 
-	AudioSource audio;
-
+	AudioSource bgm;
 	public Animator anim;
 	public Image black;
 
 	// Use this for initialization
 	void Start () 
 	{
-		audio = GetComponent<AudioSource>();	
+		bgm = GetComponent<AudioSource>();	
 	}
 	
 	// Update is called once per frame
@@ -22,7 +21,7 @@ public class StartGame : MonoBehaviour {
 	{
 		if (Input.GetButtonDown("Menu Button"))
         {
-			audio.Play();
+			bgm.Play();
             StartCoroutine(Fade());
         }
 	}
