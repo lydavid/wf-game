@@ -107,7 +107,7 @@ public class HumanBullet : MonoBehaviour {
                 // Set the player to be above ground
                 //float yPos = Mathf.Abs(other.transform.position.y - transform.position.y);
                 // for now we use 2 which is about the heigh of this gameObject, to prevent it from spawning through the ground after warp
-               // transform.position = new Vector3(transform.position.x, Mathf.Ceil(yPos + transform.position.y + 2), transform.position.z);
+                //transform.position = new Vector3(transform.position.x, Mathf.Ceil(yPos + transform.position.y + 2), transform.position.z);
 
             }
             
