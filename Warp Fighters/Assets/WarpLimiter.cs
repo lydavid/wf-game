@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WarpLimiter : MonoBehaviour {
 
+    public Texture warpChargeBarSide;
+    public Texture warpChargeBarMiddle;
+
     public bool canWarp;  // other scripts in player game object must confirm with this that they are able to warp before doing so
     public int maxWarpCharges;
     public int warpCharges;
@@ -51,6 +54,32 @@ public class WarpLimiter : MonoBehaviour {
         {
             warpCharges += 1;
             warpRechargeTimeProgress = warpRechargeTime;
+        }
+    }
+
+    void OnGUI()
+    {
+        for (int i = 0; i < warpCharges; i++)
+        {
+            int barSize = 10;
+            /*if (i > warpCharges)
+            {
+                barSize = Mathf.RoundToInt(Mathf.Floor(warpRechargeTime - warpRechargeTimeProgress) * 10 / warpRechargeTime);
+            } else
+            {
+                barSize = 10;
+            }*/
+            for (int j = 0; j < barSize; j++)
+            {
+                if (j == 0 || j == barSize - 1)
+                {
+                    GUI.DrawTexture(new Rect(i * 10 * 5 + j * 5, 50, 5, 15), warpChargeBarSide);
+                }
+                else
+                {
+                    GUI.DrawTexture(new Rect(i * 10 * 5 + j * 5, 50, 5, 15), warpChargeBarMiddle);
+                }
+            }
         }
     }
 }
