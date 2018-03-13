@@ -11,6 +11,8 @@ public class MeshExplosion : MonoBehaviour {
     float waitTime;
     bool setToDestroy;
 
+    Vector3 playerPos;
+
     // Use this for initialization
     void Start () {
         waitTime = 0;
@@ -31,6 +33,13 @@ public class MeshExplosion : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
+
+        // Get position of player
+        if (other.gameObject.tag == "Player")
+        {
+            playerPos = other.transform.position;
+        }
+
         // in control of its own collision and not touching Ground
         if (selfControl && other.gameObject.layer != 9)
         {
@@ -132,7 +141,7 @@ public class MeshExplosion : MonoBehaviour {
 
                     GameObject GO = new GameObject("Triangle " + (i / 3));
                     //GO.layer = LayerMask.NameToLayer("Particle");
-                    GO.transform.position = transform.position;
+                    GO.transform.position = transform.localPosition;
                     GO.transform.rotation = transform.rotation;
                     GO.transform.localScale = transform.lossyScale;
                     GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
@@ -140,13 +149,16 @@ public class MeshExplosion : MonoBehaviour {
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                     //GO.AddComponent<BoxCollider>();
                     float variance = 2.0f;
-                    Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
+                    //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
                     //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 4, -variance * 2), transform.position.y, transform.position.z);
                     //Vector3 explosionPos = Vector3.zero;
+
+                    // Explodes in a circle around the player, looks much cooler than the other ones
+                    Vector3 explosionPos = new Vector3(playerPos.x + Random.Range(-variance * 2, variance * 2), playerPos.y + Random.Range(-variance * 2, variance * 2), playerPos.z + Random.Range(-variance * 2, variance * 2));
                     GOs.Add(GO);
 
                     // explode the triangle mesh objects
-                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(400, 500), explosionPos, 10);
+                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(800, 1000), explosionPos, 25);
                     //mesh.RecalculateNormals();
                     //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
                     trianglesCount += 1;
