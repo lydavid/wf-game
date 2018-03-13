@@ -24,6 +24,12 @@ public class StartGame : MonoBehaviour {
 			bgm.Play();
             StartCoroutine(Fade());
         }
+
+        if (Input.GetButtonDown("Window Button"))
+        {
+            bgm.Play();
+            StartCoroutine(OtherFade());
+        }
 	}
 
 	IEnumerator Fade () 
@@ -32,4 +38,13 @@ public class StartGame : MonoBehaviour {
 		yield return new WaitForSeconds(1);
 		SceneManager.LoadScene("JonLevel");
 	}
+
+    IEnumerator OtherFade()
+    {
+        anim.SetBool("Fade", true);
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("FullMap");
+    }
+
+
 }
