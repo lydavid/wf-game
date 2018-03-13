@@ -7,6 +7,8 @@ public class WarpLimiter : MonoBehaviour {
     public Texture warpChargeBarSide;
     public Texture warpChargeBarMiddle;
 
+    public ParticleSystem ps;
+
     public bool canWarp;  // other scripts in player game object must confirm with this that they are able to warp before doing so
     public int maxWarpCharges;
     public int warpCharges;
@@ -18,7 +20,7 @@ public class WarpLimiter : MonoBehaviour {
         canWarp = true;
         maxWarpCharges = 5;
         warpCharges = maxWarpCharges;
-        warpRechargeTime = 3.0f;
+        warpRechargeTime = 1.5f;
         warpRechargeTimeProgress = warpRechargeTime;
 
     }
@@ -26,7 +28,11 @@ public class WarpLimiter : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (warpCharges < maxWarpCharges)
+        WarpLimitCheats();
+
+        // Need to be grounded and not in warp to recharge
+        // Prevents infinite charge up if the player warps to high places and waits for charge midfall
+        if (warpCharges < maxWarpCharges && gameObject.GetComponent<Rigidbody>().velocity.y == 0)
         {
             Recharge();
         }
@@ -41,6 +47,24 @@ public class WarpLimiter : MonoBehaviour {
         }
 		
 	}
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.layer != 9)
+        {
+            //ParticleSystem ps = GetComponent<ParticleSystem>();
+            ps.Play();
+        }
+    }
+
+    void WarpLimitCheats()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            warpCharges += 1;
+            maxWarpCharges += 1;
+        }
+    }
 
     public void ConsumeCharge()
     {
