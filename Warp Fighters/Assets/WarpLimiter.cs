@@ -7,7 +7,6 @@ public class WarpLimiter : MonoBehaviour {
     public Texture warpChargeBarSide;
     public Texture warpChargeBarMiddle;
 
-    public ParticleSystem ps;
 
     public bool canWarp;  // other scripts in player game object must confirm with this that they are able to warp before doing so
     public int maxWarpCharges;
@@ -48,22 +47,10 @@ public class WarpLimiter : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.layer != 9)
-        {
-            //ParticleSystem ps = GetComponent<ParticleSystem>();
-            ps.Play();
-        }
-    }
 
     void WarpLimitCheats()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            warpCharges += 1;
-            maxWarpCharges += 1;
-        }
+        
     }
 
     public void ConsumeCharge()
