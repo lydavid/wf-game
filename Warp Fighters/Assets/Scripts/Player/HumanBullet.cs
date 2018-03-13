@@ -25,7 +25,7 @@ public class HumanBullet : MonoBehaviour {
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
-        magnitude = 5000;
+        magnitude = 3000;
 
         bulletMode = false;
 
