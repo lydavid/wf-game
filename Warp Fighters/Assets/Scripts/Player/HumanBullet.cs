@@ -41,8 +41,21 @@ public class HumanBullet : MonoBehaviour {
         if (playerSettings.humanBulletOn)
         {
             forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
-                                                                // forward is a mixture of x and z
+                                                        // forward is a mixture of x and z
+            
+            //Physics.Raycast(ray);
 
+            RaycastHit hit;
+            Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                //Transform objectHit = hit.transform;
+                Debug.Log(hit.transform.gameObject.name);
+                forward = Vector3.Normalize( new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
+
+                // Do something with the object that was hit by the raycast.
+            }
             // now we need to change y according to the angle of the orb (it's x rot seems to rep the up/down look angle
             //Debug.Log(transform.TransformDirection(Vector3.forward));
             //Debug.Log(orb.transform.localEulerAngles);
