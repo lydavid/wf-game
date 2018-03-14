@@ -137,6 +137,7 @@ public class TPSPlayerController : MonoBehaviour {
     {
         float mouseHorizontal = 0;
 
+        // Prevent weird camera movement when locking on to target
         if (!GetComponent<LockOn>().targetLockedOn)
         {
             if (Input.GetAxis("Mouse X") != 0)

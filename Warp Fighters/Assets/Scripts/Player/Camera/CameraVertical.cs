@@ -17,21 +17,18 @@ public class CameraVertical : MonoBehaviour {
 	void Update ()
     {
         float mouseVertical = 0;
-        if (lockOn.targetLockedOn)
+
+        // unlike for hori camera, this is already locked when locking on
+        //if (!lockOn.targetLockedOn)
+        if (Input.GetAxis("Mouse Y") != 0)
         {
-            //transform.LookAt(lockOn.target.transform);
+            mouseVertical = Input.GetAxis("Mouse Y");
         }
-        else
+        if (Input.GetAxis("Right Stick Y") != 0)
         {
-            if (Input.GetAxis("Mouse Y") != 0)
-            {
-                mouseVertical = Input.GetAxis("Mouse Y");
-            }
-            if (Input.GetAxis("Right Stick Y") != 0)
-            {
-                mouseVertical = Input.GetAxis("Right Stick Y");
-            }
+            mouseVertical = Input.GetAxis("Right Stick Y");
         }
+        //}
 
         vertical = (vertical - turnSpeed * mouseVertical) % 360f;
         vertical = Mathf.Clamp(vertical, -30, 60);

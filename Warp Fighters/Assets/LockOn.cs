@@ -12,13 +12,19 @@ public class LockOn : MonoBehaviour {
     Quaternion camOriginalRot;
 
     public GameObject body;
+    Vector3 bodyOriginalPos;
+    Quaternion bodyOriginalRot;
 
-	// Use this for initialization
-	void Start () {
+    public Vector3 targetCenter;
+
+    // Use this for initialization
+    void Start () {
         targetLockedOn = false;
         camOriginalPos = cam.transform.localPosition;
         camOriginalRot = cam.transform.localRotation;
-	}
+        bodyOriginalPos = body.transform.localPosition;
+        bodyOriginalRot = body.transform.localRotation;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -35,14 +41,18 @@ public class LockOn : MonoBehaviour {
             targetLockedOn = true;
             target = GetComponent<HumanBullet>().target;
             //transform.LookAt(target.GetComponent<Center>().center.transform.position);
-            cam.transform.LookAt(target.GetComponent<Center>().center.transform.position); // rather than lock on to the transform position (often times their feet), lock on to the center of the object
-            //body.transform.LookAt(target.GetComponent<Center>().center.transform.position);
+            targetCenter = target.GetComponent<Center>().GetCenter();
+            cam.transform.LookAt(targetCenter); // rather than lock on to the transform position (often times their feet), lock on to the center of the object
+            body.transform.LookAt(targetCenter);
         }
         else
         {
             targetLockedOn = false;
+            GetComponent<HumanBullet>().target = null;
             cam.transform.localPosition = camOriginalPos;
             cam.transform.localRotation = camOriginalRot;
+            body.transform.localPosition = bodyOriginalPos;
+            body.transform.localRotation = bodyOriginalRot;
         }
 
     }
