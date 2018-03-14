@@ -21,7 +21,10 @@ public class HumanBullet : MonoBehaviour {
 
     Rigidbody rb;
 
-    private Vector3 forward; 
+    private Vector3 forward;
+
+    public GameObject target;
+
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
@@ -51,9 +54,14 @@ public class HumanBullet : MonoBehaviour {
             if (Physics.Raycast(ray, out hit))
             {
                 //Transform objectHit = hit.transform;
-                //Debug.Log(hit.transform.gameObject.name);
+                Debug.Log(hit.transform.gameObject.name);
                 forward = Vector3.Normalize( new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
 
+                if (hit.transform.gameObject.layer == 10)
+                {
+                    target = hit.transform.gameObject;
+
+                }
                 // Do something with the object that was hit by the raycast.
             }
             // now we need to change y according to the angle of the orb (it's x rot seems to rep the up/down look angle

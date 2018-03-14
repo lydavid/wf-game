@@ -137,14 +137,17 @@ public class TPSPlayerController : MonoBehaviour {
     {
         float mouseHorizontal = 0;
 
-        if (Input.GetAxis("Mouse X") != 0)
+        if (!GetComponent<LockOn>().targetLockedOn)
         {
-            mouseHorizontal = Input.GetAxis("Mouse X");
-        }
+            if (Input.GetAxis("Mouse X") != 0)
+            {
+                mouseHorizontal = Input.GetAxis("Mouse X");
+            }
 
-        if (Input.GetAxis("Right Stick X") != 0)
-        {
-            mouseHorizontal = Input.GetAxis("Right Stick X");
+            if (Input.GetAxis("Right Stick X") != 0)
+            {
+                mouseHorizontal = Input.GetAxis("Right Stick X");
+            }
         }
 
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
@@ -163,6 +166,9 @@ public class TPSPlayerController : MonoBehaviour {
 	}*/
 
 	void Gravity () {
-		transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
+        //if (!humanBullet.bulletMode)
+        //{
+            transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
+        //}
 	}
 }
