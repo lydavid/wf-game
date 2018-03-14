@@ -8,10 +8,14 @@ public class CameraVertical : MonoBehaviour {
 
     private float vertical;
     private float turnSpeed = 2.5f;
+
+    public TPSPlayerController controller;
+
     void Start ()
     {
         vertical = transform.eulerAngles.x;
         lockOn = transform.parent.gameObject.GetComponent<LockOn>();
+        controller = transform.parent.gameObject.GetComponent<TPSPlayerController>();
     }
 	
 	void Update ()
@@ -24,9 +28,13 @@ public class CameraVertical : MonoBehaviour {
         {
             mouseVertical = Input.GetAxis("Mouse Y");
         }
-        if (Input.GetAxis("Right Stick Y") != 0)
+        if (Input.GetAxis("Right Stick Y") != 0 && controller.controllerType == ControllerType.xbox)
         {
             mouseVertical = Input.GetAxis("Right Stick Y");
+        }
+        if (Input.GetAxis("Right Stick Y (PS4)") != 0 && controller.controllerType == ControllerType.ps)
+        {
+            mouseVertical = Input.GetAxis("Right Stick Y (PS4)");
         }
         //}
 

@@ -17,6 +17,8 @@ public class LockOn : MonoBehaviour {
 
     public Vector3 targetCenter;
 
+    TPSPlayerController controller;
+
     // Use this for initialization
     void Start () {
         targetLockedOn = false;
@@ -24,6 +26,8 @@ public class LockOn : MonoBehaviour {
         camOriginalRot = cam.transform.localRotation;
         bodyOriginalPos = body.transform.localPosition;
         bodyOriginalRot = body.transform.localRotation;
+
+        controller = GetComponent<TPSPlayerController>();
     }
 	
 	// Update is called once per frame
@@ -36,7 +40,9 @@ public class LockOn : MonoBehaviour {
     private void LateUpdate()
     {
         //Debug.Log(Input.GetAxis("Right Trigger"));
-        if (Input.GetAxis("Right Trigger") > 0 || Input.GetMouseButton(1))
+        if (Input.GetAxis("Right Trigger") > 0 && controller.controllerType == ControllerType.xbox
+            || Input.GetMouseButton(1)
+            || Input.GetAxis("R2") > 0 && controller.controllerType == ControllerType.ps)
         {
             Debug.Log("Yee boi");
             targetLockedOn = true;
