@@ -1,7 +1,7 @@
-﻿
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
+
+public enum ControllerType { pc, xbox, ps };
 
 public class TPSPlayerController : MonoBehaviour {
 
@@ -24,6 +24,8 @@ public class TPSPlayerController : MonoBehaviour {
     //private Animator animacao;
     HumanBullet humanBullet;
 
+    public ControllerType controllerType = ControllerType.pc;
+
     void Start ()
     {
         //animacao = GetComponentInChildren<Animator>();
@@ -36,11 +38,29 @@ public class TPSPlayerController : MonoBehaviour {
 
     void Update ()
     {
+        CheckControllerType();
         MouseToggleInGame();
         Controller();
         MovePerson();
         AnimatePerson();
 		Gravity ();
+    }
+
+    private void CheckControllerType()
+    {
+        string[] names = Input.GetJoystickNames();
+        foreach (string name in names)
+        {
+            Debug.Log(name);
+            if (name == "Controller (Xbox One For Windows)")
+            {
+                controllerType = ControllerType.xbox;
+            } else
+            {
+                controllerType = ControllerType.ps;
+            }
+            
+        }
     }
 
 
@@ -71,12 +91,14 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void Controller () {
 
+        
+
         float mH = Input.GetAxis("Horizontal");
         float mV = Input.GetAxis("Vertical");
 
         transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
 
-        if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("B Button")) {
+        if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox) {
             if (GetComponent<WarpLimiter>().canWarp)
             {
                 humanBullet.ShootMe();

@@ -27,7 +27,8 @@ public class Center : MonoBehaviour {
     {
         if (!useCenterOfRenderer)
         {
-            center = centerRep.transform.position;
+            Debug.Log(centerRep.gameObject.name);
+            center = centerRep.GetComponent<Renderer>().bounds.center;
         }
         else
         {

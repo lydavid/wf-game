@@ -35,7 +35,8 @@ public class LockOn : MonoBehaviour {
 
     private void LateUpdate()
     {
-        if (Input.GetButton("Right Trigger") || Input.GetMouseButton(1))
+        //Debug.Log(Input.GetAxis("Right Trigger"));
+        if (Input.GetAxis("Right Trigger") > 0 || Input.GetMouseButton(1))
         {
             Debug.Log("Yee boi");
             targetLockedOn = true;
