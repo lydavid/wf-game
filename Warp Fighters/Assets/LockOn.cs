@@ -40,9 +40,10 @@ public class LockOn : MonoBehaviour {
     private void LateUpdate()
     {
         //Debug.Log(Input.GetAxis("Right Trigger"));
-        if (Input.GetAxis("Right Trigger") > 0 && controller.controllerType == ControllerType.xbox
+        if ((Input.GetAxis("Right Trigger") > 0 && controller.controllerType == ControllerType.xbox
             || Input.GetMouseButton(1)
             || Input.GetAxis("R2") > 0 && controller.controllerType == ControllerType.ps)
+            && GetComponent<HumanBullet>().target != null)
         {
             Debug.Log("Yee boi");
             targetLockedOn = true;

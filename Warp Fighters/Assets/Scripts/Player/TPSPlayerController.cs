@@ -77,7 +77,7 @@ public class TPSPlayerController : MonoBehaviour {
         }
 
         // allows us to click back into game
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
