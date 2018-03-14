@@ -169,6 +169,8 @@ public class TPSPlayerController : MonoBehaviour {
                 mouseHorizontal = Input.GetAxis("Mouse X");
             }
 
+            // might need to speed up movement of right stick axis, they seem way slower than with mouse
+            // or slow down mouse for precision when aiming
             if (Input.GetAxis("Right Stick X") != 0 && controllerType == ControllerType.xbox)
             {
                 mouseHorizontal = Input.GetAxis("Right Stick X");

@@ -23,20 +23,20 @@ public class CameraVertical : MonoBehaviour {
         float mouseVertical = 0;
 
         // unlike for hori camera, this is already locked when locking on
-        //if (!lockOn.targetLockedOn)
-        if (Input.GetAxis("Mouse Y") != 0)
-        {
-            mouseVertical = Input.GetAxis("Mouse Y");
+        if (!lockOn.targetLockedOn) {
+            if (Input.GetAxis("Mouse Y") != 0)
+            {
+                mouseVertical = Input.GetAxis("Mouse Y");
+            }
+            if (Input.GetAxis("Right Stick Y") != 0 && controller.controllerType == ControllerType.xbox)
+            {
+                mouseVertical = Input.GetAxis("Right Stick Y");
+            }
+            if (Input.GetAxis("Right Stick Y (PS4)") != 0 && controller.controllerType == ControllerType.ps)
+            {
+                mouseVertical = Input.GetAxis("Right Stick Y (PS4)");
+            }
         }
-        if (Input.GetAxis("Right Stick Y") != 0 && controller.controllerType == ControllerType.xbox)
-        {
-            mouseVertical = Input.GetAxis("Right Stick Y");
-        }
-        if (Input.GetAxis("Right Stick Y (PS4)") != 0 && controller.controllerType == ControllerType.ps)
-        {
-            mouseVertical = Input.GetAxis("Right Stick Y (PS4)");
-        }
-        //}
 
         vertical = (vertical - turnSpeed * mouseVertical) % 360f;
         vertical = Mathf.Clamp(vertical, -30, 60);
