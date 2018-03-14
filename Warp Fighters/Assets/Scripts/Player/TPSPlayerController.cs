@@ -92,13 +92,15 @@ public class TPSPlayerController : MonoBehaviour {
     private void Controller () {
 
         
-
+        // Movement axis should be same for xbox, ps, pc
         float mH = Input.GetAxis("Horizontal");
         float mV = Input.GetAxis("Vertical");
 
         transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
 
-        if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox) {
+        if (Input.GetMouseButtonDown(0) || 
+            Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox ||
+            Input.GetButtonDown("X Button") && controllerType == ControllerType.ps) {
             if (GetComponent<WarpLimiter>().canWarp)
             {
                 humanBullet.ShootMe();
@@ -167,9 +169,14 @@ public class TPSPlayerController : MonoBehaviour {
                 mouseHorizontal = Input.GetAxis("Mouse X");
             }
 
-            if (Input.GetAxis("Right Stick X") != 0)
+            if (Input.GetAxis("Right Stick X") != 0 && controllerType == ControllerType.xbox)
             {
                 mouseHorizontal = Input.GetAxis("Right Stick X");
+            }
+
+            if (Input.GetAxis("Right Stick X (PS4)") != 0 && controllerType == ControllerType.ps)
+            {
+                mouseHorizontal = Input.GetAxis("Right Stick X (PS4)");
             }
         }
 
