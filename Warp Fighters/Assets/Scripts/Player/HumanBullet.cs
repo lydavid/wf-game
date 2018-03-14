@@ -25,6 +25,9 @@ public class HumanBullet : MonoBehaviour {
 
     public GameObject target;
 
+    [SerializeField]
+    private GameObject WallCrackPrefab;
+
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
@@ -117,12 +120,23 @@ public class HumanBullet : MonoBehaviour {
         GetComponent<Rigidbody>().AddForce(Physics.gravity);
     }*/
 
+
+    void drawDecal (ContactPoint point)
+    {
+        GameObject decal = Instantiate(WallCrackPrefab);
+        decal.transform.position = point.point + (point.normal * 0.01f);
+        decal.transform.forward = point.normal * -1f;
+    }
     private void OnCollisionEnter(Collision other)
     {
         //if (other.gameObject.layer != 9 && other.gameObject.tag != "Player")
         //{
         if (bulletMode)
         {
+
+            ContactPoint pointOfContact = other.contacts[0];
+            drawDecal(pointOfContact);
+
             rb.velocity = new Vector3(3, 3, 3); //stops the player from flying everywhere
             
             bullet.SetActive(false);
