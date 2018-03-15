@@ -12,7 +12,7 @@ public class Decals : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		impactDecals = GameObject.Find("ImpactDecals");
+		impactDecals = new GameObject();
 		humanBullet = GetComponent<HumanBullet>(); 
 	}
 	
