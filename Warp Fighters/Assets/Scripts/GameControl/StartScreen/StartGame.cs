@@ -19,17 +19,17 @@ public class StartGame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter"))
+		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("right shift"))
         {
 			bgm.Play();
             StartCoroutine(Fade());
         }
 
-        if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("right shift"))
+        /*if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("right shift"))
         {
             bgm.Play();
             StartCoroutine(OtherFade());
-        }
+        }*/
 	}
 
 	IEnumerator Fade () 
@@ -40,12 +40,12 @@ public class StartGame : MonoBehaviour {
         SceneManager.LoadScene("LoadingScreen");
     }
 
-    IEnumerator OtherFade()
+    /*IEnumerator OtherFade()
     {
         anim.SetBool("Fade", true);
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("FullMap");
-    }
+    }*/
 
 
 }
