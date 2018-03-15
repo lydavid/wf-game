@@ -34,7 +34,7 @@ public class BasicEnemyController : MonoBehaviour {
     public int arcSize;
     public int sightRange;
 
-    private Rigidbody rb;
+    //private Rigidbody rb;
 
 
     [Header("Combat")]
@@ -53,7 +53,7 @@ public class BasicEnemyController : MonoBehaviour {
     Vector3 originalPos;
 
     [Header("Materials")]
-    Material origMaterial;
+    //Material origMaterial;
     public Material alertedColor;  // orange when it's persuing the player
     public Material attackColor;  // blue when it's dealing dmg to the player
     public Material damagedColor; // red when it's receiving dmg from the player
@@ -68,10 +68,12 @@ public class BasicEnemyController : MonoBehaviour {
     Vector3 originalPosition;
     Quaternion originalRotation;
 
+    Animator animator; 
+
     // Use this for initialization
     void Start()
     {
-        rb = player.GetComponent<Rigidbody>();
+        //rb = player.GetComponent<Rigidbody>();
         arcSize = 30;
         sightRange = 30;
         coolOffTime = 3.0f;
@@ -79,7 +81,7 @@ public class BasicEnemyController : MonoBehaviour {
 
         selfRigidbody = GetComponent<Rigidbody>();
 
-        origMaterial = GetComponent<Renderer>().material;
+        //origMaterial = GetComponent<Renderer>().material;
 
         ableToDamagePlayer = true;
         initiatedAttack = false;
@@ -91,6 +93,8 @@ public class BasicEnemyController : MonoBehaviour {
         originalPosition = transform.position;
         Debug.Log(originalPosition);
         originalRotation = transform.rotation;
+
+        animator = GetComponent<Animator>();
     }
 
 
@@ -108,9 +112,15 @@ public class BasicEnemyController : MonoBehaviour {
                 //{
                 if (enemyType != EnemyType.a_guard)
                 {
+                    
                     MoveBetweenPoints();
+                    
+                } else
+                {
+                    animator.SetBool("Patrol", true);
+                    LookForPlayer();
                 }
-                LookForPlayer();
+                
                 //}
                 break;
 
@@ -230,7 +240,7 @@ public class BasicEnemyController : MonoBehaviour {
             if (Physics.Raycast(start, dir, out hit))
             {
 
-                if (hit.rigidbody == rb)
+                if (hit.transform.gameObject.tag == "Player")
                 {
 
                     if (enemyType != EnemyType.a_guard)
