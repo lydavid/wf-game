@@ -29,12 +29,12 @@ public class ForcedInstructions : MonoBehaviour {
             looked = true;
         }
 
-        if (Input.GetButtonDown("A Button"))
+        if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0))
         {
             warped = true;
         }
 
-        if (Input.GetAxis("Right Trigger") > 0)
+        if (Input.GetAxis("Right Trigger") > 0 || Input.GetMouseButtonDown(1))
         {
             locked = true;
         }
