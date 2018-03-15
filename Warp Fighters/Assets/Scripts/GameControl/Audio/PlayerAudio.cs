@@ -9,12 +9,14 @@ public class PlayerAudio : MonoBehaviour {
 	public AudioClip instantWarpClip;
 	public AudioClip bgmClip;
     public AudioClip velocityWarpClip;
+    public AudioClip impactClip;
 	//public GameObject Helper;
 
 
 	private AudioSource bgmAudio;
     public AudioSource instantWarpAudio;
     public AudioSource velocityWarpAudio;
+    public AudioSource impactAudio;
 
 
     // Use this for initialization
@@ -30,7 +32,8 @@ public class PlayerAudio : MonoBehaviour {
 	void Awake () {
 		instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
         velocityWarpAudio = AddAudio(gameObject, velocityWarpClip, false, false, 0.2f);
-        bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.02f);
+        bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.2f);
+        impactAudio = AddAudio(gameObject, impactClip, false, false, 0.2f);
 	}
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {

@@ -105,6 +105,7 @@ public class HumanBullet : MonoBehaviour {
 
     public void ShootMe () 
     {
+        GetComponent<PlayerAudio>().velocityWarpAudio.Play();
         /* Adjust bullet position to be exactly where this parent transform was. This will give us proper accuracy as we had computed forward using this parent transform */
         bullet.transform.position = transform.position;
 
@@ -127,6 +128,10 @@ public class HumanBullet : MonoBehaviour {
         //{
         if (bulletMode)
         {
+            // Play sound as player collided with something whilst in bullet mode
+            GetComponent<PlayerAudio>().impactAudio.Play();
+
+
             rb.velocity = new Vector3(3, 3, 3); //stops the player from flying everywhere
             
             bullet.SetActive(false);
