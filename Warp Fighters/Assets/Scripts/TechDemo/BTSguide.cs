@@ -91,11 +91,11 @@ public class BTSguide : MonoBehaviour {
 		if (warpToggle == true) {
 
 			if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0)) {
-                playerAudio.instantWarpAudio.Play();
+                //playerAudio.instantWarpAudio.Play();
 				InstantWarp();
 			}
 			if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1)) {
-                playerAudio.velocityWarpAudio.Play();
+                playerAudio.warpAudio.Play();
                 VelocityWarp();
 			}
 		}

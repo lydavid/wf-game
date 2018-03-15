@@ -6,16 +6,14 @@ using UnityEngine;
 // Set up all the AudioClip and AudioSource in this script and allow for other scripts to call them from here.
 public class PlayerAudio : MonoBehaviour {
 
-	public AudioClip instantWarpClip;
+    [Header("Clips")]
 	public AudioClip bgmClip;
-    public AudioClip velocityWarpClip;
+    public AudioClip warpClip;
     public AudioClip impactClip;
-	//public GameObject Helper;
 
-
-	private AudioSource bgmAudio;
-    public AudioSource instantWarpAudio;
-    public AudioSource velocityWarpAudio;
+    [Header("Audio Sources")]
+	public AudioSource bgmAudio;
+    public AudioSource warpAudio;
     public AudioSource impactAudio;
 
 
@@ -30,9 +28,10 @@ public class PlayerAudio : MonoBehaviour {
 	}
 
 	void Awake () {
-		instantWarpAudio = AddAudio(gameObject, instantWarpClip, false, false, 0.2f);
-        velocityWarpAudio = AddAudio(gameObject, velocityWarpClip, false, false, 0.2f);
+
         bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.2f);
+
+        warpAudio = AddAudio(gameObject, warpClip, false, false, 0.2f);
         impactAudio = AddAudio(gameObject, impactClip, false, false, 0.2f);
 	}
 
