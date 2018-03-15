@@ -31,6 +31,7 @@ public class HumanBullet : MonoBehaviour {
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
+
         magnitude = 3000;
 
         bulletMode = false;
@@ -38,7 +39,6 @@ public class HumanBullet : MonoBehaviour {
         playerSettings = GetComponent<PlayerSettings>();
 
         rb = GetComponent<Rigidbody>();
-        
     }
 
 
@@ -120,9 +120,10 @@ public class HumanBullet : MonoBehaviour {
         GetComponent<Rigidbody>().AddForce(Physics.gravity);
     }*/
 
-
+    
     void drawDecal (ContactPoint point)
-    {
+    {   
+        
         GameObject decal = Instantiate(WallCrackPrefab);
         decal.transform.position = point.point + (point.normal * 0.01f);
         decal.transform.forward = point.normal * -1f;
@@ -134,8 +135,8 @@ public class HumanBullet : MonoBehaviour {
         if (bulletMode)
         {
 
-            ContactPoint pointOfContact = other.contacts[0];
-            drawDecal(pointOfContact);
+            //ContactPoint pointOfContact = other.contacts[0];
+            //drawDecal(pointOfContact);
 
             rb.velocity = new Vector3(3, 3, 3); //stops the player from flying everywhere
             
