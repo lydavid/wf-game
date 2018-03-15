@@ -133,14 +133,17 @@ public class BasicEnemyController : MonoBehaviour {
                 break;
 
             case EnemyMoveState.chasingPlayer:
+                animator.SetBool("Warp", true);
                 ChasePlayer();
                 break;
 
             case EnemyMoveState.coolingOff:
+                animator.SetBool("Warp", false);
                 CoolOff();
                 break;
 
             case EnemyMoveState.warpAtPlayer:
+                animator.SetBool("Warp", true);
                 WarpAtPlayer();
                 break;
 
