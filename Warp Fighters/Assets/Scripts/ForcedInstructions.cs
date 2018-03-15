@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ForcedInstructions : MonoBehaviour {
 
-    public GameObject smallerInstructions;
+    //public GameObject smallerInstructions;
 
     bool moved;
     bool looked;
+    bool warped;
+    bool locked;
 
 	// Use this for initialization
 	void Start () {
@@ -27,9 +29,19 @@ public class ForcedInstructions : MonoBehaviour {
             looked = true;
         }
 
-        if (moved && looked)
+        if (Input.GetButtonDown("A Button"))
         {
-            smallerInstructions.SetActive(true);
+            warped = true;
+        }
+
+        if (Input.GetAxis("Right Trigger") > 0)
+        {
+            locked = true;
+        }
+
+        if (moved && looked && warped && locked)
+        {
+            //smallerInstructions.SetActive(true);
             gameObject.SetActive(false);
         }
 	}
