@@ -12,11 +12,13 @@ public class HPManager : MonoBehaviour {
     bool exploded;
 
     public AudioSource deathAudio;
+    public AudioSource bgm;
 
 	// Use this for initialization
 	void Start () {
         healthPoints = 5;
         deathAudio = GetComponent<PlayerAudio>().deathAudio;
+        bgm = GetComponent<PlayerAudio>().bgmAudio;
         isDead = false;
         exploded = false;
 	}
@@ -33,7 +35,7 @@ public class HPManager : MonoBehaviour {
     {
         if (!deathAudio.isPlaying && !exploded)
         {
-            // Then explode
+            // Explode character upon end of death sound
             GetComponent<MeshExplosion>().SplitMesh(3.0f, 4.0f);
             exploded = true;
         }
@@ -49,22 +51,26 @@ public class HPManager : MonoBehaviour {
 
     public void Damage(int damage)
     {
-        healthPoints -= damage;
-        if (healthPoints <= 0)
+        if (!isDead)
         {
+            healthPoints -= damage;
+            if (healthPoints <= 0)
+            {
 
-            // Before loading GameOver screen, make player character play death sound, and explode
-            deathAudio.Play();
-            isDead = true;
+                // Before loading GameOver screen, make player character play death sound, and stop bgm
+                bgm.Stop();
+                deathAudio.Play();
+                isDead = true;
 
-            // Make character fall over
-            //transform.Rotate(new Vector3(0, 0, 90));
+                // Make character fall over
+                //transform.Rotate(new Vector3(0, 0, 90));
 
-            
 
-            // GAME OVER
-            //SceneManager.LoadScene("GameOver");
-            // now handled in MeshExplosion, exclusively for Player obj
+
+                // GAME OVER
+                //SceneManager.LoadScene("GameOver");
+                // now handled in MeshExplosion, exclusively for Player obj
+            }
         }
     }
 

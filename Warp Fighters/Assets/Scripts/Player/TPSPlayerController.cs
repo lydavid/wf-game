@@ -26,6 +26,8 @@ public class TPSPlayerController : MonoBehaviour {
 
     public ControllerType controllerType = ControllerType.pc;
 
+    HPManager hPManager;
+
     void Start ()
     {
         //animacao = GetComponentInChildren<Animator>();
@@ -34,10 +36,16 @@ public class TPSPlayerController : MonoBehaviour {
         horizontal = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        hPManager = gameObject.GetComponent<HPManager>();
     }
 
     void Update ()
     {
+        if (hPManager.isDead)
+        {
+            return;
+        }
         CheckControllerType();
         MouseToggleInGame();
         Controller();

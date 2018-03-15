@@ -11,15 +11,25 @@ public class CameraVertical : MonoBehaviour {
 
     public TPSPlayerController controller;
 
+    HPManager hPManager;
+
     void Start ()
     {
         vertical = transform.eulerAngles.x;
         lockOn = transform.parent.gameObject.GetComponent<LockOn>();
         controller = transform.parent.gameObject.GetComponent<TPSPlayerController>();
+
+        hPManager = transform.parent.gameObject.GetComponent<HPManager>();
     }
 	
 	void Update ()
     {
+
+        if (hPManager.isDead)
+        {
+            return;
+        }
+
         float mouseVertical = 0;
 
         // unlike for hori camera, this is already locked when locking on

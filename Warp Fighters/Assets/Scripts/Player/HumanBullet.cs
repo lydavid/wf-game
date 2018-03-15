@@ -28,6 +28,9 @@ public class HumanBullet : MonoBehaviour {
     [SerializeField]
 
 
+    AudioSource warpAudio;
+
+
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
@@ -39,6 +42,8 @@ public class HumanBullet : MonoBehaviour {
         playerSettings = GetComponent<PlayerSettings>();
 
         rb = GetComponent<Rigidbody>();
+
+        warpAudio = GetComponent<PlayerAudio>().warpAudio;
     }
 
 
@@ -106,7 +111,7 @@ public class HumanBullet : MonoBehaviour {
 
     public void ShootMe () 
     {
-        GetComponent<PlayerAudio>().warpAudio.Play();
+        warpAudio.Play();
         /* Adjust bullet position to be exactly where this parent transform was. This will give us proper accuracy as we had computed forward using this parent transform */
         bullet.transform.position = transform.position;
 

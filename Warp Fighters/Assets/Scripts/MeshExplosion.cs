@@ -162,7 +162,20 @@ public class MeshExplosion : MonoBehaviour {
                     //Vector3 explosionPos = Vector3.zero;
 
                     // Explodes in a circle around the player, looks much cooler than the other ones
-                    Vector3 explosionPos = new Vector3(hittedObjectPos.x + Random.Range(-variance * 2, variance * 2), hittedObjectPos.y + Random.Range(-variance * 2, variance * 2), hittedObjectPos.z + Random.Range(-variance * 2, variance * 2));
+
+                    Vector3 explosionPos;
+                    if (gameObject.tag == "Player")
+                    {
+                        // explode from center instead
+                        explosionPos = new Vector3(gameObject.transform.position.x + Random.Range(-variance * 2, variance * 2), gameObject.transform.position.y + Random.Range(-variance * 2, variance * 2), gameObject.transform.position.z + Random.Range(-variance * 2, variance * 2));
+
+                    }
+                    else
+                    {
+                        explosionPos = new Vector3(hittedObjectPos.x + Random.Range(-variance * 2, variance * 2), hittedObjectPos.y + Random.Range(-variance * 2, variance * 2), hittedObjectPos.z + Random.Range(-variance * 2, variance * 2));
+
+                    }
+
                     GOs.Add(GO);
 
                     // explode the triangle mesh objects
