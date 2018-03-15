@@ -11,12 +11,14 @@ public class PlayerAudio : MonoBehaviour {
     public AudioClip warpClip;
     public AudioClip impactClip;
     public AudioClip deathClip;
+    public AudioClip healthLowClip;
 
     [Header("Audio Sources")]
 	public AudioSource bgmAudio;
     public AudioSource warpAudio;
     public AudioSource impactAudio;
     public AudioSource deathAudio;
+    public AudioSource healthLowAudio;
 
 
     // Use this for initialization
@@ -36,6 +38,7 @@ public class PlayerAudio : MonoBehaviour {
         warpAudio = AddAudio(gameObject, warpClip, false, false, 0.2f);
         impactAudio = AddAudio(gameObject, impactClip, false, false, 0.2f);
         deathAudio = AddAudio(gameObject, deathClip, false, false, 0.2f);
+        healthLowAudio = AddAudio(gameObject, healthLowClip, false, false, 0.2f);
     }
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {

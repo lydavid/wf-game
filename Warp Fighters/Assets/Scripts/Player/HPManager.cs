@@ -11,14 +11,24 @@ public class HPManager : MonoBehaviour {
     public bool isDead;
     bool exploded;
 
-    public AudioSource deathAudio;
-    public AudioSource bgm;
+    PlayerAudio playerAudio;
+
+    AudioSource bgm;
+    AudioSource healthLowAudio;
+    AudioSource deathAudio;
+    
 
 	// Use this for initialization
 	void Start () {
         healthPoints = 5;
-        deathAudio = GetComponent<PlayerAudio>().deathAudio;
-        bgm = GetComponent<PlayerAudio>().bgmAudio;
+
+        playerAudio = GetComponent<PlayerAudio>();
+
+        bgm = playerAudio.bgmAudio;
+        healthLowAudio = playerAudio.healthLowAudio;
+        deathAudio = playerAudio.deathAudio;
+        
+
         isDead = false;
         exploded = false;
 	}
@@ -70,6 +80,9 @@ public class HPManager : MonoBehaviour {
                 // GAME OVER
                 //SceneManager.LoadScene("GameOver");
                 // now handled in MeshExplosion, exclusively for Player obj
+            } else if (healthPoints <= 1)
+            {
+                healthLowAudio.Play();
             }
         }
     }
