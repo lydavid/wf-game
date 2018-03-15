@@ -36,8 +36,9 @@ public class StartGame : MonoBehaviour {
 	{	
 		anim.SetBool("Fade", true);
 		yield return new WaitForSeconds(1);
-		SceneManager.LoadScene("JonLevel");
-	}
+		//SceneManager.LoadScene("JonLevel");
+        SceneManager.LoadScene("LoadingScreen");
+    }
 
     IEnumerator OtherFade()
     {
