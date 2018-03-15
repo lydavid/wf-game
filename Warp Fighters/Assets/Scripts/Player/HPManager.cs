@@ -16,6 +16,8 @@ public class HPManager : MonoBehaviour {
 	}
 
     void OnCollisionEnter (Collision hit) {
+
+        // TODO: Touching "Terrain" auto-kills you? Maybe wanna change this
         if (hit.gameObject.tag == "Terrain") {
             SceneManager.LoadScene("GameOver");
         }
@@ -26,8 +28,19 @@ public class HPManager : MonoBehaviour {
         healthPoints -= damage;
         if (healthPoints <= 0)
         {
+
+            // Before loading GameOver screen, make player character play death sound, and explode
+            GetComponent<PlayerAudio>().deathAudio.Play();
+
+            // Make character fall over
+            transform.Rotate(new Vector3(0, 0, 90));
+
+            // Then explode
+            GetComponent<MeshExplosion>().SplitMesh(3.0f, 4.0f);
+
             // GAME OVER
-            SceneManager.LoadScene("GameOver");
+            //SceneManager.LoadScene("GameOver");
+            // now handled in MeshExplosion, exclusively for Player obj
         }
     }
 

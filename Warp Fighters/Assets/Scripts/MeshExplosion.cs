@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 // Adapted from MeshEffect script but applies to all Meshes, including mesh of children
@@ -17,6 +18,7 @@ public class MeshExplosion : MonoBehaviour {
     void Start () {
         waitTime = 0;
         setToDestroy = false;
+        hittedObjectPos = Vector3.zero;
 
 	}
 	
@@ -56,7 +58,7 @@ public class MeshExplosion : MonoBehaviour {
     }
 
     // modified from: https://answers.unity.com/questions/1036438/explode-mesh-when-clicked-on.html
-    public void SplitMesh(float waitTime)
+    public void SplitMesh(float waitTime, float scale = 1.0f)
     {
 
         if (GetComponent<Collider>())
@@ -149,7 +151,7 @@ public class MeshExplosion : MonoBehaviour {
                     //GO.layer = LayerMask.NameToLayer("Particle");
                     GO.transform.position = transform.localPosition;
                     GO.transform.rotation = transform.rotation;
-                    GO.transform.localScale = transform.lossyScale;
+                    GO.transform.localScale = transform.lossyScale * scale;
                     GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
@@ -193,7 +195,16 @@ public class MeshExplosion : MonoBehaviour {
             {
                 Destroy(GO);
             }
-            Destroy(gameObject);
+
+            // End the game once the player has exploded
+            if (gameObject.tag == "Player")
+            {
+                SceneManager.LoadScene("GameOver");
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

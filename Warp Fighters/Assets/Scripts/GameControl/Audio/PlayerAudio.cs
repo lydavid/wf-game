@@ -10,11 +10,13 @@ public class PlayerAudio : MonoBehaviour {
 	public AudioClip bgmClip;
     public AudioClip warpClip;
     public AudioClip impactClip;
+    public AudioClip deathClip;
 
     [Header("Audio Sources")]
 	public AudioSource bgmAudio;
     public AudioSource warpAudio;
     public AudioSource impactAudio;
+    public AudioSource deathAudio;
 
 
     // Use this for initialization
@@ -33,7 +35,8 @@ public class PlayerAudio : MonoBehaviour {
 
         warpAudio = AddAudio(gameObject, warpClip, false, false, 0.2f);
         impactAudio = AddAudio(gameObject, impactClip, false, false, 0.2f);
-	}
+        deathAudio = AddAudio(gameObject, deathClip, false, false, 0.2f);
+    }
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {
 		AudioSource audio = obj.AddComponent<AudioSource>();
