@@ -21,7 +21,7 @@ public class BasicEnemyController : MonoBehaviour {
 
 
     [Header("Movement")]
-    public float speed = 5.0f;  // movement speed of enemy
+    public float speed = 4.0f;  // movement speed of enemy
     public Transform start, target;  // positions to move between
 
     private bool moveToA = false;
@@ -112,12 +112,20 @@ public class BasicEnemyController : MonoBehaviour {
                 //{
                 if (enemyType != EnemyType.a_guard)
                 {
-                    
+                    if (wait)
+                    {
+                        animator.SetBool("Patrol", false);
+                    }
+                    else
+                    {
+                        animator.SetBool("Patrol", true);
+                    }
                     MoveBetweenPoints();
-                    
+                    LookForPlayer();
+
                 } else
                 {
-                    animator.SetBool("Patrol", true);
+                    
                     LookForPlayer();
                 }
                 
@@ -164,6 +172,7 @@ public class BasicEnemyController : MonoBehaviour {
         float step = speed * Time.deltaTime;
         if (wait)
         {
+            //animator.SetBool("Patrol", false);
             StartCoroutine(Pause());
         }
         else
