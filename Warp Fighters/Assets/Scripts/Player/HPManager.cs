@@ -8,12 +8,36 @@ using UnityEngine.SceneManagement;
 public class HPManager : MonoBehaviour {
 
     public int healthPoints;  // instead of a health bar, let's use something like hearts (ie hits)
+    public bool isDead;
+    bool exploded;
 
+    public AudioSource deathAudio;
 
 	// Use this for initialization
 	void Start () {
         healthPoints = 5;
+        deathAudio = GetComponent<PlayerAudio>().deathAudio;
+        isDead = false;
+        exploded = false;
 	}
+
+    private void Update()
+    {
+        if (isDead)
+        {
+            WaitAndExplode();
+        }
+    }
+
+    void WaitAndExplode()
+    {
+        if (!deathAudio.isPlaying && !exploded)
+        {
+            // Then explode
+            GetComponent<MeshExplosion>().SplitMesh(3.0f, 4.0f);
+            exploded = true;
+        }
+    }
 
     void OnCollisionEnter (Collision hit) {
 
@@ -30,13 +54,13 @@ public class HPManager : MonoBehaviour {
         {
 
             // Before loading GameOver screen, make player character play death sound, and explode
-            GetComponent<PlayerAudio>().deathAudio.Play();
+            deathAudio.Play();
+            isDead = true;
 
             // Make character fall over
-            transform.Rotate(new Vector3(0, 0, 90));
+            //transform.Rotate(new Vector3(0, 0, 90));
 
-            // Then explode
-            GetComponent<MeshExplosion>().SplitMesh(3.0f, 4.0f);
+            
 
             // GAME OVER
             //SceneManager.LoadScene("GameOver");
