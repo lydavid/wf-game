@@ -57,11 +57,12 @@ public class HumanBullet : MonoBehaviour {
             if (Physics.Raycast(ray, out hit))
             {
                 //Transform objectHit = hit.transform;
-               // Debug.Log(hit.transform.gameObject.name);
+                
                 forward = Vector3.Normalize( new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
 
                 if (hit.transform.gameObject.layer == 10)
                 {
+                    Debug.Log(hit.transform.gameObject.name);
                     target = hit.transform.gameObject;
 
                 }

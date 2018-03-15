@@ -25,14 +25,15 @@ public class Center : MonoBehaviour {
     // by making this a function rather than updating center constantly in Update, we can improve performance
     public Vector3 GetCenter()
     {
+        
         if (!useCenterOfRenderer)
         {
-            Debug.Log(centerRep.gameObject.name);
+            Debug.Log(centerRep.name);
             center = centerRep.GetComponent<Renderer>().bounds.center;
         }
         else
         {
-            center = GetComponent<Renderer>().bounds.center;
+            center = gameObject.GetComponent<Renderer>().bounds.center;
         }
         return center;
     }
