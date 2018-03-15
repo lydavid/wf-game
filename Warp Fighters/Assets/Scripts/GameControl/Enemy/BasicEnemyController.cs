@@ -511,6 +511,10 @@ public class BasicEnemyController : MonoBehaviour {
 
     void ExplodeOnImpact()
     {
+
+        // Give player an additional charge
+        player.GetComponent<WarpLimiter>().GainMaxChargeAndRefill();
+
         waitTime = 3.0f;
         GetComponent<MeshExplosion>().SplitMesh(waitTime);
         

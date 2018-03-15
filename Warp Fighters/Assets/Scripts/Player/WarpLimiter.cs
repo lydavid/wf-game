@@ -27,8 +27,6 @@ public class WarpLimiter : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        WarpLimitCheats();
-
         // Need to be grounded and not in warp to recharge
         // Prevents infinite charge up if the player warps to high places and waits for charge midfall
         if (warpCharges < maxWarpCharges && gameObject.GetComponent<Rigidbody>().velocity.y == 0)
@@ -48,16 +46,6 @@ public class WarpLimiter : MonoBehaviour {
 	}
 
 
-    void WarpLimitCheats()
-    {
-        
-    }
-
-    public void ConsumeCharge()
-    {
-        warpCharges -= 1;
-    }
-
     void Recharge()
     {
         warpRechargeTimeProgress -= Time.deltaTime;
@@ -67,6 +55,21 @@ public class WarpLimiter : MonoBehaviour {
             warpRechargeTimeProgress = warpRechargeTime;
         }
     }
+
+
+    public void ConsumeCharge()
+    {
+        warpCharges -= 1;
+    }
+
+
+    // Called upon defeating an enemy
+    public void GainMaxChargeAndRefill(int charge = 1)
+    {
+        maxWarpCharges += charge;
+        warpCharges = maxWarpCharges;
+    }
+
 
     void OnGUI()
     {
