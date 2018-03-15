@@ -26,7 +26,7 @@ public class RespawnOnGround : MonoBehaviour {
             lastGroundPosition = transform.position;
             //Debug.Log(lastGroundPosition);
 
-        } else if (other.gameObject.tag == "BottomPlane")
+        } else if (other.gameObject.tag == "InvisibleWall")
         {
             // Respawn player at last ground position
             transform.position = lastGroundPosition;
