@@ -82,8 +82,9 @@ public class TPSPlayerController : MonoBehaviour {
 
     }
 
-    private void FixedUpdate()
+    private void LateFixedUpdate()
     {
+        //MoveWithPhysics();
         //if (grounded)
         //{
             // Calculate how fast we should be moving
