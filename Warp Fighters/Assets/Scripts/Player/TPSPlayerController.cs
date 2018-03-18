@@ -16,7 +16,7 @@ public class TPSPlayerController : MonoBehaviour {
     private int controlState = 0;
 
     //Define the turning speed.
-    private float turnSpeed = 2.5f;
+    float turnSpeed = 7f;
     
 
     private float horizontal;
@@ -51,7 +51,14 @@ public class TPSPlayerController : MonoBehaviour {
         Controller();
         MovePerson();
         AnimatePerson();
-		Gravity ();
+
+        if (!humanBullet.bulletMode)
+        {
+            Gravity();
+        }
+		
+
+
     }
 
     private void CheckControllerType()

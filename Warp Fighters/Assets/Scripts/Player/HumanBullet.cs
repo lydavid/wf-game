@@ -115,10 +115,12 @@ public class HumanBullet : MonoBehaviour {
         /* Adjust bullet position to be exactly where this parent transform was. This will give us proper accuracy as we had computed forward using this parent transform */
         bullet.transform.position = transform.position;
 
+        rb.useGravity = false;
         rb.velocity = new Vector3(1,1,1);
         rb.AddForce(forward);
         body.SetActive(false);
         bullet.SetActive(true);
+        
         bulletMode = true;
     }
 
@@ -158,6 +160,7 @@ public class HumanBullet : MonoBehaviour {
             }
             
             bulletMode = false;
+            rb.useGravity = true;
         }
         //}
     }

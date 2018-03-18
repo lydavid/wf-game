@@ -7,7 +7,7 @@ public class CameraVertical : MonoBehaviour {
     LockOn lockOn;
 
     private float vertical;
-    private float turnSpeed = 2.5f;
+    float turnSpeed = 7f;
 
     public TPSPlayerController controller;
 
