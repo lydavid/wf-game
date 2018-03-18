@@ -27,7 +27,8 @@ public class CameraTPS : MonoBehaviour {
         v += Input.GetAxis("Right Stick Y") * sensitivity * Time.deltaTime;
 
 		v = Mathf.Clamp(v, -70f, 70f);
-		cameraRay();
+		Debug.Log("From cam: "+RayCamToPlayer());
+		Debug.Log("From player: "+RayPlayerToCam());
     }
 
     private void LateUpdate()
@@ -38,12 +39,14 @@ public class CameraTPS : MonoBehaviour {
 		camTransform.LookAt(player.transform.position);
     }
 
-	private void cameraRay ()
+
+	/*Raycast from camera to player
+		returns true iff ray hits player obj */
+	private bool RayCamToPlayer ()
 	{
-		
 		RaycastHit hit;
 		Vector3 start = transform.position;
-		Vector3 dir = transform.forward;
+		Vector3 dir = (player.transform.position - camTransform.position);
 
 		Debug.DrawRay(start, dir, Color.green);
 
@@ -51,14 +54,29 @@ public class CameraTPS : MonoBehaviour {
 		{
 			if (hit.transform.gameObject.tag == "Player")
 			{
-				clipped = false;
+				return true;
 			} 
-			else 
-			{
-				clipped = true;
-			}
 		}
+		return false;
+	}
 
-		Debug.Log(clipped);
+	/*Raycast from player to camera
+		returns true iff ray hits camera obj */
+	private bool RayPlayerToCam ()
+	{
+		RaycastHit hit;
+		Vector3 start = player.transform.position;
+		Vector3 dir = (camTransform.position - player.transform.position);
+
+		Debug.DrawRay(start, dir, Color.red);
+
+		if (Physics.Raycast(start, dir, out hit))
+		{
+			if (hit.transform.gameObject.tag == "MainCamera")
+			{
+				return true;
+			} 
+		}
+		return false;
 	}
 }
