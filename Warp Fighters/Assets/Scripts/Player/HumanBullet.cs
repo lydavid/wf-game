@@ -49,6 +49,9 @@ public class HumanBullet : MonoBehaviour {
 
     void Update()
     {
+
+        Debug.Log(GetComponent<Rigidbody>().velocity.magnitude);
+
         if (playerSettings.humanBulletOn)
         {
             forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
@@ -67,7 +70,7 @@ public class HumanBullet : MonoBehaviour {
 
                 if (hit.transform.gameObject.layer == 10)
                 {
-                    Debug.Log(hit.transform.gameObject.name);
+                    //Debug.Log(hit.transform.gameObject.name);
                     target = hit.transform.gameObject;
 
                 }
@@ -122,6 +125,7 @@ public class HumanBullet : MonoBehaviour {
         bullet.SetActive(true);
         
         bulletMode = true;
+
     }
 
     /*private void FixedUpdate()

@@ -45,7 +45,6 @@ public class LockOn : MonoBehaviour {
             || Input.GetAxis("R2") > 0 && controller.controllerType == ControllerType.ps)
             && GetComponent<HumanBullet>().target != null)
         {
-            Debug.Log("Yee boi");
             targetLockedOn = true;
             target = GetComponent<HumanBullet>().target;
             //transform.LookAt(target.GetComponent<Center>().center.transform.position);

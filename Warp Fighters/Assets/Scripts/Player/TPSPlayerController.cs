@@ -66,7 +66,7 @@ public class TPSPlayerController : MonoBehaviour {
         string[] names = Input.GetJoystickNames();
         foreach (string name in names)
         {
-            Debug.Log(name);
+            //Debug.Log(name);
             if (name == "Controller (Xbox One For Windows)")
             {
                 controllerType = ControllerType.xbox;
