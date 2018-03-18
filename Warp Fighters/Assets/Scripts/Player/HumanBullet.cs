@@ -31,6 +31,8 @@ public class HumanBullet : MonoBehaviour {
     AudioSource warpAudio;
 
 
+    AttackManager attackManager;
+
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
@@ -44,6 +46,8 @@ public class HumanBullet : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         warpAudio = GetComponent<PlayerAudio>().warpAudio;
+
+        attackManager = GetComponent<AttackManager>();
     }
 
 
@@ -54,7 +58,7 @@ public class HumanBullet : MonoBehaviour {
 
         if (playerSettings.humanBulletOn)
         {
-            forward = orb.transform.forward * magnitude;//transform.TransformDirection(Vector3.forward);
+            forward = Vector3.Normalize(orb.transform.forward) * magnitude;//transform.TransformDirection(Vector3.forward);
                                                         // forward is a mixture of x and z
             
             //Physics.Raycast(ray);
@@ -68,6 +72,7 @@ public class HumanBullet : MonoBehaviour {
                 
                 forward = Vector3.Normalize( new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
 
+                // interactable object
                 if (hit.transform.gameObject.layer == 10)
                 {
                     //Debug.Log(hit.transform.gameObject.name);
@@ -165,6 +170,7 @@ public class HumanBullet : MonoBehaviour {
             
             bulletMode = false;
             rb.useGravity = true;
+            attackManager.TurnOffAttackMode();
         }
         //}
     }
