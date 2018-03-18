@@ -5,11 +5,11 @@ public enum ControllerType { pc, xbox, ps };
 
 public class TPSPlayerController : MonoBehaviour {
 
-    public float speed = 3.0f;
-	public float gravity = 3.0f;
+    public float speed = 8.0f;
+    public float gravity = 3.0f;
 
     //This variable indicates the current state of character.
-    
+
     private int state;
 
     // 0 for PC, 1 for xbox controller
@@ -17,7 +17,7 @@ public class TPSPlayerController : MonoBehaviour {
 
     //Define the turning speed.
     float turnSpeed = 7f;
-    
+
 
     private float horizontal;
 
@@ -28,19 +28,29 @@ public class TPSPlayerController : MonoBehaviour {
 
     HPManager hPManager;
 
-    void Start ()
+
+    public bool moveWithPhysics = true;
+    Rigidbody rb;
+    float maxVelocityChange;
+    Vector3 targetVelocity;
+
+    void Start()
     {
         //animacao = GetComponentInChildren<Animator>();
-        humanBullet = GetComponent<HumanBullet>(); 
+        humanBullet = GetComponent<HumanBullet>();
         state = 0;
         horizontal = transform.eulerAngles.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         hPManager = gameObject.GetComponent<HPManager>();
+
+        rb = GetComponent<Rigidbody>();
+        maxVelocityChange = speed;
+        targetVelocity = Vector3.zero;
     }
 
-    void Update ()
+    void Update()
     {
         if (hPManager.isDead)
         {
@@ -48,18 +58,44 @@ public class TPSPlayerController : MonoBehaviour {
         }
         CheckControllerType();
         MouseToggleInGame();
-        Controller();
-        MovePerson();
+
+        if (moveWithPhysics)
+        {
+            MoveWithPhysics();
+        }
+        else
+        {
+            Controller();
+        }
+        CheckForWarp();
+
+
+        MoveHorizontalCamera();
         AnimatePerson();
 
         if (!humanBullet.bulletMode)
         {
             Gravity();
         }
-		
+
 
 
     }
+
+    private void FixedUpdate()
+    {
+        //if (grounded)
+        //{
+            // Calculate how fast we should be moving
+            
+            
+
+            // Apply a force that attempts to reach our target velocity
+            
+
+        //}
+    }
+    
 
     private void CheckControllerType()
     {
@@ -104,6 +140,20 @@ public class TPSPlayerController : MonoBehaviour {
         //animacao.SetInteger("Estado", state);
     }
 
+    private void CheckForWarp()
+    {
+        if (Input.GetMouseButtonDown(0) ||
+            Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox ||
+            Input.GetButtonDown("X Button") && controllerType == ControllerType.ps)
+        {
+            if (GetComponent<WarpLimiter>().canWarp)
+            {
+                humanBullet.ShootMe();
+                GetComponent<WarpLimiter>().ConsumeCharge();
+            }
+        }
+    }
+
     private void Controller () {
 
         
@@ -112,16 +162,15 @@ public class TPSPlayerController : MonoBehaviour {
         float mV = Input.GetAxis("Vertical");
 
         transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+        /*for (int i = 0; i < speed; i++)
+        {
+            //
+            transform.Translate(mH * Time.deltaTime, 0, mV * Time.deltaTime);
+        }*/
 
-        if (Input.GetMouseButtonDown(0) || 
-            Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox ||
-            Input.GetButtonDown("X Button") && controllerType == ControllerType.ps) {
-            if (GetComponent<WarpLimiter>().canWarp)
-            {
-                humanBullet.ShootMe();
-                GetComponent<WarpLimiter>().ConsumeCharge();
-            }
-        }
+
+
+        
 
         /* 
         // keypad or numpad 1 for pc, 2 for xbox controller
@@ -153,6 +202,22 @@ public class TPSPlayerController : MonoBehaviour {
         }*/
     }
 
+    private void MoveWithPhysics()
+    {
+        if (!humanBullet.bulletMode)
+        {
+            targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            targetVelocity = transform.TransformDirection(targetVelocity);
+            targetVelocity *= speed;
+            var velocity = rb.velocity;
+            var velocityChange = (targetVelocity - velocity);
+            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+            velocityChange.y = 0;
+            rb.AddForce(velocityChange, ForceMode.VelocityChange);
+        }
+    }
+
     private void Control()
     {
         /*
@@ -172,7 +237,7 @@ public class TPSPlayerController : MonoBehaviour {
 
     }
 
-    private void MovePerson()
+    private void MoveHorizontalCamera()
     {
         float mouseHorizontal = 0;
 
