@@ -29,13 +29,15 @@ public class ButtonPress : MonoBehaviour {
 		
 	}
 
-    void OnCollisionStay(Collision other)
+    void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
             //gameObject.GetComponent<Animator>().Play("ButtonPressAnimation");
-            anim.SetBool("ButtonPressed", true);
-            doorAnim.SetBool("DoorOpen", true);
+            //anim.SetBool("ButtonPressed", true);
+            //doorAnim.SetBool("DoorOpen", true);
+            anim.Play("ButtonDownUp"); // Button goes down then back up after some time (3s total)
+            doorAnim.Play("DoorOpenClose"); // Door swings open then closes after some time (3s total)
             
 
             Debug.Log("enter");
@@ -45,7 +47,7 @@ public class ButtonPress : MonoBehaviour {
         }
     }
 
-    void OnCollisionExit(Collision other)
+    /*void OnCollisionExit(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
@@ -57,5 +59,5 @@ public class ButtonPress : MonoBehaviour {
             //animator.SetBool("buttonPressed", false);
             //door.SetActive(true);
         }
-    }
+    }*/
 }
