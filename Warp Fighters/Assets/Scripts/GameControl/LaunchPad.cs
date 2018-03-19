@@ -11,7 +11,8 @@ public class LaunchPad : MonoBehaviour {
 
     int strength = 2;
 
-    public Animator animator;
+    Animator animator;
+    AudioSource bounceAudio;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,7 @@ public class LaunchPad : MonoBehaviour {
 		distance = 700;
 
         animator = transform.parent.GetComponent<Animator>();
+        bounceAudio = transform.parent.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -41,10 +43,12 @@ public class LaunchPad : MonoBehaviour {
             //playerRB.velocity = new Vector3(0, Mathf.Sqrt(Mathf.Pow(playerRB.velocity.x, 2) + Mathf.Pow(playerRB.velocity.z, 2)) * strength, 0);
             //animator.SetBool("PlayerTouched", true);
 
-            
-            animator.Play("LaunchPadLift");
-            playerRB.velocity = new Vector3(0, playerRB.velocity.magnitude * strength, 0);
-            
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("LaunchPadLift"))
+            {
+                bounceAudio.Play();
+                animator.Play("LaunchPadLift");
+                playerRB.velocity = new Vector3(0, playerRB.velocity.magnitude * strength, 0);
+            }
         }
 	}
 }

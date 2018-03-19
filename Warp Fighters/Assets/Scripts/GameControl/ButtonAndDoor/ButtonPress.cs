@@ -12,6 +12,9 @@ public class ButtonPress : MonoBehaviour {
     Animator anim;
     public Animator doorAnim;
 
+    AudioSource buttonPressAudio;
+    AudioSource doorOpenCloseAudio;
+
 	// Use this for initialization
 	void Start () {
         //buttonPressed = false;
@@ -20,8 +23,8 @@ public class ButtonPress : MonoBehaviour {
         doorAnim = doorAnim.GetComponent<Animator>();
 
         //door = gameObject.transform.GetChild(0).gameObject; // we assume that door is the one and only child of this button object
-        Debug.Log(door.name);
-
+        buttonPressAudio = GetComponent<AudioSource>();
+        doorOpenCloseAudio = door.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -36,11 +39,19 @@ public class ButtonPress : MonoBehaviour {
             //gameObject.GetComponent<Animator>().Play("ButtonPressAnimation");
             //anim.SetBool("ButtonPressed", true);
             //doorAnim.SetBool("DoorOpen", true);
-            anim.Play("ButtonDownUp"); // Button goes down then back up after some time (3s total)
-            doorAnim.Play("DoorOpenClose"); // Door swings open then closes after some time (3s total)
-            
 
-            Debug.Log("enter");
+            // Prevent audio from playing again before animation finishes
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("ButtonDownUp")) {
+                anim.Play("ButtonDownUp"); // Button goes down then back up after some time (3s total)
+                buttonPressAudio.Play();
+            }
+
+            if (!doorAnim.GetCurrentAnimatorStateInfo(0).IsName("DoorOpenClose"))
+            {
+                doorAnim.Play("DoorOpenClose"); // Door swings open then closes after some time (3s total)
+                doorOpenCloseAudio.Play();
+            }
+
             //buttonPressed = true;
             //animator.SetBool("buttonPressed", true);
             //door.SetActive(false);
