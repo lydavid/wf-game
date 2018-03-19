@@ -5,7 +5,7 @@ using UnityEngine;
 public class LaunchPad : MonoBehaviour {
 
 	public GameObject player;
-	public Rigidbody playerRB;
+	Rigidbody playerRB;
 
 	public int distance;
 
@@ -16,7 +16,7 @@ public class LaunchPad : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player = GameObject.FindGameObjectWithTag("Player");
+		//player = GameObject.FindGameObjectWithTag("Player");
 		playerRB = player.GetComponent<Rigidbody>();
 		distance = 700;
 
@@ -35,7 +35,10 @@ public class LaunchPad : MonoBehaviour {
 		{
             //Vector3 curVelocity = playerRB.velocity;
             //Debug.Log(playerRB.velocity.magnitude);
+
+            Debug.Log(playerRB.velocity);
             float magnitude = playerRB.velocity.magnitude;
+
             //playerRB.velocity = Vector3.zero;
             //playerRB.angularVelocity = Vector3.zero;
             //playerRB.AddForce((transform.up + (0.03f * curVelocity)) * distance );

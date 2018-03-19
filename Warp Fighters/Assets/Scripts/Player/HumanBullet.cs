@@ -32,6 +32,11 @@ public class HumanBullet : MonoBehaviour {
 
 
     AttackManager attackManager;
+    TPSPlayerController TPSPlayerController;
+
+    List<Vector3> lastVelocity;
+    int lastVelocityEntry = 0;
+    int lastVelocitySize = 20;
 
     void Start()
     {
@@ -48,13 +53,52 @@ public class HumanBullet : MonoBehaviour {
         warpAudio = GetComponent<PlayerAudio>().warpAudio;
 
         attackManager = GetComponent<AttackManager>();
+        TPSPlayerController = GetComponent<TPSPlayerController>();
+
+        lastVelocity = new List<Vector3>();
     }
 
+    private void FixedUpdate()
+    {
+        //Debug.Log(lastVelocity.Count);
+        if (lastVelocity.Count < lastVelocitySize)
+        {
+            lastVelocity.Add(rb.velocity);
+        }
+        else
+        {
+            lastVelocity[lastVelocityEntry] = rb.velocity;
+            lastVelocityEntry += 1;
+            //Debug.Log(lastVelocityEntry);
+            if (lastVelocityEntry >= lastVelocitySize)
+            {
+                lastVelocityEntry = 0;
+            }
+        }
+    }
+
+    /*public float GetAverageMagnitudeOfLastVelocity()
+    {
+        float magnitudes = 0;
+
+        Debug.Log(lastVelocity.Count);
+        for (int i = 0; i < lastVelocitySize; i++)
+        {
+            Debug.Log(lastVelocity[i].magnitude);
+            if (lastVelocity[i].magnitude > magnitudes)
+            {
+                magnitudes += lastVelocity[i].magnitude;
+            }
+            
+        }
+        return magnitudes;
+
+    }*/
 
     void Update()
     {
 
-        Debug.Log(GetComponent<Rigidbody>().velocity.magnitude);
+        //Debug.Log(GetComponent<Rigidbody>().velocity.magnitude);
 
         if (playerSettings.humanBulletOn)
         {
@@ -130,6 +174,7 @@ public class HumanBullet : MonoBehaviour {
         bullet.SetActive(true);
         
         bulletMode = true;
+        TPSPlayerController.grounded = false;
 
     }
 

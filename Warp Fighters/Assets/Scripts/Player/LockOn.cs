@@ -19,6 +19,8 @@ public class LockOn : MonoBehaviour {
 
     TPSPlayerController controller;
 
+    GameObject[] interactables; // list of interactable objects in the scene
+
     // Use this for initialization
     void Start () {
         targetLockedOn = false;
@@ -28,6 +30,8 @@ public class LockOn : MonoBehaviour {
         bodyOriginalRot = body.transform.localRotation;
 
         controller = GetComponent<TPSPlayerController>();
+
+        
     }
 	
 	// Update is called once per frame

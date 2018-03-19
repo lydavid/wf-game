@@ -34,6 +34,8 @@ public class TPSPlayerController : MonoBehaviour {
     float maxVelocityChange;
     Vector3 targetVelocity;
 
+    public bool grounded;
+
     void Start()
     {
         //animacao = GetComponentInChildren<Animator>();
@@ -52,6 +54,7 @@ public class TPSPlayerController : MonoBehaviour {
 
     void Update()
     {
+
         if (hPManager.isDead)
         {
             return;
@@ -73,30 +76,37 @@ public class TPSPlayerController : MonoBehaviour {
         MoveHorizontalCamera();
         AnimatePerson();
 
+    }
+
+    private void LateUpdate()
+    {
+        // Make sure we apply gravity after move with physics, otherwise it'll make y velocity 0
         if (!humanBullet.bulletMode)
         {
             Gravity();
         }
-
-
-
     }
 
-    private void LateFixedUpdate()
+
+
+
+    private void OnCollisionEnter(Collision other)
     {
-        //MoveWithPhysics();
-        //if (grounded)
-        //{
-            // Calculate how fast we should be moving
-            
-            
-
-            // Apply a force that attempts to reach our target velocity
-            
-
-        //}
+        if (other.gameObject.layer == 9) // ground
+        {
+            grounded = true;
+        }
     }
-    
+
+    // Collision exit doesn't work with warping, toggle grounded when player warps
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.layer == 9) // ground
+        {
+            grounded = false;
+        }
+    }
+
 
     private void CheckControllerType()
     {
@@ -205,8 +215,17 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void MoveWithPhysics()
     {
+        
         if (!humanBullet.bulletMode)
         {
+            /*float y;
+            if (grounded)
+            {
+                y = 0;
+            } else
+            {
+                y = -gravity;
+            }*/
             targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *= speed;
@@ -214,7 +233,7 @@ public class TPSPlayerController : MonoBehaviour {
             var velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-            velocityChange.y = 0;
+            velocityChange.y = 0;// rb.velocity.y;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
         }
     }
@@ -280,8 +299,6 @@ public class TPSPlayerController : MonoBehaviour {
 
 	void Gravity () {
         //if (!humanBullet.bulletMode)
-        //{
-            transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
-        //}
+        transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
 	}
 }
