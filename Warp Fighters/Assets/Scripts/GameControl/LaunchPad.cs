@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LaunchPad : MonoBehaviour {
 
-	public GameObject player;
+	GameObject player;
 	Rigidbody playerRB;
 
 	public int distance;
@@ -16,7 +16,7 @@ public class LaunchPad : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//player = GameObject.FindGameObjectWithTag("Player");
+		player = GameObject.FindGameObjectWithTag("Player");
 		playerRB = player.GetComponent<Rigidbody>();
 		distance = 700;
 

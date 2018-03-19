@@ -233,7 +233,7 @@ public class TPSPlayerController : MonoBehaviour {
             var velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-            velocityChange.y = 0;// rb.velocity.y;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
+            velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
         }
     }
