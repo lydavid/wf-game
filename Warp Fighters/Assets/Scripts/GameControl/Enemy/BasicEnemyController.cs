@@ -22,7 +22,8 @@ public class BasicEnemyController : MonoBehaviour {
 
     [Header("Movement")]
     public float speed = 4.0f;  // movement speed of enemy
-    public Transform start, target;  // positions to move between
+    Transform start, target;  // positions to move between
+    public float patrolDistance;
 
     private bool moveToA = false;
     private bool moveToB = true;
@@ -73,6 +74,13 @@ public class BasicEnemyController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+        // Create transform where it is standing, this will the the start
+        start = Instantiate(new GameObject(), transform.position, transform.rotation).transform;
+        // create another transform some distance away, this will be the target
+        Vector3 newPosition = transform.TransformPoint(Vector3.forward * patrolDistance);
+        target = Instantiate(new GameObject(), newPosition, transform.rotation).transform;
+
         //rb = player.GetComponent<Rigidbody>();
         arcSize = 30;
         sightRange = 30;
