@@ -9,7 +9,7 @@ public class LaunchPad : MonoBehaviour {
 
 	public int distance;
 
-    int strength = 2;
+    public int strength = 2;
 
     Animator animator;
     AudioSource bounceAudio;
@@ -50,7 +50,8 @@ public class LaunchPad : MonoBehaviour {
             {
                 bounceAudio.Play();
                 animator.Play("LaunchPadLift");
-                playerRB.velocity = new Vector3(0, playerRB.velocity.magnitude * strength, 0);
+                //playerRB.velocity = new Vector3(0, playerRB.velocity.magnitude * strength, 0);
+                playerRB.AddForce(new Vector3(0, playerRB.velocity.magnitude * strength, 0), ForceMode.Impulse);
             }
         }
 	}
