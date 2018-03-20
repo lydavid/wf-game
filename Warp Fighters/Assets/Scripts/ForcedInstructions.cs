@@ -11,9 +11,12 @@ public class ForcedInstructions : MonoBehaviour {
     bool warped;
     bool locked;
 
+    TrackTime trackTime;
+
 	// Use this for initialization
 	void Start () {
         //smallerInstructions = GameObject.FindGameObjectWithTag("Instructions");
+        trackTime = GameObject.FindGameObjectWithTag("Player").GetComponent<TrackTime>();
 	}
 	
 	// Update is called once per frame
@@ -22,21 +25,25 @@ public class ForcedInstructions : MonoBehaviour {
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             moved = true;
+            trackTime.ToggleTrackTime(true);
         }
 
         if (Input.GetAxis("Right Stick X") != 0 || Input.GetAxis("Right Stick Y") != 0 || Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
         {
             looked = true;
+            trackTime.ToggleTrackTime(true);
         }
 
         if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0))
         {
             warped = true;
+            trackTime.ToggleTrackTime(true);
         }
 
         if (Input.GetAxis("Right Trigger") > 0 || Input.GetMouseButtonDown(1))
         {
             locked = true;
+            trackTime.ToggleTrackTime(true);
         }
 
         if (moved && looked && warped && locked)

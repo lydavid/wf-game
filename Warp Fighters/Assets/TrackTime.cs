@@ -9,12 +9,15 @@ public class TrackTime : MonoBehaviour {
 
     public bool trackTime; // counts while this is true, until it is false
     public float timeInSeconds;
-    public int minutes;
-    public int seconds;
-    public int milliseconds;
-    
+    int minutes;
+    int seconds;
+    int milliseconds;
 
-    public Text displayTimeText;
+    string addZeroForMin;
+    string addZeroForSec;
+    string addZeroForMS;
+
+    Text displayTimeText;
 
 	// Use this for initialization
 	void Start () {
@@ -24,8 +27,6 @@ public class TrackTime : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
 		if (trackTime)
         {
             timeInSeconds += Time.deltaTime;
@@ -39,9 +40,10 @@ public class TrackTime : MonoBehaviour {
         minutes = (int) (timeInSeconds / 60);
         seconds = (int) (timeInSeconds % 60);
         milliseconds = (int)(timeInSeconds * 100 % 100);
-        string addZeroForMin = "";
-        string addZeroForSec = "";
-        string addZeroForMS = "";
+
+        addZeroForMin = "";
+        addZeroForMin = "";
+        addZeroForMS = "";
         if (minutes < 10)
         {
             addZeroForMin = "0";
@@ -54,17 +56,26 @@ public class TrackTime : MonoBehaviour {
         {
             addZeroForMS = "0";
         }
+
         displayTimeText.text = addZeroForMin + minutes.ToString() + "′" + addZeroForSec + seconds.ToString() + "′′"
             + addZeroForMS + milliseconds.ToString();
-        
     }
 
+
     // Toggles whether to start/stop tracking time
-    public void ToggleTrackTime()
+    // if given true param, set to true -> used in ForcedInstructions
+    public void ToggleTrackTime(bool setTo = false)
     {
-        if (trackTime)
+        if (!setTo)
         {
-            trackTime = false;
+            if (trackTime)
+            {
+                trackTime = false;
+            }
+            else
+            {
+                trackTime = true;
+            }
         } else
         {
             trackTime = true;
