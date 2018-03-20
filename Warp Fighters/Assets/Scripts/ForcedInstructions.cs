@@ -28,19 +28,26 @@ public class ForcedInstructions : MonoBehaviour {
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetAxis("Right Stick X") != 0 || Input.GetAxis("Right Stick Y") != 0 || Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+        if (Input.GetAxis("Right Stick X") != 0 
+            || Input.GetAxis("Right Stick Y") != 0 
+            || Input.GetAxis("Mouse X") != 0 
+            || Input.GetAxis("Mouse Y") != 0)
         {
             looked = true;
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("A Button") 
+            || Input.GetMouseButtonDown(0)
+            || Input.GetButton("X Button"))
         {
             warped = true;
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetAxis("Right Trigger") > 0 || Input.GetMouseButtonDown(1))
+        if (Input.GetAxis("Right Trigger") > 0 
+            || Input.GetMouseButtonDown(1)
+            || Input.GetAxis("R2 (PS4)") != 0)
         {
             locked = true;
             trackTime.ToggleTrackTime(true);

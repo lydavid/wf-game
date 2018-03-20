@@ -9,22 +9,20 @@ public class TrackTime : MonoBehaviour {
 
     public bool trackTime; // counts while this is true, until it is false
     public float timeInSeconds;
-    int minutes;
-    int seconds;
-    int milliseconds;
-
-    string addZeroForMin;
-    string addZeroForSec;
-    string addZeroForMS;
 
     Text displayTimeText;
+
 
 	// Use this for initialization
 	void Start () {
         timeInSeconds = 0.0f;
         displayTimeText = GameObject.Find("TimeDisplay").GetComponent<Text>();
+
+        // Reset this var to 0 at start of game, since it persists through game sessions
+        PlayerPrefs.SetFloat("TimeInSeconds", 0.0f);
     }
 	
+
 	// Update is called once per frame
 	void Update () {
 		if (trackTime)
@@ -34,31 +32,11 @@ public class TrackTime : MonoBehaviour {
         DisplayTime();
 	}
 
+
     // Display the current time on UI
     private void DisplayTime()
     {
-        minutes = (int) (timeInSeconds / 60);
-        seconds = (int) (timeInSeconds % 60);
-        milliseconds = (int)(timeInSeconds * 100 % 100);
-
-        addZeroForMin = "";
-        addZeroForMin = "";
-        addZeroForMS = "";
-        if (minutes < 10)
-        {
-            addZeroForMin = "0";
-        }
-        if (seconds < 10)
-        {
-            addZeroForSec = "0";
-        }
-        if (milliseconds < 10)
-        {
-            addZeroForMS = "0";
-        }
-
-        displayTimeText.text = addZeroForMin + minutes.ToString() + "′" + addZeroForSec + seconds.ToString() + "′′"
-            + addZeroForMS + milliseconds.ToString();
+        displayTimeText.text = StringHelpers.TimeInSecondsToFormattedString(timeInSeconds);
     }
 
 
