@@ -11,6 +11,7 @@ public class TrackTime : MonoBehaviour {
     public float timeInSeconds;
     public int minutes;
     public int seconds;
+    public int milliseconds;
     
 
     public Text displayTimeText;
@@ -37,8 +38,10 @@ public class TrackTime : MonoBehaviour {
     {
         minutes = (int) (timeInSeconds / 60);
         seconds = (int) (timeInSeconds % 60);
+        milliseconds = (int)(timeInSeconds * 100 % 100);
         string addZeroForMin = "";
         string addZeroForSec = "";
+        string addZeroForMS = "";
         if (minutes < 10)
         {
             addZeroForMin = "0";
@@ -47,7 +50,12 @@ public class TrackTime : MonoBehaviour {
         {
             addZeroForSec = "0";
         }
-        displayTimeText.text = addZeroForMin + minutes.ToString() + "′" + addZeroForSec + seconds.ToString() + "′′";
+        if (milliseconds < 10)
+        {
+            addZeroForMS = "0";
+        }
+        displayTimeText.text = addZeroForMin + minutes.ToString() + "′" + addZeroForSec + seconds.ToString() + "′′"
+            + addZeroForMS + milliseconds.ToString();
         
     }
 
