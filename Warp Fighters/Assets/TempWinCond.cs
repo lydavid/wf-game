@@ -11,6 +11,10 @@ public class TempWinCond : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         trackTime = GetComponent<TrackTime>();
+        if (GameObject.Find("RiggedEnemy (Boss)"))
+        {
+            bossEnemy = GameObject.Find("RiggedEnemy (Boss)");
+        }
 	}
 	
 	// Update is called once per frame
