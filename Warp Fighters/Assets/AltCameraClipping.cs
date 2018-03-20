@@ -15,6 +15,7 @@ public class AltCameraClipping : MonoBehaviour {
     bool obstructed;
 
     HumanBullet humanBullet;
+    Vector3 originalLocalPosition;
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +31,7 @@ public class AltCameraClipping : MonoBehaviour {
         //Debug.Log(distToPlayer);
 
         humanBullet = player.GetComponent<HumanBullet>();
+        originalLocalPosition = transform.localPosition;
 	}
 	
 	// Update is called once per frame
@@ -74,6 +76,7 @@ public class AltCameraClipping : MonoBehaviour {
                     //Debug.Log(transform.TransformDirection(Vector3.forward));
                     //transform.Translate(transform.TransformDirection(Vector3.forward));
                     transform.Translate(new Vector3(0, 0, 1));
+                    transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
                     //curDistance = 
                 }
             } else
@@ -90,6 +93,7 @@ public class AltCameraClipping : MonoBehaviour {
                     if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
                     {
                         transform.Translate(new Vector3(0, 0, -1));
+                        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
                     }
                 }
 
