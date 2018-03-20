@@ -78,7 +78,7 @@ public class AltCameraClipping : MonoBehaviour {
                 {
                     //Debug.Log(transform.TransformDirection(Vector3.forward));
                     //transform.Translate(transform.TransformDirection(Vector3.forward));
-                    TranslateAlongZ(0.1f);
+                    TranslateAlongZ(1f);
                 }
             } else
             {
@@ -117,7 +117,7 @@ public class AltCameraClipping : MonoBehaviour {
                     // to return from current cam dist to player towards default distance to player, then do so
                     if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer + 1)
                     {
-                        TranslateAlongZ(-0.1f);
+                        TranslateAlongZ(-1f);
                     }
                 }
 
