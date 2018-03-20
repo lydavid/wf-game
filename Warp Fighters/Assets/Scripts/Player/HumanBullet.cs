@@ -222,7 +222,8 @@ public class HumanBullet : MonoBehaviour {
         }
 
         rb.useGravity = false;
-        rb.velocity = new Vector3(0,0,0);
+        rb.velocity = Vector3.zero;//new Vector3(1,1,1);
+        rb.angularVelocity = Vector3.zero;
         rb.AddForce(forward);
 
         if (warpType == WarpType.noBulletMode)
