@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerParticleEffects : MonoBehaviour {
 
     public ParticleSystem ps1;
+    public ParticleSystem warpParticles;
+
+    HumanBullet humanBullet;
 
 	// Use this for initialization
 	void Start () {
@@ -16,13 +19,27 @@ public class PlayerParticleEffects : MonoBehaviour {
 		
 	}
 
+    void DisplayWarpEffect ()
+    {
+        if (humanBullet.bulletMode)
+        {
+            warpParticles.Simulate(0);
+        }
+        else
+        {
+            warpParticles.Pause();
+        }
+    }
+
+
+
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer != 9)
-        {
+     //   if (other.gameObject.layer != 9)
+       // {
             //ParticleSystem ps = GetComponent<ParticleSystem>();
             // Collision light burst effect
-            ps1.Play();
-        }
+         //   ps1.Play();
+        //}
     }
 }
