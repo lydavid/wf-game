@@ -75,25 +75,41 @@ public class AltCameraClipping : MonoBehaviour {
                 {
                     //Debug.Log(transform.TransformDirection(Vector3.forward));
                     //transform.Translate(transform.TransformDirection(Vector3.forward));
-                    transform.Translate(new Vector3(0, 0, 1));
-                    transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
-                    //curDistance = 
+                    TranslateAlongZ(0.1f);
                 }
             } else
             {
                 //obstructed = false;
+
+                // we need a condition before we can execute this part, or else it will keep going back and forth between
+                // this section and the section above when player is against wall
                 RaycastHit objHit;
                 Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
 
-                Debug.DrawRay(transform.position, backwards, Color.red);
-                if (Physics.Raycast(transform.position, backwards, out objHit))
+                //Debug.DrawRay(transform.position, backwards, Color.red);
+                //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
+                //ray = cam.ScreenPointToRay(pos);
+                ray.direction = -ray.direction;
+                ray.origin = player.transform.position;
+                Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
+                //if (Physics.Raycast(transform.position, backwards, out objHit))
+                if (Physics.Raycast(ray, out objHit))
                 {
+
+                    // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
+                    // actually whatever is behind that wall, discounting the wall...
+
+                    // one sol is to raycast from player, through camera
+                    // problem is that if player is behind a not very tall thing, it won't reset
+                    // let's try anyways
+
                     float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
                     Debug.Log(distToClosestObjFromCam);
-                    if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
+                    // if the distance to closest obj from behind cam is bigger than that of the distance needed
+                    // to return from current cam dist to player towards default distance to player, then do so
+                    if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer + 1)
                     {
-                        transform.Translate(new Vector3(0, 0, -1));
-                        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
+                        TranslateAlongZ(-0.1f);
                     }
                 }
 
@@ -139,5 +155,12 @@ public class AltCameraClipping : MonoBehaviour {
         //    }
         //}
 
+    }
+
+    void TranslateAlongZ(float amount)
+    {
+        transform.Translate(new Vector3(0, 0, amount));
+        // Main relative postion to player
+        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
     }
 }
