@@ -39,7 +39,7 @@ public class AltCameraClipping : MonoBehaviour {
 
         // update distance to player
         distToPlayer = Vector3.Distance(player.transform.position, transform.position);
-        Debug.Log(distToPlayer);
+        //Debug.Log(distToPlayer);
 
         // raycast from player to camera, when something comes between them, move in until it is not
         /*Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
@@ -50,14 +50,17 @@ public class AltCameraClipping : MonoBehaviour {
         // raycast from camera to player
         // above code runs into problem that the raycast always goes through the player (starts from its front)
         Vector3 pos;
+        GameObject rep;
         if (humanBullet.bulletMode)
         {
-            pos = cam.WorldToScreenPoint(player.transform.GetChild(0).position);
+            rep = player.transform.GetChild(0).gameObject;
         }
         else
         {
-            pos = cam.WorldToScreenPoint(player.transform.GetChild(1).position);
+            
+            rep = player.transform.GetChild(1).gameObject;
         }
+        pos = cam.WorldToScreenPoint(rep.transform.position);
         Ray ray = cam.ScreenPointToRay(pos);
 
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
@@ -66,7 +69,7 @@ public class AltCameraClipping : MonoBehaviour {
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
         if (Physics.Raycast(ray, out playerHit))
         {
-            Debug.Log(playerHit.transform.gameObject.name);
+            //Debug.Log(playerHit.transform.gameObject.name);
             if (playerHit.transform.gameObject.tag != playerTag)
             {
                 //obstructed = true;
@@ -84,16 +87,21 @@ public class AltCameraClipping : MonoBehaviour {
                 // we need a condition before we can execute this part, or else it will keep going back and forth between
                 // this section and the section above when player is against wall
                 RaycastHit objHit;
-                Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
+                Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 100;
 
                 //Debug.DrawRay(transform.position, backwards, Color.red);
                 //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
                 //ray = cam.ScreenPointToRay(pos);
                 ray.direction = -ray.direction;
-                ray.origin = player.transform.position;
+                ray.origin = rep.transform.position;
                 Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
                 //if (Physics.Raycast(transform.position, backwards, out objHit))
-                if (Physics.Raycast(ray, out objHit))
+
+                // hit all layers except "Player" layer
+                int layerMask = 1 << 12; // LayerMask.NameToLayer("Player"); //
+                layerMask = ~layerMask;
+
+                if (Physics.Raycast(ray, out objHit, 100, layerMask))
                 {
 
                     // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
@@ -102,9 +110,9 @@ public class AltCameraClipping : MonoBehaviour {
                     // one sol is to raycast from player, through camera
                     // problem is that if player is behind a not very tall thing, it won't reset
                     // let's try anyways
-
+                    Debug.Log(objHit.transform.gameObject.name);
                     float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
-                    Debug.Log(distToClosestObjFromCam);
+                    //Debug.Log(distToClosestObjFromCam);
                     // if the distance to closest obj from behind cam is bigger than that of the distance needed
                     // to return from current cam dist to player towards default distance to player, then do so
                     if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer + 1)
