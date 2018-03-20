@@ -67,7 +67,7 @@ public class HumanBullet : MonoBehaviour {
 
         if (warpType == WarpType.original)
         {
-            bullet.transform.localPosition = new Vector3(0.0f, 1.5f, 0.0f);
+            //bullet.transform.localPosition = new Vector3(0.0f, 1.5f, 0.0f);
         }
     }
 
@@ -115,6 +115,7 @@ public class HumanBullet : MonoBehaviour {
 
         if (playerSettings.humanBulletOn)
         {
+            // somehow when this is removed, the player is able to glitch through the floor
             forward = Vector3.Normalize(orb.transform.forward) * magnitude;//transform.TransformDirection(Vector3.forward);
                                                         // forward is a mixture of x and z
             
