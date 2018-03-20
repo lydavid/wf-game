@@ -23,6 +23,7 @@ public class Decals : MonoBehaviour {
 
 	void drawDecal (ContactPoint point)
     {   
+		// Destroy previous decals
 		int numDecals = impactDecals.transform.childCount;
 		if (numDecals >= 1)
 		{
@@ -30,16 +31,22 @@ public class Decals : MonoBehaviour {
 			
 		}
         GameObject decal = Instantiate(WallCrackPrefab, impactDecals.transform);
+		//bad hack to place it 0.01 away from surface to solve zfighting issues
         decal.transform.position = point.point + (point.normal * 0.01f);
-        decal.transform.forward = point.normal * -1f;
+        decal.transform.forward = point.normal * -1f; 
     }
 
 	void OnCollisionEnter (Collision hit)
 	{	
 		if (humanBullet.bulletMode)
 		{
-			ContactPoint pointOfContact = hit.contacts[0];
-    		drawDecal(pointOfContact);
+			// Apply decal only to walls
+			if (hit.gameObject.tag == "Wall")
+			{
+				ContactPoint pointOfContact = hit.contacts[0];
+    			drawDecal(pointOfContact);
+			}
+			
 		}
 		
 	}
