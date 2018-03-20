@@ -31,9 +31,9 @@ public class BasicEnemyController : MonoBehaviour {
 
 
     [Header("Detection")]
-    public GameObject player;
     public int arcSize;
     public int sightRange;
+    GameObject player;
 
     //private Rigidbody rb;
 
@@ -74,6 +74,8 @@ public class BasicEnemyController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+        player = GameObject.FindGameObjectWithTag("Player");
 
         // Create transform where it is standing, this will the the start
         start = Instantiate(new GameObject(), transform.position, transform.rotation).transform;

@@ -7,39 +7,133 @@ public class AltCameraClipping : MonoBehaviour {
     GameObject player;
     Camera cam;
     string playerTag;
+    float defaultDistance;
+    public float closestDistance;
+    float curDistance;
+    float distToPlayer;
+
+    bool obstructed;
+
+    HumanBullet humanBullet;
 
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
         cam = GetComponentInChildren<Camera>();
         playerTag = player.tag;
+        // default dist to player
+        defaultDistance = Vector3.Distance(player.transform.position, transform.position);//transform.localPosition.z;
+        //Debug.Log(defaultDistance);
+        closestDistance = 1.0f;
+        curDistance = defaultDistance;
+        distToPlayer = defaultDistance;
+        //Debug.Log(distToPlayer);
+
+        humanBullet = player.GetComponent<HumanBullet>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+        // update distance to player
+        distToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        Debug.Log(distToPlayer);
 
         // raycast from player to camera, when something comes between them, move in until it is not
         /*Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
         Ray ray = cam.ScreenPointToRay(pos);
         ray.direction = -ray.direction;
         ray.origin = player.transform.position;*/
-        
+
         // raycast from camera to player
         // above code runs into problem that the raycast always goes through the player (starts from its front)
-        Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
+        Vector3 pos;
+        if (humanBullet.bulletMode)
+        {
+            pos = cam.WorldToScreenPoint(player.transform.GetChild(0).position);
+        }
+        else
+        {
+            pos = cam.WorldToScreenPoint(player.transform.GetChild(1).position);
+        }
         Ray ray = cam.ScreenPointToRay(pos);
 
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.blue);
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
 
-        RaycastHit hit;
+        RaycastHit playerHit;
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out playerHit))
         {
-            Debug.Log(hit.transform.gameObject.name);
+            Debug.Log(playerHit.transform.gameObject.name);
+            if (playerHit.transform.gameObject.tag != playerTag)
+            {
+                //obstructed = true;
+                // if the intended translation will not result in it zooming in past closestDistance
+                if (distToPlayer - 1 > closestDistance)
+                {
+                    //Debug.Log(transform.TransformDirection(Vector3.forward));
+                    //transform.Translate(transform.TransformDirection(Vector3.forward));
+                    transform.Translate(new Vector3(0, 0, 1));
+                    //curDistance = 
+                }
+            } else
+            {
+                //obstructed = false;
+                RaycastHit objHit;
+                Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
 
+                Debug.DrawRay(transform.position, backwards, Color.red);
+                if (Physics.Raycast(transform.position, backwards, out objHit))
+                {
+                    float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
+                    Debug.Log(distToClosestObjFromCam);
+                    if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
+                    {
+                        transform.Translate(new Vector3(0, 0, -1));
+                    }
+                }
+
+            }
         }
 
         // reset to default position when no longer the case
+        // raycast from camera to some distance behind itself, if whatever it hit's distance is far enough, move
+        // camera back up to default distance
+        //pos = cam.WorldToScreenPoint(player.transform.position);
+        //ray = cam.ScreenPointToRay(pos);
+        //ray.direction = -ray.direction;
+
+        //RaycastHit objHit;
+
+        //if (!obstructed)
+        //{
+        //    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
+
+        //    Debug.DrawRay(transform.position, backwards, Color.red);
+        //    if (Physics.Raycast(transform.position, backwards, out objHit))
+        //    {
+        //        //Debug.Log(hit.transform.gameObject.name);
+        //        //Debug.Log("Square Distance of: " + Mathf.Sqrt((Mathf.Pow(transform.position.z, 2) -  Mathf.Pow(hit.point.z, 2))));
+
+        //        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
+        //        Debug.Log(distToClosestObjFromCam);
+        //        // if the distance is far enough, move camera back towards original position
+
+        //        // if the distance to closest obj from behind cam is bigger than that of the distance needed
+        //        // to return from current cam dist to player to default, then do so
+        //        if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
+        //        {
+        //            /*if (transform.localPosition.z - 1 > defaultDistance)
+        //            {
+
+        //            }*/
+        //            //Debug.Log("e");
+        //            //transform.Translate(transform.TransformDirection(-Vector3.forward));
+        //            transform.Translate(new Vector3(0, 0, -1));
+
+        //        }
+        //    }
+        //}
 
     }
 }
