@@ -20,6 +20,7 @@ public class TrackTime : MonoBehaviour {
 
         // Reset this var to 0 at start of game, since it persists through game sessions
         PlayerPrefs.SetFloat("TimeInSeconds", 0.0f);
+        trackTime = true;
     }
 	
 

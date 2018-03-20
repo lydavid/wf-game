@@ -9,7 +9,7 @@ public class LaunchPad : MonoBehaviour {
 
 	public int distance;
 
-    public int strength = 2;
+    public int strength = 1;
 
     Animator animator;
     AudioSource bounceAudio;
