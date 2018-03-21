@@ -74,7 +74,15 @@ public class MeshExplosion : MonoBehaviour {
         foreach (MeshFilter mf in GetComponentsInChildren<MeshFilter>())
         {
             M.Add(mf.mesh);
+            Debug.Log(mf.name);
         }
+        
+        foreach (SkinnedMeshRenderer sm in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            M.Add(sm.sharedMesh);
+            Debug.Log(sm.name);
+        }
+        
         //M = GetComponentsInChildren<MeshFilter>().mesh;
         /*}
         else if (GetComponent<SkinnedMeshRenderer>())
@@ -102,16 +110,22 @@ public class MeshExplosion : MonoBehaviour {
             mr.enabled = false;
         }
 
+        foreach (SkinnedMeshRenderer mr in GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            materials.Add(mr.materials);
+            mr.enabled = false;
+        }
+
         // make actual object invisible before we generate a copy of its mesh as objects and explode them
-        int maxTriangles = 500;
+        int maxTriangles = 1000;
         int trianglesCount = 0;
 
-        //int maxTrianglesFromOneChild = 25;
-        //int maxTrianglesFromOneChildCount = 0;
+        int maxTrianglesFromOneChild = 25;
+        int maxTrianglesFromOneChildCount = 0;
 
         for (int j = 0; j < M.Count; j++)
         {
-            //maxTrianglesFromOneChildCount = 0;
+            maxTrianglesFromOneChildCount = 0;
             if (trianglesCount > maxTriangles)
             {
                 break;
@@ -151,7 +165,8 @@ public class MeshExplosion : MonoBehaviour {
                     //GO.layer = LayerMask.NameToLayer("Particle");
                     GO.transform.position = transform.localPosition;
                     GO.transform.rotation = transform.rotation;
-                    GO.transform.localScale = transform.lossyScale * scale;
+                    GO.transform.localScale = transform.localScale * scale;
+                    
                     GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
@@ -183,11 +198,11 @@ public class MeshExplosion : MonoBehaviour {
                     //mesh.RecalculateNormals();
                     //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
                     trianglesCount += 1;
-                    /*maxTrianglesFromOneChildCount += 1;
+                    maxTrianglesFromOneChildCount += 1;
                     if (maxTrianglesFromOneChildCount >= maxTrianglesFromOneChild)
                     {
                         break;
-                    }*/
+                    }
 
                 }
             }
@@ -195,6 +210,9 @@ public class MeshExplosion : MonoBehaviour {
             // Slow down time
             //Time.timeScale = 0.5f;
         }
+
+        //Debug.Break();
+
         setToDestroy = true;
         this.waitTime = waitTime;
     }
