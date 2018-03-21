@@ -35,6 +35,7 @@ public class TPSPlayerController : MonoBehaviour {
     Vector3 targetVelocity;
 
     public bool grounded;
+    private float mH, mV;
 
     void Start()
     {
@@ -173,8 +174,8 @@ public class TPSPlayerController : MonoBehaviour {
         03 = Right
         04 = Left
         */
-        float mH = Input.GetAxis("Horizontal");
-        float mV = Input.GetAxis("Vertical");
+        mH = Input.GetAxis("Horizontal");
+        mV = Input.GetAxis("Vertical");
         
         if (mH < 0) { state = 4; }
         else if (mH > 0) { state = 3; }
@@ -186,12 +187,26 @@ public class TPSPlayerController : MonoBehaviour {
 
 
     private void Controller () {
-
         
-        // Movement axis should be same for xbox, ps, pc
-        //float mH = Input.GetAxis("Horizontal");
-        //float mV = Input.GetAxis("Vertical");
         //if (state == 0) { transform.Translate(0, 0, 0); }
+        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        if (dir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(dir);
+        }
+        //rb.AddForce(dir * speed * Time.deltaTime);
+
+        targetVelocity = transform.forward;
+        //targetVelocity = transform.TransformDirection(targetVelocity);
+        targetVelocity *= speed;
+        var velocity = rb.velocity;
+        var velocityChange = (targetVelocity - velocity);
+        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+        velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+        velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
+        rb.AddForce(velocityChange, ForceMode.VelocityChange);
+       // transform.Translate(dir * Time.deltaTime * speed, Space.World);
+        /* 
         if (state == 1) 
         { 
             transform.Translate(0, 0, speed * Time.deltaTime); 
@@ -202,14 +217,15 @@ public class TPSPlayerController : MonoBehaviour {
         }
         if (state == 3) 
         { 
-            transform.Rotate(Vector3.up * Time.deltaTime * speed * speed, Space.World);
-            //transform.Translate(speed * Time.deltaTime, 0, 0); 
+            //transform.Rotate(Vector3.up * Time.deltaTime * speed * speed, Space.World);
+            transform.Translate(speed * Time.deltaTime, 0, 0); 
         }
         if (state == 4) 
         { 
-            transform.Rotate(Vector3.up * Time.deltaTime * -speed * speed, Space.World);
-            //transform.Translate(-speed * Time.deltaTime, 0, 0); 
-        }
+            //transform.Rotate(Vector3.up * Time.deltaTime * -speed * speed, Space.World);
+            transform.Translate(-speed * Time.deltaTime, 0, 0); 
+        }*/
+        
 
 
         //transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
