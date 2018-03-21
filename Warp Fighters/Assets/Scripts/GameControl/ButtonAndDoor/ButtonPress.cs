@@ -10,7 +10,7 @@ public class ButtonPress : MonoBehaviour {
 
     //Animator animator;
     Animator anim;
-    public Animator doorAnim;
+    Animator doorAnim;
 
     AudioSource buttonPressAudio;
     AudioSource doorOpenCloseAudio;
@@ -20,7 +20,7 @@ public class ButtonPress : MonoBehaviour {
         //buttonPressed = false;
         //animator = GetComponent<Animator>();
         anim = GetComponent<Animator>();
-        doorAnim = doorAnim.GetComponent<Animator>();
+        doorAnim = door.GetComponent<Animator>();//doorAnim.GetComponent<Animator>();
 
         //door = gameObject.transform.GetChild(0).gameObject; // we assume that door is the one and only child of this button object
         buttonPressAudio = GetComponent<AudioSource>();
