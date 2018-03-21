@@ -195,17 +195,19 @@ public class TPSPlayerController : MonoBehaviour {
             transform.rotation = Quaternion.LookRotation(dir);
         }
         //rb.AddForce(dir * speed * Time.deltaTime);
+        if (!humanBullet.bulletMode)
+        {
+            targetVelocity = (dir != Vector3.zero) ? transform.forward : dir;
+            targetVelocity *= speed;
+            var velocity = rb.velocity;
+            var velocityChange = (targetVelocity - velocity);
+            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+            velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
+            rb.AddForce(velocityChange, ForceMode.VelocityChange);
+        }
 
-        targetVelocity = transform.forward;
-        //targetVelocity = transform.TransformDirection(targetVelocity);
-        targetVelocity *= speed;
-        var velocity = rb.velocity;
-        var velocityChange = (targetVelocity - velocity);
-        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-        velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-        velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
-        rb.AddForce(velocityChange, ForceMode.VelocityChange);
-       // transform.Translate(dir * Time.deltaTime * speed, Space.World);
+         // transform.Translate(dir * Time.deltaTime * speed, Space.World);
         /* 
         if (state == 1) 
         { 
