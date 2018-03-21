@@ -75,7 +75,7 @@ public class TPSPlayerController : MonoBehaviour {
         CheckForWarp();
 
  
-       // MoveHorizontalCamera();
+        MoveHorizontalCamera();
         AnimatePerson();
 
     }
