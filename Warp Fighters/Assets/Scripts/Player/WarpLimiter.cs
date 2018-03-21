@@ -8,21 +8,26 @@ public class WarpLimiter : MonoBehaviour {
     //public Texture warpChargeBarSide;
     //public Texture warpChargeBarMiddle;
 
-
     public bool canWarp;  // other scripts in player game object must confirm with this that they are able to warp before doing so
     public int maxWarpCharges;
-    public int warpCharges;
-    public float warpRechargeTime;
-    public float warpRechargeTimeProgress;
+    int warpCharges;
+    float warpRechargeTime;
+    float warpRechargeTimeProgress;
 
     Text NumWarpChargesText;
     Text WarpChargesDisplayText;
     RectTransform WarpChargesDisplayBackdrop;
 
+
     // Use this for initialization
     void Start() {
         canWarp = true;
-        maxWarpCharges = 5;
+
+        if (maxWarpCharges == 0) // allows for manually setting this in editor
+        {
+            maxWarpCharges = 2;
+        }
+
         warpCharges = maxWarpCharges;
         warpRechargeTime = 0.5f;
         warpRechargeTimeProgress = warpRechargeTime;
@@ -30,8 +35,10 @@ public class WarpLimiter : MonoBehaviour {
         NumWarpChargesText = GameObject.Find("NumWarpChargesText").GetComponent<Text>();
         WarpChargesDisplayText = GameObject.Find("WarpChargesDisplayText").GetComponent<Text>();
         WarpChargesDisplayBackdrop = GameObject.Find("WarpChargesDisplayBackdrop").GetComponent<RectTransform>();
+
         UpdateUI();
     }
+
 
     // Update is called once per frame
     void Update() {
@@ -43,7 +50,6 @@ public class WarpLimiter : MonoBehaviour {
             Recharge();
         }
 
-
         if (gameObject.GetComponent<HumanBullet>().bulletMode || warpCharges <= 0)
         {
             canWarp = false;
@@ -52,14 +58,12 @@ public class WarpLimiter : MonoBehaviour {
             canWarp = true;
         }
 
-        
-		
 	}
+
 
     // Try to not do this every frame, only call this when we know it will change
     void UpdateUI()
     {
-
         // NumWarpChargesText
         string zeroInFront = "";
         if (warpCharges < 10)
