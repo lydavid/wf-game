@@ -95,9 +95,9 @@ public class HighscoreGUI : MonoBehaviour {
             {
                 prevLetPos = 18; 
             }
-            else if (curLetPos == 26)
+            else if (curLetPos == 25)
             {
-                prevLetPos = 25;
+                prevLetPos = 24;
             }
             else
             {
