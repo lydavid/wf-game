@@ -68,12 +68,13 @@ public class TPSPlayerController : MonoBehaviour {
         }
         else
         {
+            Control();
             Controller();
         }
         CheckForWarp();
 
-
-        MoveHorizontalCamera();
+ 
+       // MoveHorizontalCamera();
         AnimatePerson();
 
     }
@@ -86,8 +87,6 @@ public class TPSPlayerController : MonoBehaviour {
             Gravity();
         }
     }
-
-
 
 
     private void OnCollisionEnter(Collision other)
@@ -164,15 +163,56 @@ public class TPSPlayerController : MonoBehaviour {
             }
         }
     }
+    private void Control()
+    {
+        /*
+        States:
+        00 = Idle
+        01 = Forward
+        02 = Backward
+        03 = Right
+        04 = Left
+        */
+        float mH = Input.GetAxis("Horizontal");
+        float mV = Input.GetAxis("Vertical");
+        
+        if (mH < 0) { state = 4; }
+        else if (mH > 0) { state = 3; }
+        else if (mV < 0) { state = 2; }
+        else if (mV > 0) { state = 1; }
+        else { state = 0; }
+
+    }
+
 
     private void Controller () {
 
         
         // Movement axis should be same for xbox, ps, pc
-        float mH = Input.GetAxis("Horizontal");
-        float mV = Input.GetAxis("Vertical");
+        //float mH = Input.GetAxis("Horizontal");
+        //float mV = Input.GetAxis("Vertical");
+        //if (state == 0) { transform.Translate(0, 0, 0); }
+        if (state == 1) 
+        { 
+            transform.Translate(0, 0, speed * Time.deltaTime); 
+        }
+        if (state == 2) 
+        { 
+            transform.Translate(0, 0, -speed * Time.deltaTime); 
+        }
+        if (state == 3) 
+        { 
+            transform.Rotate(Vector3.up * Time.deltaTime * speed * speed, Space.World);
+            //transform.Translate(speed * Time.deltaTime, 0, 0); 
+        }
+        if (state == 4) 
+        { 
+            transform.Rotate(Vector3.up * Time.deltaTime * -speed * speed, Space.World);
+            //transform.Translate(-speed * Time.deltaTime, 0, 0); 
+        }
 
-        transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+
+        //transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
         /*for (int i = 0; i < speed; i++)
         {
             //
@@ -180,8 +220,6 @@ public class TPSPlayerController : MonoBehaviour {
         }*/
 
 
-
-        
 
         /* 
         // keypad or numpad 1 for pc, 2 for xbox controller
@@ -238,26 +276,7 @@ public class TPSPlayerController : MonoBehaviour {
         }
     }
 
-    private void Control()
-    {
-        /*
-        States:
-        01 = Walking
-        02 = Running
-        03 = Walking Back
-        04 = Walking Right
-        05 = Walking Left
-        */
-        
-        /*if (mH < 0) { state = 4; }
-        else if (mH > 0) { state = 3; }
-        else if (mV < 0) { state = 2; }
-        else if (mV > 0) { state = 1; }
-        else { state = 0; }*/
-
-    }
-
-    private void MoveHorizontalCamera()
+        private void MoveHorizontalCamera()
     {
         float mouseHorizontal = 0;
 
@@ -285,11 +304,7 @@ public class TPSPlayerController : MonoBehaviour {
         horizontal = (horizontal + turnSpeed * mouseHorizontal) % 360f;
         transform.rotation = Quaternion.AngleAxis(horizontal, Vector3.up);
 
-        /*if (state == 0) { transform.Translate(0, 0, 0); }
-        if (state == 1) { transform.Translate(0, 0, speed * Time.deltaTime); }
-        if (state == 2) { transform.Translate(0, 0, -speed * Time.deltaTime); }
-        if (state == 3) { transform.Translate(speed * Time.deltaTime, 0, 0); }
-        if (state == 4) { transform.Translate(-speed * Time.deltaTime, 0, 0); }*/
+        
     }
 
 	/*void OnTriggerEnter(Collider other) {
