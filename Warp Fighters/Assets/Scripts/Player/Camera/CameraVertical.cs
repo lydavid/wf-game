@@ -24,11 +24,11 @@ public class CameraVertical : MonoBehaviour {
 	
 	void Update ()
     {
-        float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+        /*float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
         if (scrollWheel != 0)
         {
             transform.Translate(new Vector3(0, 0, scrollWheel));
-        }
+        }*/
 
         if (hPManager.isDead)
         {

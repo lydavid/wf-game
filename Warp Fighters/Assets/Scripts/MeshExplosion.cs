@@ -6,8 +6,7 @@ using UnityEngine;
 // Adapted from MeshEffect script but applies to all Meshes, including mesh of children
 public class MeshExplosion : MonoBehaviour {
 
-    // Determines whether this script placed in a GameObject should function on its own
-    // or will be called form outside
+    [Tooltip("Check if you wish for this script to function on its own. Otherwise must be called from another script.")]
     public bool selfControl; // should be false on enemies, true on simple objects like destructible cubes
 
     List<GameObject> GOs = new List<GameObject>();  // track GOs created by this script to destroy and remove clutter
@@ -85,13 +84,11 @@ public class MeshExplosion : MonoBehaviour {
         foreach (MeshFilter mf in GetComponentsInChildren<MeshFilter>())
         {
             M.Add(mf.mesh);
-            Debug.Log(mf.name);
         }
         
         foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
             M.Add(smr.sharedMesh);
-            Debug.Log(smr.name);
         }
 
         //M = GetComponentsInChildren<MeshFilter>().mesh;
@@ -120,14 +117,12 @@ public class MeshExplosion : MonoBehaviour {
         foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
         {
             materials.Add(mr.materials);
-            //mr.enabled = false;
             mr.gameObject.SetActive(false);
         }
 
         foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
             materials.Add(smr.materials);
-            //mr.enabled = false;
             smr.gameObject.SetActive(false);
         }
 
