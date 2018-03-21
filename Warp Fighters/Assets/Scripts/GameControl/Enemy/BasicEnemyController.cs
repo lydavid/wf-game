@@ -526,7 +526,7 @@ public class BasicEnemyController : MonoBehaviour {
         player.GetComponent<WarpLimiter>().GainMaxChargeAndRefill();
 
         waitTime = 3.0f;
-        GetComponent<MeshExplosion>().SplitMesh(waitTime);
+        GetComponent<MeshExplosion>().SplitMesh(waitTime, 30);
         
         enemyMoveState = EnemyMoveState.waitToDestroy;
     }
