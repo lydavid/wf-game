@@ -6,37 +6,48 @@ using UnityEngine;
 // Adapted from MeshEffect script but applies to all Meshes, including mesh of children
 public class MeshExplosion : MonoBehaviour {
 
+    // Determines whether this script placed in a GameObject should function on its own
+    // or will be called form outside
     public bool selfControl; // should be false on enemies, true on simple objects like destructible cubes
 
-    List<GameObject> GOs = new List<GameObject>();
-    float waitTime;
-    bool setToDestroy;
+    List<GameObject> GOs = new List<GameObject>();  // track GOs created by this script to destroy and remove clutter
+    float waitTime;  // countdown to destroy self
+    bool setToDestroy;  // when this is set true, after waitTime seconds, destroy all spawned GO and itself
 
-    Vector3 hittedObjectPos; // position of object that hit this, whether the player or wall, should not count grounds
+    Vector3 hittedObjectPos; // position of object that hits this, whether the player or wall, should not count grounds
+
+
+    [Header("Triangle Optimization")]
+    public bool limitTriangles;
+    public bool limitTrianglesPerChild;
+    public int maxTriangles = 10000;
+    int trianglesCount = 0;
+    public int maxTrianglesFromOneChild = 25;
+    int maxTrianglesFromOneChildCount = 0;
+
 
     // Use this for initialization
     void Start () {
         waitTime = 0;
         setToDestroy = false;
         hittedObjectPos = Vector3.zero;
-
 	}
 	
+
 	// Update is called once per frame
 	void Update () {
 
         if (setToDestroy)
         {
             WaitToDestroy();
-            //Debug.Log(waitTime);
         }
-		
 	}
+
 
     private void OnCollisionEnter(Collision other)
     {
-
         // Get position of object we collided into for our explosion origin
+        // as long as it's not of the Ground layer (otherwise it may explode on the spot)
         if (other.gameObject.layer != 9)
         {
             hittedObjectPos = other.transform.position;
@@ -77,12 +88,12 @@ public class MeshExplosion : MonoBehaviour {
             Debug.Log(mf.name);
         }
         
-        foreach (SkinnedMeshRenderer sm in GetComponentsInChildren<SkinnedMeshRenderer>())
+        foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            M.Add(sm.sharedMesh);
-            Debug.Log(sm.name);
+            M.Add(smr.sharedMesh);
+            Debug.Log(smr.name);
         }
-        
+
         //M = GetComponentsInChildren<MeshFilter>().mesh;
         /*}
         else if (GetComponent<SkinnedMeshRenderer>())
@@ -102,33 +113,39 @@ public class MeshExplosion : MonoBehaviour {
             GetComponent<SkinnedMeshRenderer>().enabled = false;
         }*/
 
+        // make actual object invisible before we generate a copy of its mesh as objects and explode them
+        // and copy their materials for our triangles
         List<Material[]> materials = new List<Material[]>();
 
         foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
         {
             materials.Add(mr.materials);
-            mr.enabled = false;
+            //mr.enabled = false;
+            mr.gameObject.SetActive(false);
         }
 
-        foreach (SkinnedMeshRenderer mr in GetComponentsInChildren<SkinnedMeshRenderer>())
+        foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
-            materials.Add(mr.materials);
-            mr.enabled = false;
+            materials.Add(smr.materials);
+            //mr.enabled = false;
+            smr.gameObject.SetActive(false);
         }
 
-        // make actual object invisible before we generate a copy of its mesh as objects and explode them
-        int maxTriangles = 1000;
-        int trianglesCount = 0;
 
-        int maxTrianglesFromOneChild = 25;
-        int maxTrianglesFromOneChildCount = 0;
+        if (limitTriangles)
+        {
+            trianglesCount = 0;
+        }
 
         for (int j = 0; j < M.Count; j++)
         {
-            maxTrianglesFromOneChildCount = 0;
-            if (trianglesCount > maxTriangles)
+            if (limitTriangles && trianglesCount > maxTriangles)
             {
                 break;
+            }
+            if (limitTrianglesPerChild)
+            {
+                maxTrianglesFromOneChildCount = 0;
             }
 
             Vector3[] verts = M[j].vertices;
@@ -136,9 +153,6 @@ public class MeshExplosion : MonoBehaviour {
             Vector2[] uvs = M[j].uv;
             for (int submesh = 0; submesh < M[j].subMeshCount; submesh++)
             {
-
-
-
                 int[] indices = M[j].GetTriangles(submesh);
 
                 for (int i = 0; i < indices.Length; i += 3)
@@ -197,11 +211,19 @@ public class MeshExplosion : MonoBehaviour {
                     GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(100, 1000), explosionPos, 25);
                     //mesh.RecalculateNormals();
                     //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
-                    trianglesCount += 1;
-                    maxTrianglesFromOneChildCount += 1;
-                    if (maxTrianglesFromOneChildCount >= maxTrianglesFromOneChild)
+
+                    if (limitTriangles)
                     {
-                        break;
+                        trianglesCount += 1;
+                    }
+
+                    if (limitTrianglesPerChild)
+                    {
+                        maxTrianglesFromOneChildCount += 1;
+                        if (maxTrianglesFromOneChildCount >= maxTrianglesFromOneChild)
+                        {
+                            break;
+                        }
                     }
 
                 }
@@ -217,6 +239,9 @@ public class MeshExplosion : MonoBehaviour {
         this.waitTime = waitTime;
     }
 
+
+    /* Let the explosion controlled by physics move around a bit before deleting all obj
+     * created by this script and the original obj itself. */
     void WaitToDestroy()
     {
         waitTime -= Time.deltaTime;
@@ -227,7 +252,7 @@ public class MeshExplosion : MonoBehaviour {
                 Destroy(GO);
             }
 
-            // End the game once the player has exploded
+            /* End the game once the player has exploded */
             if (gameObject.tag == "Player")
             {
                 SceneManager.LoadScene("GameOver");
@@ -238,5 +263,4 @@ public class MeshExplosion : MonoBehaviour {
             }
         }
     }
-
 }
