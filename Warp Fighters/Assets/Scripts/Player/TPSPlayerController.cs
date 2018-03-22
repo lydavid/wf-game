@@ -86,15 +86,20 @@ public class TPSPlayerController : MonoBehaviour {
         {
             MoveWithPhysics();
         }
+
+        if (!humanBullet.bulletMode)
+        {
+            Gravity();
+        }
     }
 
     private void LateUpdate()
     {
         // Make sure we apply gravity after move with physics, otherwise it'll make y velocity 0
-        if (!humanBullet.bulletMode)
+        /*if (!humanBullet.bulletMode)
         {
             Gravity();
-        }
+        }*/
     }
 
 
