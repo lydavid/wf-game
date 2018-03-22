@@ -15,12 +15,13 @@ public class HighscoreGUI : MonoBehaviour {
     private List<Text> individualLetters = new List<Text>();
     private string alpha;
 
+    public GameObject initialsObject;
     private String initials = "";
     private int curLetPos, prevLetPos;
     private int prevDButtonX, prevDButtonY;
     private int curDButtonX, curDButtonY;
 
-
+    private Text initial1, initial2, initial3;
 
     // Use this for initialization
     void Start () 
@@ -28,7 +29,12 @@ public class HighscoreGUI : MonoBehaviour {
         alpha = "abcdefghijklmnopqrstuvwxyz";
         width = Screen.width;
         height = Screen.height;
- 
+        initialsObject = GameObject.Find("Initials");
+
+        initial1 = initialsObject.transform.Find("1").GetComponent<Text>();
+        initial2 = initialsObject.transform.Find("2").GetComponent<Text>();
+        initial3 = initialsObject.transform.Find("3").GetComponent<Text>();
+
         // draw the 26 letters on canvas
         initLetters();
 
@@ -51,26 +57,59 @@ public class HighscoreGUI : MonoBehaviour {
 
     void EnterInitials ()
     {
+        String curLetter = individualLetters[curLetPos].text;
+
         if (Input.GetButtonDown("Menu Button"))
         {
            // go to next scene
         }
         if (Input.GetButtonDown("A Button"))
         {
-            if (initials.Length < 3)
+            if (initials.Length == 0)
             {
-                initials = initials + individualLetters[curLetPos].text;
+                initial1.text = curLetter;
+                initial1.color = Color.white;
+                initials = initials + curLetter;
+                
             }
-            
-        }
-        if (Input.GetButtonDown("B Button"))
-        {
-            if (initials.Length > 0)
+            else if (initials.Length == 1)
             {
-                initials = initials.Substring(0, initials.Length - 1);
+                initial2.text = curLetter;
+                initial2.color = Color.white;
+                initials = initials + curLetter;
+            }
+            else if (initials.Length == 2)
+            {
+                initial3.text = curLetter;
+                initial3.color = Color.white;
+                initials = initials + curLetter;
             }
 
         }
+        if (Input.GetButtonDown("B Button"))
+        {
+            if (initials.Length == 1)
+            {
+                initial1.text = "-";
+                initial1.color = Color.gray;
+                initials = initials.Substring(0, initials.Length - 1);
+
+            }
+            else if (initials.Length == 2)
+            {
+                initial2.text = "-";
+                initial2.color = Color.gray;
+                initials = initials.Substring(0, initials.Length - 1);
+            }
+            else if (initials.Length == 3)
+            {
+                initial3.text = "-";
+                initial3.color = Color.gray;
+                initials = initials.Substring(0, initials.Length - 1);
+            }
+        }
+
+        //Debug.Log("initial: " + initials);
     }
 
     void Controls ()
