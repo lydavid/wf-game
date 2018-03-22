@@ -84,6 +84,7 @@ public class TPSPlayerController : MonoBehaviour {
     {
         if (moveWithPhysics)
         {
+            Control();
             MoveWithPhysics();
         }
 
@@ -304,6 +305,7 @@ public class TPSPlayerController : MonoBehaviour {
             velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
             velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            //rb.MovePosition(transform.position + new Vector3(mH * speed, 0, mV * speed) * Time.deltaTime);
         }
     }
 
