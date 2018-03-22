@@ -25,7 +25,8 @@ public class LoadGameAsync : MonoBehaviour {
         AsyncOperation asyncLoad;
         if (sceneToLoad == 0)
         {
-            asyncLoad = SceneManager.LoadSceneAsync("Beta 0.0");
+            //asyncLoad = SceneManager.LoadSceneAsync("Beta 0.0");
+            asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
         } else
         {
             asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");

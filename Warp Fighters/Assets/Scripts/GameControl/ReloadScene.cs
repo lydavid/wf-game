@@ -16,7 +16,8 @@ public class ReloadScene : MonoBehaviour {
 
         if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
         {
-            SceneManager.LoadScene("Beta 0.0");
+            //SceneManager.LoadScene("Beta 0.0");
+            SceneManager.LoadScene("Alpha3.0");
         }
 	}
 }
