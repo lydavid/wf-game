@@ -35,7 +35,7 @@ public class SavePlayerScore : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        c = b.GetComponent<Text>();
+        /*c = b.GetComponent<Text>();
         if (PlayerPrefs.HasKey(Constants.ID_KEY))
         {
             ID = PlayerPrefs.GetInt(Constants.ID_KEY) + 1;
@@ -53,7 +53,7 @@ public class SavePlayerScore : MonoBehaviour {
         playerObj.enemiesKilled = 0;
         playerObj.warpCount = 21;
 
-        SaveAsJSON();
+        SaveAsJSON();*/
     }
 	
 	// Update is called once per frame
