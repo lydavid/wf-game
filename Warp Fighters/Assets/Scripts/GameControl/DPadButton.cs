@@ -9,34 +9,60 @@ public class DPadButton : MonoBehaviour
     public static bool left;
     public static bool right;
 
-
-    private bool dpadPressed = false;
+    private float x, y;
+    private bool dpadYPressed = false;
+    private bool dpadXPressed = false;
+    public static int countX;
+    public static int countY;
 
     void Update()
     {
-        float x = Input.GetAxis("D-Pad X Axis");
-        float y = Input.GetAxis("D-Pad Y Axis");
+        x = Input.GetAxisRaw("D-Pad X Axis");
+        y = Input.GetAxisRaw("D-Pad Y Axis");
 
-        if (x != 0 && dpadPressed == false)
+        if (x != 0 && dpadXPressed == false)
         {
+            if (x == 1)
+            {
+                countX += 1;
+                right = true;
+                   
+            }
+            else if (x == -1)
+            {
+                countX -= 1;
+                left = true;
+            }
+            dpadXPressed = true;         
+        }
+        if (x == 0)
+        {
+            dpadXPressed = false;
+            left = right = false;
+        }
 
-            dpadPressed = true;
-            right = (x > 0) ? true : false;
-            left = (x < 0) ? true : false;
-            
-        }
-        if (y != 0 && dpadPressed == false)
+        if (y != 0 && dpadYPressed == false)
         {
-            
-            dpadPressed = true;
-            up = (y > 0) ? true : false;
-            down = (y < 0) ? true : false;
-            
+            if (y == 1)
+            {
+                countY += 1;
+                up = true; 
+            }
+            else if (y == -1)
+            {
+                countY -= 1;
+                down = true;
+            }
+            dpadYPressed = true;
         }
-        if (x == 0 && y == 0)
+        if (y == 0)
         {
-            dpadPressed = false;
-            up = down = left = right = false;
+            dpadYPressed = false;
+            up = down = false;
         }
+
+        Debug.Log(countX + " : x");
+        Debug.Log(countY + " : y");
+
     }
 }

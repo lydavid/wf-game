@@ -17,6 +17,8 @@ public class HighscoreGUI : MonoBehaviour {
 
     private String initials = "";
     private int curLetPos, prevLetPos;
+    private int prevDButtonX, prevDButtonY;
+    private int curDButtonX, curDButtonY;
 
 
 
@@ -33,6 +35,9 @@ public class HighscoreGUI : MonoBehaviour {
         // tracks selection position
         prevLetPos = 0;
         curLetPos = 0;
+
+        prevDButtonX = curDButtonX = DPadButton.countX;
+        prevDButtonY = curDButtonY = DPadButton.countY;
         
     }
 	
@@ -40,23 +45,8 @@ public class HighscoreGUI : MonoBehaviour {
 	void Update () 
 	{
         Controls();
-
-        //Debug.Log("up: "+ DPadButton.up);
-
-        /*
-        if (DPadButton.up)
-        {
-            Debug.Log("up: "+ DPadButton.up);
-        }
-        if (DPadButton.down)
-        {
-            Debug.Log("down: " + DPadButton.down);
-        }*/
-
-        //Debug.Log(x + " , " + y);
-
         LetterSelect();
-        
+        EnterInitials();
     }
 
     void EnterInitials ()
@@ -85,100 +75,83 @@ public class HighscoreGUI : MonoBehaviour {
 
     void Controls ()
     {
-        if (DPadButton.right)
+        curDButtonX = DPadButton.countX;
+        if (curDButtonX != prevDButtonX)
         {
-            if (curLetPos == 9)
+            if (DPadButton.right)
             {
-                prevLetPos = 8;
+                if (curLetPos == 9)
+                {
+                    prevLetPos = 8;
+                }
+                else if (curLetPos == 19)
+                {
+                    prevLetPos = 18;
+                }
+                else if (curLetPos == 25)
+                {
+                    prevLetPos = 24;
+                }
+                else
+                {
+                    prevLetPos = curLetPos;
+                    curLetPos += 1;
+                }
             }
-            else if (curLetPos == 19)
+            else if (DPadButton.left)
             {
-                prevLetPos = 18; 
+                if (curLetPos == 0)
+                {
+                    prevLetPos = 1;
+                }
+                else if (curLetPos == 10)
+                {
+                    prevLetPos = 11;
+                }
+                else if (curLetPos == 20)
+                {
+                    prevLetPos = 21;
+                }
+                else
+                {
+                    prevLetPos = curLetPos;
+                    curLetPos -= 1;
+                }
             }
-            else if (curLetPos == 25)
-            {
-                prevLetPos = 24;
-            }
-            else
-            {
-                prevLetPos = curLetPos;
-                curLetPos += 1;
-            }
+            prevDButtonX = curDButtonX;
         }
-        else if (DPadButton.left)
+
+        curDButtonY = DPadButton.countY;
+        if (curDButtonY != prevDButtonY)
         {
-            if (curLetPos == 0)
+            if (DPadButton.up)
             {
-                prevLetPos = 1;
+                if (curLetPos <= 9)
+                {
+                    prevLetPos = 10;
+                }
+                else
+                {
+                    prevLetPos = curLetPos;
+                    curLetPos -= 10;
+                }
             }
-            else if (curLetPos == 10)
+            else if (DPadButton.down)
             {
-                prevLetPos = 11;
+                if (curLetPos >= 20 || curLetPos == 16 || curLetPos == 17 || curLetPos == 18 || curLetPos == 19)
+                {
+                    prevLetPos = 10;
+                }
+                else
+                {
+                    prevLetPos = curLetPos;
+                    curLetPos += 10;
+                }
             }
-            else if (curLetPos == 20)
-            {
-                prevLetPos = 21;
-            }
-            else
-            {
-                prevLetPos = curLetPos;
-                curLetPos -= 1;
-            }
-        }
-        else if (DPadButton.up)
-        {
-            if (curLetPos <= 9)
-            {
-                prevLetPos = 10;
-            }
-            else
-            {
-                prevLetPos = curLetPos;
-                curLetPos -= 10;
-            }
-        }
-        else if (DPadButton.down)
-        {
-            if (curLetPos >= 20 || curLetPos == 17 || curLetPos == 18 || curLetPos == 19)
-            {
-                prevLetPos = 10;
-            }
-            else
-            {
-                prevLetPos = curLetPos;
-                curLetPos += 10;
-            }
+            prevDButtonY = curDButtonY;
         }
     }
-    /*
-    void Controls ()
-    {
-        if (DPadButton.right)
-        {
-            // move right
-            if (x > 0)
-            {
-                
-            }
 
-            // move left
-            if (x < 0)
-            {
-                
-            }
-        }
-        else if (Math.Abs(y) != 0)
-        {
-            //move up
-
-            //move down
-
-        }
-
-        StartCoroutine(Pause());
-    }*/
-
-    
 	void LetterSelect ()
 	{
         individualLetters[prevLetPos].color = Color.white;
