@@ -28,15 +28,26 @@ public class MeshExplosion : MonoBehaviour {
 
     Material dissolvingMat;
 
+    bool isPlayer;
+
     // Use this for initialization
     void Start () {
         waitTime = 0;
         setToDestroy = false;
         hittedObjectPos = Vector3.zero;
 
+        isPlayer = (gameObject.tag == "Player");
+
         if (useDissolvingEffect)
         {
-            dissolvingMat = (Material)Resources.Load("DissolvingMaterial", typeof(Material));
+            if (isPlayer)
+            {
+                dissolvingMat = (Material)Resources.Load("DissolvingMaterialWhite", typeof(Material));
+                
+            } else
+            {
+                dissolvingMat = (Material)Resources.Load("DissolvingMaterial", typeof(Material));
+            }
         }
     }
 	
@@ -187,11 +198,12 @@ public class MeshExplosion : MonoBehaviour {
                     if (useDissolvingEffect)
                     {
                         GO.AddComponent<MeshRenderer>().material = dissolvingMat; // ideally, the dissolving mat texture is the same as the obj we wish to dissolve
+                        GO.AddComponent<DissolveObject>();
                     } else
                     {
                         GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
                     }
-                    GO.AddComponent<DissolveObject>();
+                    
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                     //GO.AddComponent<BoxCollider>();
@@ -203,7 +215,7 @@ public class MeshExplosion : MonoBehaviour {
                     // Explodes in a circle around the player, looks much cooler than the other ones
 
                     Vector3 explosionPos;
-                    if (gameObject.tag == "Player")
+                    if (isPlayer)
                     {
                         // explode from center instead
                         explosionPos = new Vector3(gameObject.transform.position.x + Random.Range(-variance * 2, variance * 2), gameObject.transform.position.y + Random.Range(-variance * 2, variance * 2), gameObject.transform.position.z + Random.Range(-variance * 2, variance * 2));
@@ -263,7 +275,7 @@ public class MeshExplosion : MonoBehaviour {
             }
 
             /* End the game once the player has exploded */
-            if (gameObject.tag == "Player")
+            if (isPlayer)
             {
                 SceneManager.LoadScene("GameOver");
             }
