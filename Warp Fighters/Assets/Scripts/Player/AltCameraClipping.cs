@@ -23,9 +23,9 @@ public class AltCameraClipping : MonoBehaviour {
         cam = GetComponentInChildren<Camera>();
         playerTag = player.tag;
         // default dist to player
-        defaultDistance = Vector3.Distance(player.transform.position, transform.position);//transform.localPosition.z;
-        //Debug.Log(defaultDistance);
-        closestDistance = 1.0f;
+        defaultDistance = transform.localPosition.z; //Vector3.Distance(player.transform.position, transform.position);//
+        Debug.Log(defaultDistance);
+        closestDistance = -1.0f;
         curDistance = defaultDistance;
         distToPlayer = defaultDistance;
         //Debug.Log(distToPlayer);
@@ -35,10 +35,10 @@ public class AltCameraClipping : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
         // update distance to player
-        distToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        distToPlayer = transform.localPosition.z;//Vector3.Distance(player.transform.position, transform.position);
         //Debug.Log(distToPlayer);
 
         // raycast from player to camera, when something comes between them, move in until it is not
@@ -66,20 +66,24 @@ public class AltCameraClipping : MonoBehaviour {
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
 
         RaycastHit playerHit;
+        int layerMask1 = 1 << 10; // LayerMask.NameToLayer("Player"); //
+        layerMask1 = ~layerMask1;
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
-        if (Physics.Raycast(ray, out playerHit))
+        if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
         {
-            //Debug.Log(playerHit.transform.gameObject.name);
+            Debug.Log(playerHit.transform.gameObject.name);
             if (playerHit.transform.gameObject.tag != playerTag)
             {
                 //obstructed = true;
                 // if the intended translation will not result in it zooming in past closestDistance
-                if (distToPlayer - 1 > closestDistance)
-                {
-                    //Debug.Log(transform.TransformDirection(Vector3.forward));
-                    //transform.Translate(transform.TransformDirection(Vector3.forward));
-                    TranslateAlongZ(1f);
-                }
+                
+                    if (distToPlayer < closestDistance)
+                    {
+                        //Debug.Log(transform.TransformDirection(Vector3.forward));
+                        //transform.Translate(transform.TransformDirection(Vector3.forward));
+                        TranslateAlongZ(1f);
+                    }
+                
             } else
             {
                 //obstructed = false;
@@ -115,7 +119,7 @@ public class AltCameraClipping : MonoBehaviour {
                     //Debug.Log(distToClosestObjFromCam);
                     // if the distance to closest obj from behind cam is bigger than that of the distance needed
                     // to return from current cam dist to player towards default distance to player, then do so
-                    if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer + 1)
+                    if (distToPlayer > defaultDistance && distToClosestObjFromCam >= distToPlayer - defaultDistance)
                     {
                         TranslateAlongZ(-1f);
                     }
@@ -167,8 +171,13 @@ public class AltCameraClipping : MonoBehaviour {
 
     void TranslateAlongZ(float amount)
     {
+        //Debug.Log(amount);
+        //amount = Mathf.Clamp(transform.localPosition.z + amount, defaultDistance, closestDistance);
+        //Debug.Log(amount);
         transform.Translate(new Vector3(0, 0, amount));
+        
         // Main relative postion to player
-        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, transform.localPosition.z);
+        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, Mathf.Clamp(transform.localPosition.z, defaultDistance, closestDistance));
+        distToPlayer = transform.localPosition.z;
     }
 }

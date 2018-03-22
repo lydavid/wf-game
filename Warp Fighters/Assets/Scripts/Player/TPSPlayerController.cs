@@ -298,7 +298,7 @@ public class TPSPlayerController : MonoBehaviour {
             }*/
             targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             targetVelocity = transform.TransformDirection(targetVelocity);
-            targetVelocity *= speed;
+            targetVelocity *= speed * Time.deltaTime;
             var velocity = rb.velocity;
             var velocityChange = (targetVelocity - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);

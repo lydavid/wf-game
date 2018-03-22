@@ -15,7 +15,7 @@ public class CollectedKeysManager : MonoBehaviour {
 	void Update () {
         if (collectedKeys.Count > 0)
         {
-            Debug.Log(collectedKeys[0]);
+            //Debug.Log(collectedKeys[0]);
         }
 	}
 

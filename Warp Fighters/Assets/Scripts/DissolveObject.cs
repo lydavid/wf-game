@@ -10,7 +10,6 @@ public class DissolveObject : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         mat = GetComponent<Renderer>().material;
-        Debug.Log(mat.name);
         delayTime = 0.3f;
 	}
 	
