@@ -247,6 +247,7 @@ public class HumanBullet : MonoBehaviour {
     }*/
 
     
+
     private void OnCollisionEnter(Collision other)
     {
         //if (other.gameObject.layer != 9 && other.gameObject.tag != "Player")
@@ -258,8 +259,13 @@ public class HumanBullet : MonoBehaviour {
 
             if (warpType == WarpType.original)
             {
+                //Debug.Log("y");
+                // temp fix for nonconvex pipes in beta
+                //rb.velocity = Vector3.zero;
+                //rb.angularVelocity = Vector3.zero;
                 rb.velocity = new Vector3(Mathf.Max(3, rb.velocity.x), Mathf.Max(3), Mathf.Max(3, rb.velocity.z)); //stops the player from flying everywhere
-                // seems we need a minimum velocity on collision, else we may glitch through floors
+                
+            // seems we need a minimum velocity on collision, else we may glitch through floors
                 //rb.velocity = Vector3.zero;
                 //rb.angularVelocity = Vector3.zero;
             }
