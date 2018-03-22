@@ -14,8 +14,8 @@ public class TestDissolve : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        mat.SetFloat("_SliceAmount", mat.GetFloat("_SliceAmount") + 0.1f);
-        mat.SetFloat("_BurnSize", mat.GetFloat("_BurnSize") + 0.1f);
+        mat.SetFloat("_SliceAmount", mat.GetFloat("_SliceAmount") + 0.05f);
+        mat.SetFloat("_BurnSize", mat.GetFloat("_BurnSize") + 0.05f);
         
 	}
 }

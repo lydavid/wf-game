@@ -24,7 +24,7 @@ public class MeshExplosion : MonoBehaviour {
     public int maxTrianglesFromOneChild = 25;
     int maxTrianglesFromOneChildCount = 0;
 
-    public Material dissolvingMat;
+    Material dissolvingMat;
 
     // Use this for initialization
     void Start () {
