@@ -8,6 +8,8 @@ public class MeshExplosion : MonoBehaviour {
 
     [Tooltip("Check if you wish for this script to function on its own. Otherwise must be called from another script.")]
     public bool selfControl; // should be false on enemies, true on simple objects like destructible cubes
+    [Tooltip("Check if you want the object to burn dissolve as it explodes.")]
+    public bool useDissolvingEffect;
 
     List<GameObject> GOs = new List<GameObject>();  // track GOs created by this script to destroy and remove clutter
     float waitTime;  // countdown to destroy self
@@ -31,7 +33,11 @@ public class MeshExplosion : MonoBehaviour {
         waitTime = 0;
         setToDestroy = false;
         hittedObjectPos = Vector3.zero;
-        dissolvingMat = (Material)Resources.Load("DissolvingMaterial", typeof(Material));
+
+        if (useDissolvingEffect)
+        {
+            dissolvingMat = (Material)Resources.Load("DissolvingMaterial", typeof(Material));
+        }
     }
 	
 
@@ -178,12 +184,18 @@ public class MeshExplosion : MonoBehaviour {
                     GO.transform.rotation = transform.rotation;
                     GO.transform.localScale = transform.localScale * scale;
 
-                    GO.AddComponent<MeshRenderer>().material = dissolvingMat;//materials[j][submesh]; // ideally, the dissolving mat texture is the same as the obj we wish to dissolve
+                    if (useDissolvingEffect)
+                    {
+                        GO.AddComponent<MeshRenderer>().material = dissolvingMat; // ideally, the dissolving mat texture is the same as the obj we wish to dissolve
+                    } else
+                    {
+                        GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
+                    }
                     GO.AddComponent<TestDissolve>();
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                     //GO.AddComponent<BoxCollider>();
-                    float variance = 2.0f;
+                    float variance = 5.0f;
                     //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 2, variance * 2), transform.position.y + Random.Range(-variance, 0), transform.position.z + Random.Range(-variance * 2, variance * 2));
                     //Vector3 explosionPos = new Vector3(transform.position.x + Random.Range(-variance * 4, -variance * 2), transform.position.y, transform.position.z);
                     //Vector3 explosionPos = Vector3.zero;
@@ -206,7 +218,7 @@ public class MeshExplosion : MonoBehaviour {
                     GOs.Add(GO);
 
                     // explode the triangle mesh objects
-                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(100, 1000), explosionPos, 25);
+                    GO.AddComponent<Rigidbody>().AddExplosionForce(Random.Range(600, 800), explosionPos, 25);
                     //mesh.RecalculateNormals();
                     //GO.transform.Translate(mesh.normals[1] * Random.Range(2, 5)); // translate along normal
 
