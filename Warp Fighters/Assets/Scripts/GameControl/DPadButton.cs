@@ -61,8 +61,5 @@ public class DPadButton : MonoBehaviour
             up = down = false;
         }
 
-        //Debug.Log(countX + " : x");
-        //Debug.Log(countY + " : y");
-
     }
 }

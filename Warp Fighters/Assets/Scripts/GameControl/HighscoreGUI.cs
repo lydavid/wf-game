@@ -210,7 +210,6 @@ public class HighscoreGUI : MonoBehaviour {
                 y -= 70;
             }
             char c = Char.ToUpper(alpha[i]);
-            Debug.Log(c);
             GameObject let = new GameObject("" + c);
             let.transform.SetParent(letters.transform);
 
