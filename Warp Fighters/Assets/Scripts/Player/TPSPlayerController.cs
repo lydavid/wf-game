@@ -189,13 +189,13 @@ public class TPSPlayerController : MonoBehaviour {
     private void Controller () {
         
         //if (state == 0) { transform.Translate(0, 0, 0); }
-        Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        /*Vector3 dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (dir != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(dir);
-        }
+        }*/
         //rb.AddForce(dir * speed * Time.deltaTime);
-        if (!humanBullet.bulletMode)
+        /*if (!humanBullet.bulletMode)
         {
             targetVelocity = (dir != Vector3.zero) ? transform.forward : dir;
             targetVelocity *= speed;
@@ -205,7 +205,7 @@ public class TPSPlayerController : MonoBehaviour {
             velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
             velocityChange.y = 0;// Mathf.Clamp(velocityChange.y, -maxVelocityChange, maxVelocityChange);// 0;
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
-        }
+        }*/
 
          // transform.Translate(dir * Time.deltaTime * speed, Space.World);
         /* 
@@ -230,7 +230,7 @@ public class TPSPlayerController : MonoBehaviour {
         
 
 
-        //transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
+        transform.Translate(mH * speed * Time.deltaTime, 0, mV * speed * Time.deltaTime);
         /*for (int i = 0; i < speed; i++)
         {
             //
