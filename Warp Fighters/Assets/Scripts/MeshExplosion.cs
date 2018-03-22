@@ -191,7 +191,7 @@ public class MeshExplosion : MonoBehaviour {
                     {
                         GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
                     }
-                    GO.AddComponent<TestDissolve>();
+                    GO.AddComponent<DissolveObject>();
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                     //GO.AddComponent<BoxCollider>();

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestDissolve : MonoBehaviour {
+public class DissolveObject : MonoBehaviour {
 
     Material mat;
     float delayTime;
@@ -19,8 +19,8 @@ public class TestDissolve : MonoBehaviour {
         
         if (delayTime <= 0)
         {
-            mat.SetFloat("_SliceAmount", mat.GetFloat("_SliceAmount") + 0.1f);
-            mat.SetFloat("_BurnSize", mat.GetFloat("_BurnSize") + 0.1f);
+            mat.SetFloat("_SliceAmount", mat.GetFloat("_SliceAmount") + 0.02f);
+            mat.SetFloat("_BurnSize", mat.GetFloat("_BurnSize") + 0.05f);
         } else
         {
             delayTime -= Time.deltaTime;
