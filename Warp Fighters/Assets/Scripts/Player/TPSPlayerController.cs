@@ -63,12 +63,12 @@ public class TPSPlayerController : MonoBehaviour {
         CheckControllerType();
         MouseToggleInGame();
 
-        if (moveWithPhysics)
+        /*if (moveWithPhysics)
         {
             MoveWithPhysics();
         }
-        else
-        {
+        else*/
+        if (!moveWithPhysics) {
             Control();
             Controller();
         }
@@ -78,6 +78,14 @@ public class TPSPlayerController : MonoBehaviour {
         MoveHorizontalCamera();
         AnimatePerson();
 
+    }
+
+    private void FixedUpdate()
+    {
+        if (moveWithPhysics)
+        {
+            MoveWithPhysics();
+        }
     }
 
     private void LateUpdate()
