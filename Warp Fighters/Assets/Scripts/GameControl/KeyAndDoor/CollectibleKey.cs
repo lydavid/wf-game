@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum KeyType { Cyan, Magenta, Yellow };
+public enum KeyType { Cyan, Magenta, Yellow, Blue };
 
 public class CollectibleKey : MonoBehaviour {
 
