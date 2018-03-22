@@ -19,17 +19,19 @@ public class StartGame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("right shift"))
+		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("left shift"))
         {
-			bgm.Play();
+            PlayerPrefs.SetInt("Scene", 0);
+            bgm.Play();
             StartCoroutine(Fade());
         }
 
-        /*if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("right shift"))
+        if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("right shift"))
         {
+            PlayerPrefs.SetInt("Scene", 1);
             bgm.Play();
-            StartCoroutine(OtherFade());
-        }*/
+            StartCoroutine(Fade());
+        }
 	}
 
 	IEnumerator Fade () 

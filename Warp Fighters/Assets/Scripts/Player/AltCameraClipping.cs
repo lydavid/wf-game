@@ -110,7 +110,7 @@ public class AltCameraClipping : MonoBehaviour {
                     // one sol is to raycast from player, through camera
                     // problem is that if player is behind a not very tall thing, it won't reset
                     // let's try anyways
-                    Debug.Log(objHit.transform.gameObject.name);
+                    //Debug.Log(objHit.transform.gameObject.name);
                     float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
                     //Debug.Log(distToClosestObjFromCam);
                     // if the distance to closest obj from behind cam is bigger than that of the distance needed

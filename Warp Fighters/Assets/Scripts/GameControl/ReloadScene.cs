@@ -14,9 +14,9 @@ public class ReloadScene : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
+        if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
         {
-            SceneManager.LoadScene("Alpha3.0");
+            SceneManager.LoadScene("Beta 0.0");
         }
 	}
 }
