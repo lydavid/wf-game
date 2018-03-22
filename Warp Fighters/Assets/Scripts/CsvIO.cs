@@ -4,12 +4,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System;
+using UnityEngine.UI;
 
 public class CsvIO : MonoBehaviour
 {
     //source: https://sushanta1991.blogspot.ca/2015/02/how-to-write-data-to-csv-file-in-unity.html
     private List<string[]> rowData = new List<string[]>();
     private string filePath;
+    public string[] dataOUT;
+    public Font font;
+    public Canvas canvas;
 
 
     // Use this for initialization
@@ -18,6 +22,7 @@ public class CsvIO : MonoBehaviour
         filePath = Application.dataPath + "/CSV/" + "Saved_data.csv";
         Save();
         Load();
+        DisplayPlayers();
     }
 
     void Save()
@@ -29,23 +34,16 @@ public class CsvIO : MonoBehaviour
         rowDataTemp[2] = "Enemies Killed";
         rowDataTemp[3] = "Warp Count";
         rowData.Add(rowDataTemp);
-
-
-        rowDataTemp = new string[4];
-        rowDataTemp[0] = "Initials";
-        rowDataTemp[1] = "Elapsed Time";
-        rowDataTemp[2] = "Enemies Killed";
-        rowDataTemp[3] = "Warp Count";
-        rowData.Add(rowDataTemp);
-        /*
+ 
         for (int i = 0; i < 10; i++)
         {
-            rowDataTemp = new string[3];
-            rowDataTemp[0] = "Sushanta" + i; // name
-            rowDataTemp[1] = "" + i; // ID
-            rowDataTemp[2] = "$" + UnityEngine.Random.Range(5000, 10000); // Income
+            rowDataTemp = new string[4];
+            rowDataTemp[0] = "ABB";
+            rowDataTemp[1] = "" + UnityEngine.Random.Range(1, 200);
+            rowDataTemp[2] = "" + UnityEngine.Random.Range(0, 5);
+            rowDataTemp[3] = "" + UnityEngine.Random.Range(1, 20);
             rowData.Add(rowDataTemp);
-        }*/
+        }
 
         string[][] output = new string[rowData.Count][];
 
@@ -62,9 +60,6 @@ public class CsvIO : MonoBehaviour
         for (int index = 0; index < length; index++)
             sb.AppendLine(string.Join(delimiter, output[index]));
 
-
-        
-
         StreamWriter outStream = System.IO.File.CreateText(filePath);
         outStream.WriteLine(sb);
         outStream.Close();
@@ -72,11 +67,46 @@ public class CsvIO : MonoBehaviour
 
     void Load ()
     {
-        String data = System.IO.File.ReadAllText(filePath);
-        String[] lines = data.Split("\n"[0]);
-        //String[] lineData = (lines[0].Trim()).Split(","[0]);
-        Debug.Log("0: " + lines[0]);
-        Debug.Log("1: " + lines[1]);
+        String[] lines = System.IO.File.ReadAllLines(filePath);
+        
+        dataOUT = lines;
+    }
+
+    void Update ()
+    {
+        
+       
+    }
+
+    void DisplayPlayers ()
+    {
+        float x = 30;
+        float y = 55;
+        for (int i = 1; i <= 10; i++)
+        { 
+            string[] playerData = (dataOUT[i].Trim()).Split(',');
+            foreach (string s in playerData)
+            {
+                Debug.Log(s);
+            }
+            GameObject player = new GameObject(""+i);
+            player.transform.SetParent(canvas.transform);
+
+            RectTransform trans = player.AddComponent<RectTransform>();
+            trans.sizeDelta = new Vector2(300, 30);
+            trans.localPosition = new Vector2(x, y);
+
+            // text and position
+            Text text = player.AddComponent<Text>();
+            text.alignment = TextAnchor.UpperLeft;
+            text.text = "RANK " + i + "   -   " + playerData[0] + "   >   " + playerData[1] + "s";
+
+            // font and color
+            text.font = font;
+            text.fontSize = 25;
+            text.color = Color.gray;
+            y -= 20;
+        }
     }
 
     
