@@ -24,13 +24,15 @@ public class MeshExplosion : MonoBehaviour {
     public int maxTrianglesFromOneChild = 25;
     int maxTrianglesFromOneChildCount = 0;
 
+    public Material dissolvingMat;
 
     // Use this for initialization
     void Start () {
         waitTime = 0;
         setToDestroy = false;
         hittedObjectPos = Vector3.zero;
-	}
+        dissolvingMat = (Material)Resources.Load("DissolvingMaterial", typeof(Material));
+    }
 	
 
 	// Update is called once per frame
@@ -175,8 +177,9 @@ public class MeshExplosion : MonoBehaviour {
                     GO.transform.position = transform.localPosition;
                     GO.transform.rotation = transform.rotation;
                     GO.transform.localScale = transform.localScale * scale;
-                    
-                    GO.AddComponent<MeshRenderer>().material = materials[j][submesh];
+
+                    GO.AddComponent<MeshRenderer>().material = dissolvingMat;//materials[j][submesh]; // ideally, the dissolving mat texture is the same as the obj we wish to dissolve
+                    GO.AddComponent<TestDissolve>();
                     GO.AddComponent<MeshFilter>().mesh = mesh;
                     //GO.layer = 8; // it's own layer, prevents it from colliding with other objects
                     //GO.AddComponent<BoxCollider>();
