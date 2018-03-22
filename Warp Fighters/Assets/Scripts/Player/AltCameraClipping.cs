@@ -66,17 +66,17 @@ public class AltCameraClipping : MonoBehaviour {
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
 
         RaycastHit playerHit;
-        int layerMask1 = 1 << 10; // LayerMask.NameToLayer("Player"); //
-        layerMask1 = ~layerMask1;
+        //int layerMask1 = 1 << 10; // LayerMask.NameToLayer("Player"); //
+        //layerMask1 = ~layerMask1;
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
+
+        // raycast from camera to player
         if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
         {
             Debug.Log(playerHit.transform.gameObject.name);
-            if (playerHit.transform.gameObject.tag != playerTag)
+            if (playerHit.transform.gameObject.tag != playerTag && playerHit.transform.gameObject.layer != 10) // don't zoom in when covered by an interactable obj, may want to have a list of obj type we don't want to zoom in on, since some interactables like launch pad may obscure player vision
             {
-                //obstructed = true;
-                // if the intended translation will not result in it zooming in past closestDistance
-                
+                    // if the camera is not at closest distance from player, zoom in
                     if (distToPlayer < closestDistance)
                     {
                         //Debug.Log(transform.TransformDirection(Vector3.forward));
@@ -86,7 +86,7 @@ public class AltCameraClipping : MonoBehaviour {
                 
             } else
             {
-                //obstructed = false;
+
 
                 // we need a condition before we can execute this part, or else it will keep going back and forth between
                 // this section and the section above when player is against wall
