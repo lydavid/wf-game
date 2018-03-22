@@ -23,7 +23,7 @@ public class TempWinCond : MonoBehaviour {
         if (bossEnemy == null)
         {
             // Remember player's time before going to next scene
-            PlayerPrefs.SetFloat("TimeInSeconds", trackTime.timeInSeconds);
+            PlayerPrefs.SetFloat("TimeInSeconds", trackTime.GetTime());
             SceneManager.LoadScene("Win");
         }
 		

@@ -7,8 +7,8 @@ using UnityEngine.UI;
 // Provides functionality for a Best Time score system in our game
 public class TrackTime : MonoBehaviour {
 
-    public bool trackTime; // counts while this is true, until it is false
-    public float timeInSeconds;
+    private bool trackTime; // counts while this is true, until it is false
+    private float timeInSeconds;
 
     Text displayTimeText;
 
@@ -38,6 +38,11 @@ public class TrackTime : MonoBehaviour {
     private void DisplayTime()
     {
         displayTimeText.text = StringHelpers.TimeInSecondsToFormattedString(timeInSeconds);
+    }
+
+    public float GetTime ()
+    {
+        return timeInSeconds;
     }
 
 

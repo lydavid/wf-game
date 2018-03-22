@@ -7,26 +7,25 @@ using UnityEngine;
 public class PlayerSettings : MonoBehaviour {
 
     public bool humanBulletOn;
+    
+
+   // TrackTime time;
+   // public float elapsedTime;
+    public static int enemiesKilled;
+    public static int warpCount;
+    
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         humanBulletOn = true;
+        enemiesKilled = 0;
+        warpCount = 0;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+    void Update ()
+    {
+       // elapsedTime = time.GetTime();
+    }
 
-        // Toggles human bullet mode for velocity warp
-        /* 
-		if (Input.GetKeyDown("."))
-        {
-            if (!humanBulletOn)
-            {
-                humanBulletOn = true;
-            } else
-            {
-                humanBulletOn = false;
-            }
-        }*/
-	}
 }
