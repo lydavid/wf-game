@@ -13,7 +13,7 @@ public class AttackManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         initiatedAttack = false;
-        timeToTurnOff = 1.0f;
+        timeToTurnOff = 0.5f;
         curTime = timeToTurnOff;
 	}
 
@@ -34,7 +34,7 @@ public class AttackManager : MonoBehaviour {
         }
 
         // should match up with the velocity warp button
-        if (Input.GetButtonDown("A Button") || Input.GetMouseButton(0))
+        if (Input.GetButtonDown("A Button") || Input.GetMouseButton(0) || Input.GetButtonDown("X Button"))
         {
             initiatedAttack = true;
             turningOffAttackMode = false; // interrupts turning off
@@ -49,6 +49,11 @@ public class AttackManager : MonoBehaviour {
     public void TurnOffAttackMode()
     {
         turningOffAttackMode = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        TurnOffAttackMode();
     }
 
 }
