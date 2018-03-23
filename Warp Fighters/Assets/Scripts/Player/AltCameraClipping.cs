@@ -73,7 +73,7 @@ public class AltCameraClipping : MonoBehaviour {
         // raycast from camera to player
         if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
         {
-            Debug.Log(playerHit.transform.gameObject.name);
+            //Debug.Log(playerHit.transform.gameObject.name);
             if (playerHit.transform.gameObject.tag != playerTag && playerHit.transform.gameObject.layer != 10) // don't zoom in when covered by an interactable obj, may want to have a list of obj type we don't want to zoom in on, since some interactables like launch pad may obscure player vision
             {
                     // if the camera is not at closest distance from player, zoom in

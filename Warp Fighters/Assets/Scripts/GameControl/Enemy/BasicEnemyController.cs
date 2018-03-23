@@ -21,43 +21,50 @@ public class BasicEnemyController : MonoBehaviour {
 
 
     [Header("Movement")]
-    public float speed = 4.0f;  // movement speed of enemy
-    Transform start, target;  // positions to move between
+    [Tooltip("Movement speed of the enemy.")]
+    public float speed = 4.0f;
+    [Tooltip("Distance enemy will move up to before turning back.")]
     public float patrolDistance;
+    [Tooltip("Time in seconds of how long to wait before turning and moving in the other direction.")]
+    public float pauseTime = 0.5f;
 
-    private bool moveToA = false;
-    private bool moveToB = true;
-    private bool wait = false;
+    Transform start, target;  // positions to move between
+    bool moveToA = false;
+    bool moveToB = true;
+    bool wait = false;
 
 
     [Header("Detection")]
-    public int arcSize;
-    public int sightRange;
-    GameObject player;
+    public int arcSize = 30;
+    public int sightRange = 30;
 
-    //private Rigidbody rb;
+    GameObject player;
 
 
     [Header("Combat")]
-    public Vector3 knockBackForce;
-    public float coolOffTime;
-    public int healthPoints;
+    public float coolOffTime = 3.0f;
+    public int healthPoints = 1;
 
+    public Vector3 knockBackForce;
     Rigidbody selfRigidbody;
+
 
     [Header("State Machine")]
     public EnemyMoveState enemyMoveState;
 
+
     [Header("Debug")]
     //int count = 0;
-    public float waitTime;
+    float waitTime;
     Vector3 originalPos;
 
-    [Header("Materials")]
+
+    /*[Header("Materials")]
     //Material origMaterial;
     public Material alertedColor;  // orange when it's persuing the player
     public Material attackColor;  // blue when it's dealing dmg to the player
     public Material damagedColor; // red when it's receiving dmg from the player
+    */
 
     [Header("Flags")]
     public bool ableToDamagePlayer; // use this to restrict enemy from hitting player multiple times in its single warp
@@ -65,16 +72,18 @@ public class BasicEnemyController : MonoBehaviour {
     public bool initiatedAttack;
     public bool ableToBeDamaged;
 
+
     // for guard type only
     Vector3 originalPosition;
     Quaternion originalRotation;
 
-    Animator animator; 
+    [Header("Animations")]
+    Animator animator; // enemy movement animations
+
 
     // Use this for initialization
     void Start()
     {
-
         player = GameObject.FindGameObjectWithTag("Player");
 
         // Create transform where it is standing, this will the the start
@@ -83,10 +92,6 @@ public class BasicEnemyController : MonoBehaviour {
         Vector3 newPosition = transform.TransformPoint(Vector3.forward * patrolDistance);
         target = Instantiate(new GameObject(), newPosition, transform.rotation).transform;
 
-        //rb = player.GetComponent<Rigidbody>();
-        arcSize = 30;
-        sightRange = 30;
-        coolOffTime = 3.0f;
         enemyMoveState = EnemyMoveState.patroling;
 
         selfRigidbody = GetComponent<Rigidbody>();
@@ -95,13 +100,10 @@ public class BasicEnemyController : MonoBehaviour {
 
         ableToDamagePlayer = true;
         initiatedAttack = false;
-
-        healthPoints = 1;
         ableToBeDamaged = true;
 
         // for guard type only
         originalPosition = transform.position;
-        Debug.Log(originalPosition);
         originalRotation = transform.rotation;
 
         animator = GetComponent<Animator>();
@@ -111,15 +113,11 @@ public class BasicEnemyController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        
         // State machine to control enemy actions
         switch (enemyMoveState)
         {
             case EnemyMoveState.patroling:
 
-                // prevents patrolling and consequently the rest of movement actions for testing
-                //if (!cannotMove)
-                //{
                 if (enemyType != EnemyType.a_guard)
                 {
                     if (wait)
@@ -138,8 +136,6 @@ public class BasicEnemyController : MonoBehaviour {
                     
                     LookForPlayer();
                 }
-                
-                //}
                 break;
 
             case EnemyMoveState.chasingPlayer:
@@ -171,18 +167,14 @@ public class BasicEnemyController : MonoBehaviour {
 
             default: break;
         }
-        
-        
     }
 
 
 	/* Moves enemy between start and target */
     void MoveBetweenPoints()
     {
-
-        //transform.rotation = Quaternion.identity;
-
         float step = speed * Time.deltaTime;
+
         if (wait)
         {
             //animator.SetBool("Patrol", false);
@@ -195,15 +187,14 @@ public class BasicEnemyController : MonoBehaviour {
             {
                 //transform.LookAt(target.transform);
                 transform.position = Vector3.MoveTowards(transform.position, target.position, step);
-            }
-
-            if (moveToA)
+            } else if (moveToA)
             {
                 //transform.LookAt(start.transform);
                 transform.position = Vector3.MoveTowards(transform.position, start.position, step);
 
             }
-            if (transform.position == target.position)
+
+            if (Vector3.Distance(transform.position, target.position) < 1)//(transform.position == target.position) // careful: computing Distance is much slower than using squares, cause it uses sqrt
             {
                 moveToA = true;
                 moveToB = false;
@@ -214,10 +205,8 @@ public class BasicEnemyController : MonoBehaviour {
                     //transform.rotation = Quaternion.Euler(0, 270, 0);
                     //transform.LookAt(start.transform);
                 }
-                transform.LookAt(start.transform);
 
-            }
-            if (transform.position == start.position)
+            } else if (Vector3.Distance(transform.position, start.position) < 1)//(transform.position == start.position)
             {
                 moveToA = false;
                 moveToB = true;
@@ -227,7 +216,7 @@ public class BasicEnemyController : MonoBehaviour {
                     //transform.rotation = Quaternion.Euler(0, 90, 0);
                     //transform.LookAt(target.transform);
                 }
-                transform.LookAt(target.transform);
+                
             }
         }
     }
@@ -235,8 +224,17 @@ public class BasicEnemyController : MonoBehaviour {
 
     IEnumerator Pause()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(0.5f);
+
         wait = false;
+
+        if (moveToA)
+        {
+            transform.LookAt(start.transform);
+        } else
+        {
+            transform.LookAt(target.transform);
+        }
     }
 
 
@@ -307,16 +305,15 @@ public class BasicEnemyController : MonoBehaviour {
     /* Enemy speed warps towards player */
     void WarpAtPlayer()
     {
-
         initiatedAttack = true;
 
         //originalPos = transform.position;
 
-        float magnitude = 30.0f; // should be same as sightRange and 
+        float magnitude = 30.0f; // should be same as sightRange
         transform.LookAt(player.transform);
         Debug.Log(transform.forward * magnitude);
         gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * magnitude, ForceMode.Impulse);
-        //enemyMoveState = EnemyMoveState.coolingOff;
+        //Debug.Break();
 
         // change to a waiting state while waiting for enemy to collide with player or not
         enemyMoveState = EnemyMoveState.waiting;
@@ -337,24 +334,23 @@ public class BasicEnemyController : MonoBehaviour {
 
         if (enemyType != EnemyType.a_guard)
         {
-
+            // Non-guard enemies will head back towards their patrol route
             if (moveToA)
             {
-                transform.position = target.transform.position;
+                //transform.position = target.transform.position;
                 transform.LookAt(start);
 
             }
             else
             {
-                transform.position = start.transform.position;
+                //transform.position = start.transform.position;
                 transform.LookAt(target);
             }
 
         } else
         {
-
-            transform.position = originalPosition;
-            
+            // Guard enemies warps at you, then teleports back to their starting position
+            transform.position = originalPosition; 
             transform.rotation = originalRotation;
         }
 
