@@ -52,12 +52,12 @@ public class TPSPlayerController : MonoBehaviour {
         maxVelocityChange = speed;
         targetVelocity = Vector3.zero;
 
-        CheckControllerType(); // only do this once at start of game
+        //CheckControllerType(); // only do this once at start of game
     }
 
     void Update()
     {
-
+        CheckControllerType();
         if (hPManager.isDead)
         {
             return;
