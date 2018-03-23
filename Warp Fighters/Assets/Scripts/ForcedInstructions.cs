@@ -6,48 +6,46 @@ public class ForcedInstructions : MonoBehaviour {
 
     //public GameObject smallerInstructions;
 
+    GameObject player;
+
     bool moved;
     bool looked;
     bool warped;
     bool locked;
 
     TrackTime trackTime;
+    TPSPlayerController TPSPlayerController;
 
 	// Use this for initialization
 	void Start () {
         //smallerInstructions = GameObject.FindGameObjectWithTag("Instructions");
-        trackTime = GameObject.FindGameObjectWithTag("Player").GetComponent<TrackTime>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        trackTime = player.GetComponent<TrackTime>();
+        TPSPlayerController = player.GetComponent<TPSPlayerController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // once player has moved and looked around, change big-ass instructions into smaller one
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        if (InputManager.MoveX() != 0 || InputManager.MoveY() != 0)
         {
             moved = true;
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetAxis("Right Stick X") != 0 
-            || Input.GetAxis("Right Stick Y") != 0 
-            || Input.GetAxis("Mouse X") != 0 
-            || Input.GetAxis("Mouse Y") != 0)
+        if (InputManager.LookX() > 0 || InputManager.LookY() > 0)
         {
             looked = true;
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetButtonDown("A Button") 
-            || Input.GetMouseButtonDown(0)
-            || Input.GetButton("X Button"))
+        if (InputManager.WarpButton(TPSPlayerController.controllerType))
         {
             warped = true;
             trackTime.ToggleTrackTime(true);
         }
 
-        if (Input.GetAxis("Right Trigger") > 0 
-            || Input.GetMouseButtonDown(1)
-            || Input.GetAxis("R2 (PS4)") != 0)
+        if (InputManager.LockOnButton(TPSPlayerController.controllerType))
         {
             locked = true;
             trackTime.ToggleTrackTime(true);
@@ -55,7 +53,6 @@ public class ForcedInstructions : MonoBehaviour {
 
         if (moved && looked && warped && locked)
         {
-            //smallerInstructions.SetActive(true);
             gameObject.SetActive(false);
         }
 	}

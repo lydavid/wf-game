@@ -43,11 +43,11 @@ public class CameraVertical : MonoBehaviour {
             {
                 mouseVertical = Input.GetAxis("Mouse Y");
             }
-            if (Input.GetAxis("Right Stick Y") != 0 && controller.controllerType == ControllerType.xbox)
+            if (Input.GetAxis("Right Stick Y") != 0 && controller.controllerType == InputManager.ControllerType.xbox)
             {
                 mouseVertical = Input.GetAxis("Right Stick Y");
             }
-            if (Input.GetAxis("Right Stick Y (PS4)") != 0 && controller.controllerType == ControllerType.ps)
+            if (Input.GetAxis("Right Stick Y (PS4)") != 0 && controller.controllerType == InputManager.ControllerType.ps)
             {
                 mouseVertical = Input.GetAxis("Right Stick Y (PS4)");
             }

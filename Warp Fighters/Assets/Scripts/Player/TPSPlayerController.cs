@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum ControllerType { pc, xbox, ps };
+
 
 public class TPSPlayerController : MonoBehaviour {
 
@@ -24,7 +24,7 @@ public class TPSPlayerController : MonoBehaviour {
     //private Animator animacao;
     HumanBullet humanBullet;
 
-    public ControllerType controllerType = ControllerType.pc;
+    public InputManager.ControllerType controllerType = InputManager.ControllerType.pc;
 
     HPManager hPManager;
 
@@ -51,6 +51,8 @@ public class TPSPlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         maxVelocityChange = speed;
         targetVelocity = Vector3.zero;
+
+        CheckControllerType(); // only do this once at start of game
     }
 
     void Update()
@@ -60,7 +62,7 @@ public class TPSPlayerController : MonoBehaviour {
         {
             return;
         }
-        CheckControllerType();
+        
         MouseToggleInGame();
 
         /*if (moveWithPhysics)
@@ -121,22 +123,25 @@ public class TPSPlayerController : MonoBehaviour {
         }
     }
 
-
+    /* Determine what controller is plugged in if any so that our inputs may change to reflect it */
     private void CheckControllerType()
     {
         string[] names = Input.GetJoystickNames();
-        foreach (string name in names)
+        string name = names[0];
+        ///foreach (string name in names)
+        //{
+        //Debug.Log(name);
+        if (name.ToUpper().Contains("XBOX"))
         {
-            //Debug.Log(name);
-            if (name == "Controller (Xbox One For Windows)")
-            {
-                controllerType = ControllerType.xbox;
-            } else
-            {
-                controllerType = ControllerType.ps;
-            }
-            
-        }
+            controllerType = InputManager.ControllerType.xbox;
+        } else if (name.ToUpper().Contains("PS"))
+        {
+            controllerType = InputManager.ControllerType.ps;
+        } else
+        {
+            controllerType = InputManager.ControllerType.pc;
+        }            
+        //}
     }
 
 
@@ -167,9 +172,10 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void CheckForWarp()
     {
-        if (Input.GetMouseButtonDown(0) ||
-            Input.GetButtonDown("A Button") && controllerType == ControllerType.xbox ||
-            Input.GetButtonDown("X Button") && controllerType == ControllerType.ps)
+        if /*(Input.GetMouseButtonDown(0) ||
+            Input.GetButtonDown("A Button") && controllerType == InputManager.ControllerType.xbox ||
+            Input.GetButtonDown("X Button") && controllerType == InputManager.ControllerType.ps)*/
+            (InputManager.WarpButton(controllerType))
         {
             if (GetComponent<WarpLimiter>().canWarp)
             {
@@ -323,12 +329,12 @@ public class TPSPlayerController : MonoBehaviour {
 
             // might need to speed up movement of right stick axis, they seem way slower than with mouse
             // or slow down mouse for precision when aiming
-            if (Input.GetAxis("Right Stick X") != 0 && controllerType == ControllerType.xbox)
+            if (Input.GetAxis("Right Stick X") != 0 && controllerType == InputManager.ControllerType.xbox)
             {
                 mouseHorizontal = Input.GetAxis("Right Stick X");
             }
 
-            if (Input.GetAxis("Right Stick X (PS4)") != 0 && controllerType == ControllerType.ps)
+            if (Input.GetAxis("Right Stick X (PS4)") != 0 && controllerType == InputManager.ControllerType.ps)
             {
                 mouseHorizontal = Input.GetAxis("Right Stick X (PS4)");
             }
