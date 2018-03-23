@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HighscoreGUI : MonoBehaviour {
 
@@ -61,7 +62,12 @@ public class HighscoreGUI : MonoBehaviour {
 
         if (Input.GetButtonDown("Menu Button"))
         {
-           // go to next scene
+            // go to next scene
+            PlayerPrefs.SetString("PlayerInitials", initial1.text + initial2.text + initial3.text);
+
+            // write all of the player's info into file before going to next scene
+
+            SceneManager.LoadScene("Leaderboard");
         }
         if (Input.GetButtonDown("A Button"))
         {
