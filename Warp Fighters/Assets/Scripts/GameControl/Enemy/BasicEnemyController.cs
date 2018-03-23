@@ -193,13 +193,13 @@ public class BasicEnemyController : MonoBehaviour {
 
             if (moveToB)
             {
-                transform.LookAt(target.transform);
+                //transform.LookAt(target.transform);
                 transform.position = Vector3.MoveTowards(transform.position, target.position, step);
             }
 
             if (moveToA)
             {
-                transform.LookAt(start.transform);
+                //transform.LookAt(start.transform);
                 transform.position = Vector3.MoveTowards(transform.position, start.position, step);
 
             }
@@ -214,6 +214,7 @@ public class BasicEnemyController : MonoBehaviour {
                     //transform.rotation = Quaternion.Euler(0, 270, 0);
                     //transform.LookAt(start.transform);
                 }
+                transform.LookAt(start.transform);
 
             }
             if (transform.position == start.position)
@@ -226,6 +227,7 @@ public class BasicEnemyController : MonoBehaviour {
                     //transform.rotation = Quaternion.Euler(0, 90, 0);
                     //transform.LookAt(target.transform);
                 }
+                transform.LookAt(target.transform);
             }
         }
     }

@@ -14,6 +14,7 @@ public class ReloadScene : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        // Window Button because this is temp in our level as well, which has Start for pause
         if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
         {
             //SceneManager.LoadScene("Beta 0.0");
