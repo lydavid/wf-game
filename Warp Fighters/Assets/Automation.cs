@@ -15,7 +15,7 @@ public class Automation : MonoBehaviour {
         MeshCollider[] meshColliders = GameObject.FindObjectsOfType(typeof(MeshCollider)) as MeshCollider[];
         foreach (MeshCollider mc in meshColliders)
         {
-            Debug.Log(mc.gameObject.name);
+            //Debug.Log(mc.gameObject.name);
             mc.convex = true;
             if (mc.gameObject.tag == "Wall")
             {

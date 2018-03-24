@@ -263,8 +263,15 @@ public class HumanBullet : MonoBehaviour {
                 // temp fix for nonconvex pipes in beta
                 //rb.velocity = Vector3.zero;
                 //rb.angularVelocity = Vector3.zero;
-                rb.velocity = new Vector3(Mathf.Max(3, rb.velocity.x), Mathf.Max(3), Mathf.Max(3, rb.velocity.z)); //stops the player from flying everywhere
-                
+                if (other.contacts[0].point.y >= transform.position.y)
+                { // if point of contact is higher
+                    rb.velocity = new Vector3(-3, -3, -3); //stops the player from flying everywhere
+
+                }
+                else
+                {
+                    rb.velocity = new Vector3(Mathf.Max(3, rb.velocity.x), 3, Mathf.Max(3, rb.velocity.z)); //stops the player from flying everywhere
+                }
             // seems we need a minimum velocity on collision, else we may glitch through floors
                 //rb.velocity = Vector3.zero;
                 //rb.angularVelocity = Vector3.zero;

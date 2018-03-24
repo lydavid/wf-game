@@ -127,21 +127,21 @@ public class TPSPlayerController : MonoBehaviour {
     private void CheckControllerType()
     {
         string[] names = Input.GetJoystickNames();
-        string name = names[0];
-        ///foreach (string name in names)
-        //{
+        //string name = names[0];
+        foreach (string name in names)
+        {
         //Debug.Log(name);
-        if (name.ToUpper().Contains("XBOX"))
-        {
-            controllerType = InputManager.ControllerType.xbox;
-        } else if (name.ToUpper().Contains("PS"))
-        {
-            controllerType = InputManager.ControllerType.ps;
-        } else
-        {
-            controllerType = InputManager.ControllerType.pc;
-        }            
-        //}
+            if (name.ToUpper().Contains("XBOX"))
+            {
+                controllerType = InputManager.ControllerType.xbox;
+            } else if (name.ToUpper().Contains("PS"))
+            {
+                controllerType = InputManager.ControllerType.ps;
+            } else
+            {
+                controllerType = InputManager.ControllerType.pc;
+            }            
+        }
     }
 
 

@@ -136,13 +136,19 @@ public class MeshExplosion : MonoBehaviour {
         foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
         {
             materials.Add(mr.materials);
-            mr.gameObject.SetActive(false);
+            if (!selfControl)
+            {
+                mr.gameObject.SetActive(false);
+            }
         }
 
         foreach (SkinnedMeshRenderer smr in GetComponentsInChildren<SkinnedMeshRenderer>())
         {
             materials.Add(smr.materials);
-            smr.gameObject.SetActive(false);
+            if (!selfControl)
+            {
+                smr.gameObject.SetActive(false);
+            }
         }
 
 
@@ -255,6 +261,7 @@ public class MeshExplosion : MonoBehaviour {
             //Time.timeScale = 0.5f;
         }
 
+        Debug.Log(GOs.Count);
         //Debug.Break();
 
         setToDestroy = true;
