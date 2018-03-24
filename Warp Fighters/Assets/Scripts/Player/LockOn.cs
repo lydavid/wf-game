@@ -105,21 +105,44 @@ public class LockOn : MonoBehaviour {
 
                         if (OnScreen(viewPoint))
                         {
-                            Debug.Log(GO.name + ": " + OnScreen(viewPoint));
-                            if (target == null)
+
+                            // Find whether it is actually not behind a wall with raycast
+                            Ray ray;
+                            RaycastHit hit;
+                            LayerMask layerMask = 1 << 10;
+                            layerMask |= 1 << 12;
+                            layerMask = ~layerMask;
+                            //if (!Physics.Linecast(transform.position, GO.transform.position, layerMask))
+                            Debug.DrawRay(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) * 100, Color.black);
+                            if (Physics.Raycast(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) *100, out hit))
                             {
-                                target = GO;
-                            }
-                            else
-                            {
-                                Vector3 targetViewPoint = cam.WorldToViewportPoint(target.transform.position);
-                                float currentMagnitude = Vector3.Distance(targetViewPoint, viewPoint);
-                                if (CloserToCenter(viewPoint, targetViewPoint))
+                                Debug.Log(hit.transform.root.name + " vs " + GO.transform.root.name);
+                                if (hit.transform.root.name != GO.transform.root.name)
                                 {
-                                    //closestMagnitude = currentMagnitude;
-                                    target = GO;
+                                    
+                                    Debug.Log("blocked");
                                 }
-                                //if (CloserToCenter(GO.transform.position))
+                                else
+                                {
+
+
+                                    Debug.Log(GO.name + ": " + OnScreen(viewPoint));
+                                    if (target == null)
+                                    {
+                                        target = GO;
+                                    }
+                                    else
+                                    {
+                                        Vector3 targetViewPoint = cam.WorldToViewportPoint(target.transform.position);
+                                        float currentMagnitude = Vector3.Distance(targetViewPoint, viewPoint);
+                                        if (CloserToCenter(viewPoint, targetViewPoint))
+                                        {
+                                            //closestMagnitude = currentMagnitude;
+                                            target = GO;
+                                        }
+                                        //if (CloserToCenter(GO.transform.position))
+                                    }
+                                }
                             }
                         }
                     }

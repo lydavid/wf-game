@@ -37,4 +37,15 @@ public class Center : MonoBehaviour {
         }
         return center;
     }
+
+    public string GetCenterRepName()
+    {
+        if (centerRep != null)
+        {
+            return centerRep.name;
+        } else
+        {
+            return gameObject.name;
+        }
+    }
 }
