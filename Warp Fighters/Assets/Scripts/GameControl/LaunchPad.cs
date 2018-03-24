@@ -36,7 +36,7 @@ public class LaunchPad : MonoBehaviour {
             //Vector3 curVelocity = playerRB.velocity;
             //Debug.Log(playerRB.velocity.magnitude);
 
-            Debug.Log(playerRB.velocity);
+            //Debug.Log(playerRB.velocity);
             float magnitude = playerRB.velocity.magnitude;
 
             //playerRB.velocity = Vector3.zero;

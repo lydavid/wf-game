@@ -44,13 +44,15 @@ public class LockOn : MonoBehaviour {
         
     }
 
-    // returns whether viewpoint coords are considered on screen
+
+    /* Return whether screenPoint coords are considered on screen */
     private bool OnScreen(Vector3 screenPoint)
     {
         return screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1 && screenPoint.z > 0;
     }
 
 
+    /* Return whether A is closer to center of screen space than B */
     private bool CloserToCenter(Vector3 A, Vector3 B)
     {
         float center = 0.5f;
@@ -68,13 +70,12 @@ public class LockOn : MonoBehaviour {
 
     }
 	
+
 	// Update is called once per frame
 	void Update () {
-
-
-        
 		
 	}
+
 
     private void LateUpdate()
     {
@@ -87,14 +88,10 @@ public class LockOn : MonoBehaviour {
         {
             targetLockedOn = true;
 
-
-
-
             target = GetComponent<HumanBullet>().target;
 
             if (target == null)
             {
-                //float closestMagnitude = Mathf.Infinity;
                 foreach (GameObject GO in interactables)
                 {
                     if (GO != null)
@@ -106,7 +103,7 @@ public class LockOn : MonoBehaviour {
                         if (OnScreen(viewPoint))
                         {
 
-                            // Find whether it is actually not behind a wall with raycast
+                            // Find whether it is actually behind a wall with raycast
                             Ray ray = new Ray(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) * 100);
                             RaycastHit hit;
                             LayerMask layerMask = 1 << 10;
@@ -116,17 +113,15 @@ public class LockOn : MonoBehaviour {
                             Debug.DrawRay(ray.origin, ray.direction, Color.black);
                             if (Physics.Raycast(ray, out hit))
                             {
-                                Debug.Log(hit.transform.root.name + " vs " + GO.transform.root.name);
-                                if (hit.transform.root.name != GO.transform.root.name)
+                                //Debug.Log(hit.transform.root.name + " vs " + GO.transform.root.name);
+                                if (hit.transform.root.GetInstanceID() != GO.transform.root.GetInstanceID())
                                 {
                                     
-                                    Debug.Log("blocked");
+                                    //Debug.Log("blocked");
                                 }
                                 else
                                 {
 
-
-                                    Debug.Log(GO.name + ": " + OnScreen(viewPoint));
                                     if (target == null)
                                     {
                                         target = GO;
@@ -137,10 +132,8 @@ public class LockOn : MonoBehaviour {
                                         float currentMagnitude = Vector3.Distance(targetViewPoint, viewPoint);
                                         if (CloserToCenter(viewPoint, targetViewPoint))
                                         {
-                                            //closestMagnitude = currentMagnitude;
                                             target = GO;
                                         }
-                                        //if (CloserToCenter(GO.transform.position))
                                     }
                                 }
                             }
@@ -153,7 +146,7 @@ public class LockOn : MonoBehaviour {
             if (target != null)
             {
                 //transform.LookAt(target.GetComponent<Center>().center.transform.position);
-                Debug.Log(target.name);
+                //Debug.Log(target.name);
                 targetCenter = target.GetComponent<Center>().GetCenter();
                 cam.transform.LookAt(targetCenter); // rather than lock on to the transform position (often times their feet), lock on to the center of the object
                 body.transform.LookAt(targetCenter);

@@ -23,12 +23,12 @@ public class CollectibleKey : MonoBehaviour {
         if (other.gameObject.tag == "Player")
         {
 
-            Debug.Log("Player entered");
+            //Debug.Log("Player entered");
             //this.gameObject.SetActive(false);
             // indicate on the Player that they have collected this
             other.gameObject.GetComponent<CollectedKeysManager>().AddKey(keyType);
             // destroy this object
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.gameObject);
 
         }
     }
