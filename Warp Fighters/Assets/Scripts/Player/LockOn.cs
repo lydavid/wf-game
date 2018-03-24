@@ -107,14 +107,14 @@ public class LockOn : MonoBehaviour {
                         {
 
                             // Find whether it is actually not behind a wall with raycast
-                            Ray ray;
+                            Ray ray = new Ray(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) * 100);
                             RaycastHit hit;
                             LayerMask layerMask = 1 << 10;
                             layerMask |= 1 << 12;
                             layerMask = ~layerMask;
                             //if (!Physics.Linecast(transform.position, GO.transform.position, layerMask))
-                            Debug.DrawRay(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) * 100, Color.black);
-                            if (Physics.Raycast(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) *100, out hit))
+                            Debug.DrawRay(ray.origin, ray.direction, Color.black);
+                            if (Physics.Raycast(ray, out hit))
                             {
                                 Debug.Log(hit.transform.root.name + " vs " + GO.transform.root.name);
                                 if (hit.transform.root.name != GO.transform.root.name)

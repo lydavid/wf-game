@@ -7,7 +7,7 @@ public class LaunchPad : MonoBehaviour {
 	GameObject player;
 	Rigidbody playerRB;
 
-	public int distance;
+	//public int distance;
 
     public int strength = 1;
 
@@ -18,10 +18,10 @@ public class LaunchPad : MonoBehaviour {
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");
 		playerRB = player.GetComponent<Rigidbody>();
-		distance = 700;
+		//distance = 700;
 
-        animator = transform.parent.GetComponent<Animator>();
-        bounceAudio = transform.parent.GetComponent<AudioSource>();
+        animator = transform.GetComponent<Animator>();
+        bounceAudio = transform.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
