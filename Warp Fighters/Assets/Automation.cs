@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Automation : MonoBehaviour {
 
-    public PhysicMaterial frictionlessMaterial;
+    PhysicMaterial frictionlessMaterial;
 
 	// Use this for initialization
 	void Start () {
@@ -15,12 +15,24 @@ public class Automation : MonoBehaviour {
         MeshCollider[] meshColliders = GameObject.FindObjectsOfType(typeof(MeshCollider)) as MeshCollider[];
         foreach (MeshCollider mc in meshColliders)
         {
-            //Debug.Log(mc.gameObject.name);
-            mc.convex = true;
-            if (mc.gameObject.tag == "Wall")
+            /*if (mc.gameObject.tag != "Player" && mc.gameObject.layer != 10) // don't do this for the player and interactables
             {
-                mc.material = frictionlessMaterial;
-            }
+                if (mc.gameObject.tag == "Wall")
+                {
+                    TurnIntoConvexTriangles b = mc.transform.root.gameObject.AddComponent<TurnIntoConvexTriangles>();
+                    b.SplitMesh(frictionlessMaterial);
+
+                } else {
+                    //mc.material = frictionlessMaterial;
+                    TurnIntoConvexTriangles b = mc.transform.root.gameObject.AddComponent<TurnIntoConvexTriangles>();
+                    b.SplitMesh();
+                }
+
+            }*/
+            //Debug.Log(mc.gameObject.name);
+            //mc.convex = true;
+            //mc.gameObject.AddComponent<TurnIntoConvexTriangles>();
+            
         }
     }
 
