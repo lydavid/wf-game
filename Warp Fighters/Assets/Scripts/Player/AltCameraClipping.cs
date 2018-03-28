@@ -96,7 +96,7 @@ public class AltCameraClipping : MonoBehaviour {
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
 
         // raycast from camera to player
-        if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
+        /*if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
         {
             //Debug.Log(playerHit.transform.gameObject.name);
             if (playerHit.transform.gameObject.tag != playerTag && playerHit.transform.gameObject.layer != 10) // don't zoom in when covered by an interactable obj, may want to have a list of obj type we don't want to zoom in on, since some interactables like launch pad may obscure player vision
@@ -114,8 +114,54 @@ public class AltCameraClipping : MonoBehaviour {
             } else
             {
 
+                
+            }
+        }*/
+
+
+        // now also raycast from camera backwards, if closest wall is less than 1.0f, move in
+        Vector3 backwards = transform.TransformDirection(-Vector3.forward);
+        Ray ray2 = new Ray();
+        ray2.origin = transform.position;
+        ray2.direction = backwards;
+        RaycastHit wallHit;
+
+        Debug.DrawRay(ray2.origin, ray2.direction, Color.magenta);
+
+
+        // make two more raycasts, from the sides, so that slowly turning against a wall will zoom in as well
+        Vector3 left = transform.TransformDirection(Vector3.left);
+        Ray rayLeft = new Ray();
+        rayLeft.origin = transform.position;
+        rayLeft.direction = left;
+        Debug.DrawRay(rayLeft.origin, rayLeft.direction, Color.cyan);
+
+        Vector3 right = transform.TransformDirection(-Vector3.left);
+        Ray rayRight = new Ray();
+        rayRight.origin = transform.position;
+        rayRight.direction = right;
+        Debug.DrawRay(rayRight.origin, rayRight.direction, Color.yellow);
+
+        if (Physics.Raycast(ray2, out wallHit))
+        {
+            
+
+            if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
+            {
+                Debug.Log(wallHit.transform.name);
+                TranslateAlongZ(1f);
+                canZoomBackOut = false;
+                canZoomBackOutTimer = timer;
+            } else
+            {
                 if (canZoomBackOut)
                 {
+
+
+
+
+
+
                     // we need a condition before we can execute this part, or else it will keep going back and forth between
                     // this section and the section above when player is against wall
                     RaycastHit objHit;
@@ -124,16 +170,16 @@ public class AltCameraClipping : MonoBehaviour {
                     //Debug.DrawRay(transform.position, backwards, Color.red);
                     //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
                     //ray = cam.ScreenPointToRay(pos);
-                    ray.direction = -ray.direction;
-                    ray.origin = rep.transform.position;
-                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
+                    //ray.direction = -ray.direction;
+                    //ray.origin = rep.transform.position;
+                    Debug.DrawRay(ray2.origin, ray2.direction * 100, Color.red);
                     //if (Physics.Raycast(transform.position, backwards, out objHit))
 
                     // hit all layers except "Player" layer
                     int layerMask = 1 << 12; // LayerMask.NameToLayer("Player"); //
                     layerMask = ~layerMask;
 
-                    if (Physics.Raycast(ray, out objHit, 100, layerMask))
+                    if (Physics.Raycast(ray2, out objHit, 100, layerMask))
                     {
 
                         // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
@@ -155,24 +201,18 @@ public class AltCameraClipping : MonoBehaviour {
                 }
             }
         }
-
-
-        // now also raycast from camera backwards, if closest wall is less than 1.0f, move in anyways
-        
-        Vector3 backwards = transform.TransformDirection(-Vector3.forward);
-        Ray ray2 = new Ray();
-        ray2.origin = transform.position;
-        ray2.direction = backwards;
-        
-
-        Debug.DrawRay(ray2.origin, ray2.direction, Color.magenta);
-
-        RaycastHit wallHit;
-
-        if (Physics.Raycast(ray2, out wallHit))
+        else if (Physics.Raycast(rayLeft, out wallHit))
         {
-            
-
+            if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
+            {
+                Debug.Log(wallHit.transform.name);
+                TranslateAlongZ(1f);
+                canZoomBackOut = false;
+                canZoomBackOutTimer = timer;
+            }
+        }
+        else if (Physics.Raycast(rayRight, out wallHit))
+        {
             if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
             {
                 Debug.Log(wallHit.transform.name);
@@ -182,6 +222,8 @@ public class AltCameraClipping : MonoBehaviour {
             }
         }
 
+
+
         // reset to default position when no longer the case
         // raycast from camera to some distance behind itself, if whatever it hit's distance is far enough, move
         // camera back up to default distance
@@ -189,37 +231,37 @@ public class AltCameraClipping : MonoBehaviour {
         //ray = cam.ScreenPointToRay(pos);
         //ray.direction = -ray.direction;
 
-            //RaycastHit objHit;
+        //RaycastHit objHit;
 
-            //if (!obstructed)
-            //{
-            //    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
+        //if (!obstructed)
+        //{
+        //    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
 
-            //    Debug.DrawRay(transform.position, backwards, Color.red);
-            //    if (Physics.Raycast(transform.position, backwards, out objHit))
-            //    {
-            //        //Debug.Log(hit.transform.gameObject.name);
-            //        //Debug.Log("Square Distance of: " + Mathf.Sqrt((Mathf.Pow(transform.position.z, 2) -  Mathf.Pow(hit.point.z, 2))));
+        //    Debug.DrawRay(transform.position, backwards, Color.red);
+        //    if (Physics.Raycast(transform.position, backwards, out objHit))
+        //    {
+        //        //Debug.Log(hit.transform.gameObject.name);
+        //        //Debug.Log("Square Distance of: " + Mathf.Sqrt((Mathf.Pow(transform.position.z, 2) -  Mathf.Pow(hit.point.z, 2))));
 
-            //        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
-            //        Debug.Log(distToClosestObjFromCam);
-            //        // if the distance is far enough, move camera back towards original position
+        //        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
+        //        Debug.Log(distToClosestObjFromCam);
+        //        // if the distance is far enough, move camera back towards original position
 
-            //        // if the distance to closest obj from behind cam is bigger than that of the distance needed
-            //        // to return from current cam dist to player to default, then do so
-            //        if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
-            //        {
-            //            /*if (transform.localPosition.z - 1 > defaultDistance)
-            //            {
+        //        // if the distance to closest obj from behind cam is bigger than that of the distance needed
+        //        // to return from current cam dist to player to default, then do so
+        //        if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
+        //        {
+        //            /*if (transform.localPosition.z - 1 > defaultDistance)
+        //            {
 
-            //            }*/
-            //            //Debug.Log("e");
-            //            //transform.Translate(transform.TransformDirection(-Vector3.forward));
-            //            transform.Translate(new Vector3(0, 0, -1));
+        //            }*/
+        //            //Debug.Log("e");
+        //            //transform.Translate(transform.TransformDirection(-Vector3.forward));
+        //            transform.Translate(new Vector3(0, 0, -1));
 
-            //        }
-            //    }
-            //}
+        //        }
+        //    }
+        //}
 
     }
 
@@ -230,10 +272,10 @@ public class AltCameraClipping : MonoBehaviour {
         //Debug.Log(amount);
         transform.Translate(new Vector3(0, 0, amount));
         Debug.Log(transform.localPosition);
-        if (transform.localPosition.z >= 0)
+        if (transform.localPosition.z >= -1.0f)
         {
             // go fps
-            transform.localPosition = fpsPivot.transform.localPosition;//Vector3.zero;
+            transform.position = fpsPivot.transform.position;//Vector3.zero;
         }
         else
         {
