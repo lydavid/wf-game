@@ -29,7 +29,7 @@ public class TPSPlayerController : MonoBehaviour {
     HPManager hPManager;
 
 
-    public bool moveWithPhysics = true;
+    bool moveWithPhysics = true;
     Rigidbody rb;
     float maxVelocityChange;
     Vector3 targetVelocity;
