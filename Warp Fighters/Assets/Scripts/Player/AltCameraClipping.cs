@@ -96,6 +96,8 @@ public class AltCameraClipping : MonoBehaviour {
         //bool hit = Physics.Raycast(ray, out hitInfo, 10);
 
         // raycast from camera to player
+        // We continue to this part because when the player is warping around quickly, the camera may go behind a wall
+        // and so fail the raycast checks below
         if (Physics.Raycast(ray, out playerHit))  // mark certain objects such as crystals/destructible cubes as something to not zoom in for
         {
             //Debug.Log(playerHit.transform.gameObject.name);
@@ -111,22 +113,18 @@ public class AltCameraClipping : MonoBehaviour {
                         canZoomBackOutTimer = timer;
                     }
                 
-            } else
-            {
-
-                
             }
         }
 
 
         // now also raycast from camera backwards, if closest wall is less than 1.0f, move in
         Vector3 backwards = transform.TransformDirection(-Vector3.forward);
-        Ray ray2 = new Ray();
-        ray2.origin = transform.position;
-        ray2.direction = backwards;
+        Ray rayBack = new Ray();
+        rayBack.origin = transform.position;
+        rayBack.direction = backwards;
         RaycastHit wallHit;
 
-        Debug.DrawRay(ray2.origin, ray2.direction, Color.magenta);
+        Debug.DrawRay(rayBack.origin, rayBack.direction, Color.magenta);
 
 
         // make two more raycasts, from the sides, so that slowly turning against a wall will zoom in as well
@@ -142,16 +140,13 @@ public class AltCameraClipping : MonoBehaviour {
         rayRight.direction = right;
         Debug.DrawRay(rayRight.origin, rayRight.direction, Color.yellow);
 
-        if (Physics.Raycast(ray2, out wallHit))
+        if (Physics.Raycast(rayBack, out wallHit))
         {
             
 
             if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
             {
-                Debug.Log(wallHit.transform.name);
                 TranslateAlongZ(1f);
-                canZoomBackOut = false;
-                canZoomBackOutTimer = timer;
             } else
             {
                 if (canZoomBackOut)
@@ -172,14 +167,14 @@ public class AltCameraClipping : MonoBehaviour {
                     //ray = cam.ScreenPointToRay(pos);
                     //ray.direction = -ray.direction;
                     //ray.origin = rep.transform.position;
-                    Debug.DrawRay(ray2.origin, ray2.direction * 100, Color.red);
+                    Debug.DrawRay(rayBack.origin, rayBack.direction * 100, Color.red);
                     //if (Physics.Raycast(transform.position, backwards, out objHit))
 
                     // hit all layers except "Player" layer
                     int layerMask = 1 << 12; // LayerMask.NameToLayer("Player"); //
                     layerMask = ~layerMask;
 
-                    if (Physics.Raycast(ray2, out objHit, 100, layerMask))
+                    if (Physics.Raycast(rayBack, out objHit, 100, layerMask))
                     {
 
                         // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
@@ -205,20 +200,14 @@ public class AltCameraClipping : MonoBehaviour {
         {
             if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
             {
-                Debug.Log(wallHit.transform.name);
-                TranslateAlongZ(1f);
-                canZoomBackOut = false;
-                canZoomBackOutTimer = timer;
+                TranslateAlongZ(1f);  
             }
         }
         else if (Physics.Raycast(rayRight, out wallHit))
         {
             if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
             {
-                Debug.Log(wallHit.transform.name);
                 TranslateAlongZ(1f);
-                canZoomBackOut = false;
-                canZoomBackOutTimer = timer;
             }
         }
 
@@ -270,6 +259,14 @@ public class AltCameraClipping : MonoBehaviour {
         //Debug.Log(amount);
         //amount = Mathf.Clamp(transform.localPosition.z + amount, defaultDistance, closestDistance);
         //Debug.Log(amount);
+
+        // Meaning translating towards the player, set these so that we limit jarring zoom in/outs
+        if (amount > 0)
+        {
+            canZoomBackOut = false;
+            canZoomBackOutTimer = timer;
+        }
+
         transform.Translate(new Vector3(0, 0, amount));
         Debug.Log(transform.localPosition);
         if (transform.localPosition.z >= -1.0f)
@@ -279,7 +276,6 @@ public class AltCameraClipping : MonoBehaviour {
         }
         else
         {
-
             // Main relative postion to player
             transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, Mathf.Clamp(transform.localPosition.z, defaultDistance, closestDistance));
         }
