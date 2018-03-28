@@ -206,10 +206,19 @@ public class HumanBullet : MonoBehaviour {
 
         if (warpType == WarpType.original)
         {
-            bullet.transform.position = transform.position;
-            Debug.Log(cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f)));
-            transform.position = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f));
-            Debug.Log(transform.position);
+            //bullet.transform.position = transform.position;
+            //Debug.Log(cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f)));
+            //transform.position = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f));
+            //Debug.Log(transform.position);
+
+            // instead of moving transform to center of screen (will fall through wall if back against it),
+            // project transform point onto forward vector
+
+            transform.position = hit.point +
+                ((Vector3.Dot(transform.position - hit.point, ray.origin - hit.point) /
+                (Vector3.Dot(ray.origin - hit.point, ray.origin - hit.point))) *
+                (ray.origin - hit.point));
+
         }
         else if (warpType == WarpType.projectBulletToCamRay)
         {

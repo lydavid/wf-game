@@ -21,6 +21,7 @@ public class AltCameraClipping : MonoBehaviour {
     float timer = 0.5f;
     public float canZoomBackOutTimer;
 
+    public GameObject fpsPivot;
 
 	// Use this for initialization
 	void Start () {
@@ -45,6 +46,8 @@ public class AltCameraClipping : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate () {
 
+
+
         if (!canZoomBackOut)
         {
             canZoomBackOutTimer -= Time.fixedDeltaTime;
@@ -52,6 +55,11 @@ public class AltCameraClipping : MonoBehaviour {
             {
                 canZoomBackOut = true;
             }
+        }
+
+        if (humanBullet.bulletMode)
+        {
+            return;
         }
 
         // update distance to player
@@ -111,7 +119,7 @@ public class AltCameraClipping : MonoBehaviour {
                     // we need a condition before we can execute this part, or else it will keep going back and forth between
                     // this section and the section above when player is against wall
                     RaycastHit objHit;
-                    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 100;
+                    //Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 100;
 
                     //Debug.DrawRay(transform.position, backwards, Color.red);
                     //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
@@ -148,6 +156,32 @@ public class AltCameraClipping : MonoBehaviour {
             }
         }
 
+
+        // now also raycast from camera backwards, if closest wall is less than 1.0f, move in anyways
+        
+        Vector3 backwards = transform.TransformDirection(-Vector3.forward);
+        Ray ray2 = new Ray();
+        ray2.origin = transform.position;
+        ray2.direction = backwards;
+        
+
+        Debug.DrawRay(ray2.origin, ray2.direction, Color.magenta);
+
+        RaycastHit wallHit;
+
+        if (Physics.Raycast(ray2, out wallHit))
+        {
+            
+
+            if (Vector3.Distance(wallHit.point, transform.position) < 1.0f)
+            {
+                Debug.Log(wallHit.transform.name);
+                TranslateAlongZ(1f);
+                canZoomBackOut = false;
+                canZoomBackOutTimer = timer;
+            }
+        }
+
         // reset to default position when no longer the case
         // raycast from camera to some distance behind itself, if whatever it hit's distance is far enough, move
         // camera back up to default distance
@@ -155,37 +189,37 @@ public class AltCameraClipping : MonoBehaviour {
         //ray = cam.ScreenPointToRay(pos);
         //ray.direction = -ray.direction;
 
-        //RaycastHit objHit;
+            //RaycastHit objHit;
 
-        //if (!obstructed)
-        //{
-        //    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
+            //if (!obstructed)
+            //{
+            //    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 10;
 
-        //    Debug.DrawRay(transform.position, backwards, Color.red);
-        //    if (Physics.Raycast(transform.position, backwards, out objHit))
-        //    {
-        //        //Debug.Log(hit.transform.gameObject.name);
-        //        //Debug.Log("Square Distance of: " + Mathf.Sqrt((Mathf.Pow(transform.position.z, 2) -  Mathf.Pow(hit.point.z, 2))));
+            //    Debug.DrawRay(transform.position, backwards, Color.red);
+            //    if (Physics.Raycast(transform.position, backwards, out objHit))
+            //    {
+            //        //Debug.Log(hit.transform.gameObject.name);
+            //        //Debug.Log("Square Distance of: " + Mathf.Sqrt((Mathf.Pow(transform.position.z, 2) -  Mathf.Pow(hit.point.z, 2))));
 
-        //        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
-        //        Debug.Log(distToClosestObjFromCam);
-        //        // if the distance is far enough, move camera back towards original position
+            //        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
+            //        Debug.Log(distToClosestObjFromCam);
+            //        // if the distance is far enough, move camera back towards original position
 
-        //        // if the distance to closest obj from behind cam is bigger than that of the distance needed
-        //        // to return from current cam dist to player to default, then do so
-        //        if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
-        //        {
-        //            /*if (transform.localPosition.z - 1 > defaultDistance)
-        //            {
+            //        // if the distance to closest obj from behind cam is bigger than that of the distance needed
+            //        // to return from current cam dist to player to default, then do so
+            //        if (distToPlayer < defaultDistance && distToClosestObjFromCam >= defaultDistance - distToPlayer)
+            //        {
+            //            /*if (transform.localPosition.z - 1 > defaultDistance)
+            //            {
 
-        //            }*/
-        //            //Debug.Log("e");
-        //            //transform.Translate(transform.TransformDirection(-Vector3.forward));
-        //            transform.Translate(new Vector3(0, 0, -1));
+            //            }*/
+            //            //Debug.Log("e");
+            //            //transform.Translate(transform.TransformDirection(-Vector3.forward));
+            //            transform.Translate(new Vector3(0, 0, -1));
 
-        //        }
-        //    }
-        //}
+            //        }
+            //    }
+            //}
 
     }
 
@@ -195,9 +229,18 @@ public class AltCameraClipping : MonoBehaviour {
         //amount = Mathf.Clamp(transform.localPosition.z + amount, defaultDistance, closestDistance);
         //Debug.Log(amount);
         transform.Translate(new Vector3(0, 0, amount));
-        
-        // Main relative postion to player
-        transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, Mathf.Clamp(transform.localPosition.z, defaultDistance, closestDistance));
+        Debug.Log(transform.localPosition);
+        if (transform.localPosition.z >= 0)
+        {
+            // go fps
+            transform.localPosition = fpsPivot.transform.localPosition;//Vector3.zero;
+        }
+        else
+        {
+
+            // Main relative postion to player
+            transform.localPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y, Mathf.Clamp(transform.localPosition.z, defaultDistance, closestDistance));
+        }
         distToPlayer = transform.localPosition.z;
     }
 }
