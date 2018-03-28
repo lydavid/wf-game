@@ -18,6 +18,7 @@ public class WarpLimiter : MonoBehaviour {
     Text WarpChargesDisplayText;
     RectTransform WarpChargesDisplayBackdrop;
 
+    TPSPlayerController TPSPlayerController;
 
     // Use this for initialization
     void Start() {
@@ -36,6 +37,8 @@ public class WarpLimiter : MonoBehaviour {
         WarpChargesDisplayText = GameObject.Find("WarpChargesDisplayText").GetComponent<Text>();
         WarpChargesDisplayBackdrop = GameObject.Find("WarpChargesDisplayBackdrop").GetComponent<RectTransform>();
 
+        TPSPlayerController = GetComponent<TPSPlayerController>();
+
         UpdateUI();
     }
 
@@ -45,7 +48,7 @@ public class WarpLimiter : MonoBehaviour {
 
         // Need to be grounded and not in warp to recharge
         // Prevents infinite charge up if the player warps to high places and waits for charge midfall
-        if (warpCharges < maxWarpCharges && gameObject.GetComponent<Rigidbody>().velocity.y == 0)
+        if (warpCharges < maxWarpCharges && TPSPlayerController.grounded)
         {
             Recharge();
         }
