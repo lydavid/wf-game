@@ -104,7 +104,7 @@ public class LockOn : MonoBehaviour {
                         {
 
                             // Find whether it is actually behind a wall with raycast
-                            Ray ray = new Ray(transform.position, Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - transform.position) * 100);
+                            Ray ray = new Ray(cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f)), Vector3.Normalize(GO.GetComponent<Center>().GetCenter() - cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f))) * 100);//transform.position) * 100);
                             RaycastHit hit;
                             LayerMask layerMask = 1 << 10;
                             layerMask |= 1 << 12;

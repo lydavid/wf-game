@@ -71,7 +71,7 @@ public class HumanBullet : MonoBehaviour {
         }
     }
 
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         //Debug.Log(lastVelocity.Count);
         if (lastVelocity.Count < lastVelocitySize)
@@ -88,7 +88,7 @@ public class HumanBullet : MonoBehaviour {
                 lastVelocityEntry = 0;
             }
         }
-    }
+    }*/
 
     /*public float GetAverageMagnitudeOfLastVelocity()
     {
@@ -134,8 +134,11 @@ public class HumanBullet : MonoBehaviour {
                 if (warpType == WarpType.original)
                 {
                     // calculate from player obj to hit
-                    forward = Vector3.Normalize(new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
-                    Debug.DrawRay(transform.position, forward, Color.green);
+                    //forward = Vector3.Normalize(new Vector3(hit.point.x - transform.position.x, hit.point.y - transform.position.y, hit.point.z - transform.position.z)) * magnitude;
+                    //Debug.DrawRay(transform.position, forward, Color.green);
+
+                    forward = Vector3.Normalize(new Vector3(hit.point.x - ray.origin.x, hit.point.y - ray.origin.y, hit.point.z - ray.origin.z)) * magnitude;
+                    Debug.DrawRay(ray.origin, forward, Color.green);
                 }
                 else
                 {
@@ -190,7 +193,7 @@ public class HumanBullet : MonoBehaviour {
             LockOn lockOn = GetComponent<LockOn>();
             if (lockOn.targetLockedOn)
             {
-                forward = Vector3.Normalize(new Vector3(lockOn.targetCenter.x - transform.position.x, lockOn.targetCenter.y - transform.position.y, lockOn.targetCenter.z - transform.position.z)) * magnitude;
+                forward = Vector3.Normalize(lockOn.targetCenter - ray.origin) * magnitude;
             }
 
         }
@@ -204,6 +207,9 @@ public class HumanBullet : MonoBehaviour {
         if (warpType == WarpType.original)
         {
             bullet.transform.position = transform.position;
+            Debug.Log(cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f)));
+            transform.position = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f));
+            Debug.Log(transform.position);
         }
         else if (warpType == WarpType.projectBulletToCamRay)
         {
