@@ -17,6 +17,11 @@ public class AltCameraClipping : MonoBehaviour {
     HumanBullet humanBullet;
     Vector3 originalLocalPosition;
 
+    bool canZoomBackOut = true; // set to false when zooming in, after a time period, set back to true
+    float timer = 0.5f;
+    public float canZoomBackOutTimer;
+
+
 	// Use this for initialization
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -24,17 +29,30 @@ public class AltCameraClipping : MonoBehaviour {
         playerTag = player.tag;
         // default dist to player
         defaultDistance = transform.localPosition.z; //Vector3.Distance(player.transform.position, transform.position);//
-        closestDistance = -1.0f;
+        closestDistance = 0.0f; // -1.0f;
         curDistance = defaultDistance;
         distToPlayer = defaultDistance;
         //Debug.Log(distToPlayer);
 
         humanBullet = player.GetComponent<HumanBullet>();
         originalLocalPosition = transform.localPosition;
+
+        canZoomBackOutTimer = timer;
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
+
+
+
+    // Update is called once per frame
+    void FixedUpdate () {
+
+        if (!canZoomBackOut)
+        {
+            canZoomBackOutTimer -= Time.fixedDeltaTime;
+            if (canZoomBackOutTimer <= 0)
+            {
+                canZoomBackOut = true;
+            }
+        }
 
         // update distance to player
         distToPlayer = transform.localPosition.z;//Vector3.Distance(player.transform.position, transform.position);
@@ -81,49 +99,52 @@ public class AltCameraClipping : MonoBehaviour {
                         //Debug.Log(transform.TransformDirection(Vector3.forward));
                         //transform.Translate(transform.TransformDirection(Vector3.forward));
                         TranslateAlongZ(1f);
+                        canZoomBackOut = false;
+                        canZoomBackOutTimer = timer;
                     }
                 
             } else
             {
 
-
-                // we need a condition before we can execute this part, or else it will keep going back and forth between
-                // this section and the section above when player is against wall
-                RaycastHit objHit;
-                Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 100;
-
-                //Debug.DrawRay(transform.position, backwards, Color.red);
-                //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
-                //ray = cam.ScreenPointToRay(pos);
-                ray.direction = -ray.direction;
-                ray.origin = rep.transform.position;
-                Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
-                //if (Physics.Raycast(transform.position, backwards, out objHit))
-
-                // hit all layers except "Player" layer
-                int layerMask = 1 << 12; // LayerMask.NameToLayer("Player"); //
-                layerMask = ~layerMask;
-
-                if (Physics.Raycast(ray, out objHit, 100, layerMask))
+                if (canZoomBackOut)
                 {
+                    // we need a condition before we can execute this part, or else it will keep going back and forth between
+                    // this section and the section above when player is against wall
+                    RaycastHit objHit;
+                    Vector3 backwards = transform.TransformDirection(-Vector3.forward) * 100;
 
-                    // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
-                    // actually whatever is behind that wall, discounting the wall...
+                    //Debug.DrawRay(transform.position, backwards, Color.red);
+                    //Vector3 pos = cam.WorldToScreenPoint(player.transform.position);
+                    //ray = cam.ScreenPointToRay(pos);
+                    ray.direction = -ray.direction;
+                    ray.origin = rep.transform.position;
+                    Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
+                    //if (Physics.Raycast(transform.position, backwards, out objHit))
 
-                    // one sol is to raycast from player, through camera
-                    // problem is that if player is behind a not very tall thing, it won't reset
-                    // let's try anyways
-                    //Debug.Log(objHit.transform.gameObject.name);
-                    float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
-                    //Debug.Log(distToClosestObjFromCam);
-                    // if the distance to closest obj from behind cam is bigger than that of the distance needed
-                    // to return from current cam dist to player towards default distance to player, then do so
-                    if (distToPlayer > defaultDistance && distToClosestObjFromCam >= distToPlayer - defaultDistance)
+                    // hit all layers except "Player" layer
+                    int layerMask = 1 << 12; // LayerMask.NameToLayer("Player"); //
+                    layerMask = ~layerMask;
+
+                    if (Physics.Raycast(ray, out objHit, 100, layerMask))
                     {
-                        TranslateAlongZ(-1f);
+
+                        // the problem now seems to be that when the camera is through the wall, the closest obj to cam is
+                        // actually whatever is behind that wall, discounting the wall...
+
+                        // one sol is to raycast from player, through camera
+                        // problem is that if player is behind a not very tall thing, it won't reset
+                        // let's try anyways
+                        //Debug.Log(objHit.transform.gameObject.name);
+                        float distToClosestObjFromCam = Vector3.Distance(transform.position, objHit.point);
+                        //Debug.Log(distToClosestObjFromCam);
+                        // if the distance to closest obj from behind cam is bigger than that of the distance needed
+                        // to return from current cam dist to player towards default distance to player, then do so
+                        if (distToPlayer > defaultDistance && distToClosestObjFromCam >= distToPlayer - defaultDistance)
+                        {
+                            TranslateAlongZ(-1f);
+                        }
                     }
                 }
-
             }
         }
 
