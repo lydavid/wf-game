@@ -19,7 +19,7 @@ public class CsvIO : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        filePath = Application.dataPath + "/CSV/" + "Saved_data.csv";
+        filePath = "Saved_data.csv";//Application.dataPath + "/CSV/" + "Saved_data.csv";
         Save();
         Load();
         DisplayPlayers();
