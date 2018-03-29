@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Pause : MonoBehaviour {
 
@@ -18,6 +19,9 @@ public class Pause : MonoBehaviour {
     bool isPaused;
     public EventSystem eventSystem;
 
+    public GameObject resumeButtonGO;
+    public GameObject quitButtonGO;
+
 	// Use this for initialization
 	void Start () {
 		cameraOrbitX = GameObject.Find("CameraOrbitX");
@@ -26,7 +30,13 @@ public class Pause : MonoBehaviour {
 		playerAudio = player.GetComponents<AudioSource>();
 
         isPaused = false;
-	}
+
+        Button resumeButtton = resumeButtonGO.GetComponent<Button>();
+        resumeButtton.onClick.AddListener(ResumeButtonClick);
+
+        Button quitButton = quitButtonGO.GetComponent<Button>();
+        quitButton.onClick.AddListener(QuitButtonClick);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -80,4 +90,19 @@ public class Pause : MonoBehaviour {
 		cameraOrbitX.GetComponent<CameraVertical>().enabled = true;
 		pausePanel.SetActive(false);
 	}
+
+    void ResumeButtonClick()
+    {
+        ContinueGame();
+        isPaused = false;
+    }
+
+    void QuitButtonClick()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
 }
