@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerParticleEffects : MonoBehaviour {
 
-    public ParticleSystem ps1;
+    public ParticleSystem collisonParticles;
     public ParticleSystem warpParticles;
 
     HumanBullet humanBullet;
@@ -16,30 +16,34 @@ public class PlayerParticleEffects : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        
 	}
 
     void DisplayWarpEffect ()
     {
-        if (humanBullet.bulletMode)
-        {
-            warpParticles.Simulate(0);
-        }
-        else
-        {
-            warpParticles.Pause();
-        }
+
     }
 
+
+    void DisplayCollisionEffect ()
+    {
+        //if (humanBullet.bulletMode)
+       // {
+            collisonParticles.Play();
+        //}
+    }
 
 
     private void OnCollisionEnter(Collision other)
     {
-     //   if (other.gameObject.layer != 9)
-       // {
-            //ParticleSystem ps = GetComponent<ParticleSystem>();
-            // Collision light burst effect
-         //   ps1.Play();
+        DisplayCollisionEffect();
+        
+
+        //   if (other.gameObject.layer != 9)
+        // {
+        //ParticleSystem ps = GetComponent<ParticleSystem>();
+        // Collision light burst effect
+        //   ps1.Play();
         //}
     }
 }
