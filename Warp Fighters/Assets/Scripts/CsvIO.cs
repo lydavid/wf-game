@@ -36,7 +36,10 @@ public class CsvIO : MonoBehaviour
         {
             Debug.Log("no");
             // Creating First row of titles manually..
+            // ID, Initials, Elapsed Time, Enemies Killed, Warp Count
             string[] rowDataTemp = new string[4];
+
+
             rowDataTemp[0] = "Initials";
             rowDataTemp[1] = "Elapsed Time";
             rowDataTemp[2] = "Enemies Killed";
@@ -90,7 +93,26 @@ public class CsvIO : MonoBehaviour
     {
         String[] lines = System.IO.File.ReadAllLines(filePath);
         
-        dataOUT = lines;
+
+        //dataOUT = lines;
+
+        List<String> unsortedLines = new List<String>(lines);
+        unsortedLines.RemoveRange(0, 1);
+
+        foreach (String s in unsortedLines)
+        {
+            Debug.Log(s);
+        }
+        unsortedLines.Sort(delegate (String x, String y) {
+            if (int.Parse(x.Split(',')[1]) > int.Parse(y.Split(',')[1])) return 1;
+            else if (int.Parse(x.Split(',')[1]) < int.Parse(y.Split(',')[1])) return -1;
+            else return 0;
+            
+        });
+        foreach (String s in unsortedLines)
+        {
+            Debug.Log(s);
+        }
     }
 
     void Update ()
