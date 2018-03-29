@@ -45,6 +45,9 @@ public class HumanBullet : MonoBehaviour {
 
     public WarpType warpType;
 
+    // data tracking
+    public int warpCount;
+
     void Start()
     {
         orb = GameObject.Find("CameraOrbitX");
@@ -201,6 +204,7 @@ public class HumanBullet : MonoBehaviour {
 
     public void ShootMe () 
     {
+        warpCount++; // track warps every time this function is called
         warpAudio.Play();
         /* Adjust bullet position to be exactly where this parent transform was. This will give us proper accuracy as we had computed forward using this parent transform */
 

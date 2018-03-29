@@ -20,6 +20,8 @@ public class WarpLimiter : MonoBehaviour {
 
     TPSPlayerController TPSPlayerController;
 
+    public int kills; // weird to put here but since enemies calls a method here on death, it is most convenient
+
     // Use this for initialization
     void Start() {
         canWarp = true;
@@ -108,8 +110,10 @@ public class WarpLimiter : MonoBehaviour {
 
 
     // Called upon defeating an enemy
+    // cause this is the only scenario this is called, increment kill count
     public void GainMaxChargeAndRefill(int charge = 1)
     {
+        kills++;
         maxWarpCharges += charge;
         warpCharges = maxWarpCharges;
         UpdateUI();

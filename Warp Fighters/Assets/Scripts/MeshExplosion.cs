@@ -267,7 +267,7 @@ public class MeshExplosion : MonoBehaviour {
             //Time.timeScale = 0.5f;
         }
 
-        Debug.Log(GOs.Count);
+        //Debug.Log(GOs.Count);
         //Debug.Break();
 
         setToDestroy = true;

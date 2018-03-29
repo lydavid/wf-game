@@ -7,12 +7,16 @@ public class TempWinCond : MonoBehaviour {
 
     public GameObject bossEnemy;
     TrackTime trackTime;
+    HumanBullet humanBullet;
+    WarpLimiter warpLimiter;
 
     bool cannotWin;
 
 	// Use this for initialization
 	void Start () {
         trackTime = GetComponent<TrackTime>();
+        humanBullet = GetComponent<HumanBullet>();
+        warpLimiter = GetComponent<WarpLimiter>();
         /*if (GameObject.Find("RiggedEnemy (Boss)"))
         {
             bossEnemy = GameObject.Find("RiggedEnemy (Boss)");
@@ -42,6 +46,8 @@ public class TempWinCond : MonoBehaviour {
         // And the rest of their info
         PlayerPrefs.SetFloat(Constants.SCORE_KEY, trackTime.GetTime());
         PlayerPrefs.SetString(Constants.DATE_KEY, System.DateTime.Now.ToString());
+        PlayerPrefs.SetInt(Constants.WARPS_KEY, humanBullet.warpCount);
+        PlayerPrefs.SetInt(Constants.KILLS_KEY, warpLimiter.kills);
 
         SceneManager.LoadScene("Win");
     }
