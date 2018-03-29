@@ -136,6 +136,7 @@ public class Pause : MonoBehaviour {
 
     void QuitToStartButtonClick()
     {
+        ContinueGame(); // make sure our timescale isn't 0
         SceneManager.LoadScene("StartScreen");
     }
 
