@@ -16,7 +16,7 @@ public class PlayerParticleEffects : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+        DisplayWarpTrailEffect();
 	}
 
 
@@ -28,17 +28,21 @@ public class PlayerParticleEffects : MonoBehaviour {
         }
     }
 
+    void DisplayWarpTrailEffect ()
+    {
+        if (humanBullet.bulletMode)
+        {
+            warpParticles.Play();
+        }
+        else
+        {
+            warpParticles.Stop();
+        }
+    }
+
 
     private void OnCollisionEnter(Collision other)
     {
         DisplayCollisionEffect();
-        
-
-        //   if (other.gameObject.layer != 9)
-        // {
-        //ParticleSystem ps = GetComponent<ParticleSystem>();
-        // Collision light burst effect
-        //   ps1.Play();
-        //}
     }
 }
