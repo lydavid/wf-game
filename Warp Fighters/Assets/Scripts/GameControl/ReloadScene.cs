@@ -15,10 +15,10 @@ public class ReloadScene : MonoBehaviour {
 	void Update () {
 
         // Window Button because this is temp in our level as well, which has Start for pause
-        if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
+        /*if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("r"))
         {
             //SceneManager.LoadScene("Beta 0.0");
             SceneManager.LoadScene("Alpha3.0");
-        }
+        }*/
 	}
 }
