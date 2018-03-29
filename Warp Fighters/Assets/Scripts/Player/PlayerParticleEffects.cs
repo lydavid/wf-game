@@ -11,7 +11,7 @@ public class PlayerParticleEffects : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        humanBullet = GetComponent<HumanBullet>();
 	}
 	
 	// Update is called once per frame
@@ -19,18 +19,13 @@ public class PlayerParticleEffects : MonoBehaviour {
         
 	}
 
-    void DisplayWarpEffect ()
-    {
-
-    }
-
 
     void DisplayCollisionEffect ()
     {
-        //if (humanBullet.bulletMode)
-       // {
+        if (humanBullet.bulletMode)
+        {
             collisonParticles.Play();
-        //}
+        }
     }
 
 
