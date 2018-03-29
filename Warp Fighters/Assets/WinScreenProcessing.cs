@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GoToEnterInitials : MonoBehaviour {
+// Timestamp the end date and go to initial input screen after a period of time
+public class WinScreenProcessing : MonoBehaviour {
 
     float waitTime = 2.0f;
 

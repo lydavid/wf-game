@@ -30,11 +30,19 @@ public class TempWinCond : MonoBehaviour {
         {
             if (bossEnemy == null)
             {
-                // Remember player's time before going to next scene
-                PlayerPrefs.SetFloat(Constants.SCORE_KEY, trackTime.GetTime());
-                SceneManager.LoadScene("Win");
+                Win();
             }
         }
 		
 	}
+
+    public void Win()
+    {
+        // Remember player's time before going to next scene
+        // And the rest of their info
+        PlayerPrefs.SetFloat(Constants.SCORE_KEY, trackTime.GetTime());
+        PlayerPrefs.SetString(Constants.DATE_KEY, System.DateTime.Now.ToString());
+
+        SceneManager.LoadScene("Win");
+    }
 }
