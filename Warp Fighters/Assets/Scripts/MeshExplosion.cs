@@ -139,6 +139,9 @@ public class MeshExplosion : MonoBehaviour {
             if (!selfControl)
             {
                 mr.gameObject.SetActive(false);
+            } else
+            {
+                mr.enabled = false;
             }
         }
 
@@ -148,6 +151,9 @@ public class MeshExplosion : MonoBehaviour {
             if (!selfControl)
             {
                 smr.gameObject.SetActive(false);
+            } else
+            {
+                smr.enabled = false;
             }
         }
 
