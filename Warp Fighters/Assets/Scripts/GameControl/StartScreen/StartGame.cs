@@ -16,16 +16,7 @@ public class StartGame : MonoBehaviour {
 		bgm = GetComponent<AudioSource>();	
 	}
 
-    // Resets all stored info form previous player except for our player index tracking
-    void ResetAllPlayerPrefs()
-    {
-        PlayerPrefs.SetString(Constants.DATE_KEY, "");
-        PlayerPrefs.SetFloat(Constants.SCORE_KEY, Mathf.Infinity);
-        PlayerPrefs.SetString(Constants.NAME_KEY, "");
-        PlayerPrefs.SetInt(Constants.WARPS_KEY, 0);
-        PlayerPrefs.SetInt(Constants.KILLS_KEY, 0);
-        PlayerPrefs.Save();
-    }
+    
 	
 	// Update is called once per frame
 	void Update () 

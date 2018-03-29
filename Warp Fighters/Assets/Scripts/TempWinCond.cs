@@ -25,6 +25,7 @@ public class TempWinCond : MonoBehaviour {
         {
             cannotWin = true;
         }
+        ResetAllPlayerPrefs(); // do it here instead of start screen so that restarting game doesn't require us sending player back to start screen
 	}
 	
 	// Update is called once per frame
@@ -39,6 +40,17 @@ public class TempWinCond : MonoBehaviour {
         }
 		
 	}
+
+    // Resets all stored info from previous player except for our player index tracking
+    void ResetAllPlayerPrefs()
+    {
+        PlayerPrefs.SetString(Constants.DATE_KEY, "");
+        PlayerPrefs.SetFloat(Constants.SCORE_KEY, Mathf.Infinity);
+        PlayerPrefs.SetString(Constants.NAME_KEY, "");
+        PlayerPrefs.SetInt(Constants.WARPS_KEY, 0);
+        PlayerPrefs.SetInt(Constants.KILLS_KEY, 0);
+        PlayerPrefs.Save();
+    }
 
     public void Win()
     {
