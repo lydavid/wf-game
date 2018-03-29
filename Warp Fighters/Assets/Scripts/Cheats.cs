@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cheats : MonoBehaviour {
 
@@ -36,6 +37,12 @@ public class Cheats : MonoBehaviour {
         if (Input.GetKeyDown("2"))
         {
             warpLimiter.GainMaxChargeAndRefill(point);
+        }
+
+        if (Input.GetKeyDown("3"))
+        {
+            // win game
+            SceneManager.LoadScene("Win");
         }
     }
 }

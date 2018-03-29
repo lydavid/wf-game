@@ -10,7 +10,7 @@ public class DisplayYourTime : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         yourTimeText = GetComponent<Text>();
-        yourTimeText.text = StringHelpers.TimeInSecondsToFormattedString(PlayerPrefs.GetFloat("TimeInSeconds"));
+        yourTimeText.text = StringHelpers.TimeInSecondsToFormattedString(PlayerPrefs.GetFloat(Constants.SCORE_KEY));
 	}
 	
 	// Update is called once per frame

@@ -60,16 +60,18 @@ public class HighscoreGUI : MonoBehaviour {
     {
         String curLetter = individualLetters[curLetPos].text;
 
-        if (Input.GetButtonDown("Menu Button"))
+        if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("return"))
         {
-            // go to next scene
-            PlayerPrefs.SetString("PlayerInitials", initial1.text + initial2.text + initial3.text);
+            // Set initials
+            PlayerPrefs.SetString(Constants.NAME_KEY, initial1.text + initial2.text + initial3.text);
 
             // write all of the player's info into file before going to next scene
+            // or do it all in the next scene as we still have access to playerprefs
 
+            // go to next scene
             SceneManager.LoadScene("Leaderboard");
         }
-        if (Input.GetButtonDown("A Button"))
+        if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0))
         {
             if (initials.Length == 0)
             {
@@ -92,7 +94,7 @@ public class HighscoreGUI : MonoBehaviour {
             }
 
         }
-        if (Input.GetButtonDown("B Button"))
+        if (Input.GetButtonDown("B Button") || Input.GetMouseButtonDown(1))
         {
             if (initials.Length == 1)
             {

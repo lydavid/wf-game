@@ -18,7 +18,11 @@ public class DPadButton : MonoBehaviour
     void Update()
     {
         x = Input.GetAxisRaw("D-Pad X Axis");
+        x += Input.GetAxisRaw("Horizontal");
+        x = Mathf.Clamp(x, -1f, 1f);
         y = Input.GetAxisRaw("D-Pad Y Axis");
+        y += Input.GetAxisRaw("Vertical");
+        y = Mathf.Clamp(y, -1f, 1f);
 
         if (x != 0 && dpadXPressed == false)
         {

@@ -27,37 +27,28 @@ public class CsvIO : MonoBehaviour
 
     void Save()
     {
-
-        if (File.Exists(filePath))
+        string[] rowDataTemp = new string[6];
+        if (!File.Exists(filePath))
         {
-            Debug.Log("yes");
-        }
-        else
-        {
-            Debug.Log("no");
             // Creating First row of titles manually..
-            // ID, Initials, Elapsed Time, Enemies Killed, Warp Count
-            string[] rowDataTemp = new string[4];
-
-
-            rowDataTemp[0] = "Initials";
-            rowDataTemp[1] = "Elapsed Time";
-            rowDataTemp[2] = "Enemies Killed";
-            rowDataTemp[3] = "Warp Count";
+            rowDataTemp[Constants.ID_INDEX] = Constants.ID_KEY;
+            rowDataTemp[Constants.DATE_INDEX] = Constants.DATE_KEY;
+            rowDataTemp[Constants.SCORE_INDEX] = Constants.SCORE_KEY;
+            rowDataTemp[Constants.NAME_INDEX] = Constants.NAME_KEY;
+            rowDataTemp[Constants.WARPS_INDEX] = Constants.WARPS_KEY;
+            rowDataTemp[Constants.KILLS_INDEX] = Constants.KILLS_KEY;
             rowData.Add(rowDataTemp);
         }
 
+        rowDataTemp = new string[6];
+        rowDataTemp[Constants.ID_INDEX] = "" + PlayerPrefs.GetInt(Constants.ID_KEY);
+        rowDataTemp[Constants.DATE_INDEX] = PlayerPrefs.GetString(Constants.DATE_KEY);
+        rowDataTemp[Constants.SCORE_INDEX] = "" + PlayerPrefs.GetFloat(Constants.SCORE_KEY);
+        rowDataTemp[Constants.NAME_INDEX] = PlayerPrefs.GetString(Constants.NAME_KEY);
+        rowDataTemp[Constants.WARPS_INDEX] = "" + PlayerPrefs.GetInt(Constants.WARPS_KEY);
+        rowDataTemp[Constants.KILLS_INDEX] = "" + PlayerPrefs.GetInt(Constants.KILLS_KEY);
+        rowData.Add(rowDataTemp);
         
- 
-        for (int i = 0; i < 1; i++)
-        {
-            string[] rowDataTemp = new string[4];
-            rowDataTemp[0] = "ABB";
-            rowDataTemp[1] = "" + UnityEngine.Random.Range(1, 200);
-            rowDataTemp[2] = "" + UnityEngine.Random.Range(0, 5);
-            rowDataTemp[3] = "" + UnityEngine.Random.Range(1, 20);
-            rowData.Add(rowDataTemp);
-        }
 
         string[][] output = new string[rowData.Count][];
 
@@ -69,7 +60,7 @@ public class CsvIO : MonoBehaviour
         int length = output.GetLength(0);
         string delimiter = ",";
 
-        StringBuilder sb = new StringBuilder();
+        //StringBuilder sb = new StringBuilder();
 
         //StreamWriter outStream = System.IO.File.AppendText(filePath);
         StreamWriter writer = new StreamWriter(filePath, true); // writes to file, appending if file exists
@@ -104,15 +95,17 @@ public class CsvIO : MonoBehaviour
             Debug.Log(s);
         }
         unsortedLines.Sort(delegate (String x, String y) {
-            if (int.Parse(x.Split(',')[1]) > int.Parse(y.Split(',')[1])) return 1;
-            else if (int.Parse(x.Split(',')[1]) < int.Parse(y.Split(',')[1])) return -1;
+            if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) > float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return 1;
+            else if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) < float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return -1;
             else return 0;
             
         });
         foreach (String s in unsortedLines)
         {
             Debug.Log(s);
+            
         }
+        dataOUT = unsortedLines.ToArray();
     }
 
     void Update ()
@@ -120,6 +113,8 @@ public class CsvIO : MonoBehaviour
         
        
     }
+
+    
 
     void DisplayPlayers ()
     {
@@ -142,7 +137,7 @@ public class CsvIO : MonoBehaviour
             // text and position
             Text text = player.AddComponent<Text>();
             text.alignment = TextAnchor.UpperLeft;
-            text.text = "RANK " + i + "   -   " + playerData[0] + "   >   " + playerData[1] + "s";
+            text.text = "RANK " + i + "   -   " + StringHelpers.TimeInSecondsToFormattedString(float.Parse(playerData[Constants.SCORE_INDEX])) + "   >   " + playerData[Constants.NAME_INDEX];
 
             // font and color
             text.font = font;

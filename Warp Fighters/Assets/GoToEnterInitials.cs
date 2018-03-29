@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GoToEnterInitials : MonoBehaviour {
 
-    float waitTime = 5.0f;
+    float waitTime = 2.0f;
 
 	// Use this for initialization
 	void Start () {
