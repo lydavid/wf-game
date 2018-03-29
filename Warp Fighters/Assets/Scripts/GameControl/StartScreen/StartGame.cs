@@ -19,7 +19,7 @@ public class StartGame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("left shift"))
+		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("left shift") || Input.GetKeyDown("return"))
         {
             PlayerPrefs.SetInt("Scene", 1);// 0); // 0 is Beta 0.0, 1 is Alpha3.0
             bgm.Play();
