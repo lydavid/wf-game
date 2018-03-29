@@ -84,7 +84,7 @@ public class WarpLimiter : MonoBehaviour {
 
         // WarpChargesDisplayTextBackdrop
         // size varies on maxWarpCharges
-        WarpChargesDisplayBackdrop.sizeDelta = new Vector2(maxWarpCharges * 4, 20);
+        WarpChargesDisplayBackdrop.sizeDelta = new Vector2(maxWarpCharges * 8, 40);
     }
 
 
