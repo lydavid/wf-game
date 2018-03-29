@@ -8,6 +8,7 @@ public class Cheats : MonoBehaviour {
     HPManager HPManager;
     WarpLimiter warpLimiter;
     TrackTime trackTime;
+    TempWinCond tempWinCond;
 
     int point;
 
@@ -16,6 +17,7 @@ public class Cheats : MonoBehaviour {
         HPManager = gameObject.GetComponent<HPManager>();
         warpLimiter = gameObject.GetComponent<WarpLimiter>();
         trackTime = GetComponent<TrackTime>();
+        tempWinCond = GetComponent<TempWinCond>();
     }
 	
 	// Update is called once per frame
@@ -44,8 +46,7 @@ public class Cheats : MonoBehaviour {
         if (Input.GetKeyDown("3"))
         {
             // win game
-            PlayerPrefs.SetFloat(Constants.SCORE_KEY, trackTime.GetTime());
-            SceneManager.LoadScene("Win");
+            tempWinCond.Win();
         }
     }
 }

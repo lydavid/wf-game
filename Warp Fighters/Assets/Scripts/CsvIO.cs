@@ -120,7 +120,7 @@ public class CsvIO : MonoBehaviour
     {
         float x = 30;
         float y = 55;
-        for (int i = 1; i <= dataOUT.Length; i++)
+        for (int i = 0; i < dataOUT.Length; i++)
         { 
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             foreach (string s in playerData)
@@ -137,7 +137,7 @@ public class CsvIO : MonoBehaviour
             // text and position
             Text text = player.AddComponent<Text>();
             text.alignment = TextAnchor.UpperLeft;
-            text.text = "RANK " + i + "   -   " + StringHelpers.TimeInSecondsToFormattedString(float.Parse(playerData[Constants.SCORE_INDEX])) + "   >   " + playerData[Constants.NAME_INDEX];
+            text.text = "RANK " + (i + 1) + "   -   " + StringHelpers.TimeInSecondsToFormattedString(float.Parse(playerData[Constants.SCORE_INDEX])) + "   >   " + playerData[Constants.NAME_INDEX];
 
             // font and color
             text.font = font;
