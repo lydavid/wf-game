@@ -48,7 +48,7 @@ public class WarpLimiter : MonoBehaviour {
 
         // Need to be grounded and not in warp to recharge
         // Prevents infinite charge up if the player warps to high places and waits for charge midfall
-        if (warpCharges < maxWarpCharges && TPSPlayerController.grounded)
+        if (warpCharges < maxWarpCharges && (TPSPlayerController.grounded || gameObject.GetComponent<Rigidbody>().velocity == Vector3.zero))
         {
             Recharge();
         }
