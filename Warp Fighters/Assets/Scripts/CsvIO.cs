@@ -27,17 +27,28 @@ public class CsvIO : MonoBehaviour
 
     void Save()
     {
-        // Creating First row of titles manually..
-        string[] rowDataTemp = new string[4];
-        rowDataTemp[0] = "Initials";
-        rowDataTemp[1] = "Elapsed Time";
-        rowDataTemp[2] = "Enemies Killed";
-        rowDataTemp[3] = "Warp Count";
-        rowData.Add(rowDataTemp);
- 
-        for (int i = 0; i < 10; i++)
+
+        if (File.Exists(filePath))
         {
-            rowDataTemp = new string[4];
+            Debug.Log("yes");
+        }
+        else
+        {
+            Debug.Log("no");
+            // Creating First row of titles manually..
+            string[] rowDataTemp = new string[4];
+            rowDataTemp[0] = "Initials";
+            rowDataTemp[1] = "Elapsed Time";
+            rowDataTemp[2] = "Enemies Killed";
+            rowDataTemp[3] = "Warp Count";
+            rowData.Add(rowDataTemp);
+        }
+
+        
+ 
+        for (int i = 0; i < 1; i++)
+        {
+            string[] rowDataTemp = new string[4];
             rowDataTemp[0] = "ABB";
             rowDataTemp[1] = "" + UnityEngine.Random.Range(1, 200);
             rowDataTemp[2] = "" + UnityEngine.Random.Range(0, 5);
@@ -57,12 +68,22 @@ public class CsvIO : MonoBehaviour
 
         StringBuilder sb = new StringBuilder();
 
-        for (int index = 0; index < length; index++)
-            sb.AppendLine(string.Join(delimiter, output[index]));
+        //StreamWriter outStream = System.IO.File.AppendText(filePath);
+        StreamWriter writer = new StreamWriter(filePath, true); // writes to file, appending if file exists
 
-        StreamWriter outStream = System.IO.File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
+        for (int index = 0; index < length; index++)
+            //ssb = string.Join(delimiter, output[index]);
+            //outStream.WriteLine(ssb);
+            writer.WriteLine(string.Join(delimiter, output[index]));
+
+        //sb = sb.Replace(System.Environment.NewLine, "");
+
+        
+        //writer.WriteLine("Test");
+        writer.Close();
+
+
+        //outStream.Close();
     }
 
     void Load ()
@@ -82,7 +103,7 @@ public class CsvIO : MonoBehaviour
     {
         float x = 30;
         float y = 55;
-        for (int i = 1; i <= 10; i++)
+        for (int i = 1; i <= dataOUT.Length; i++)
         { 
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             foreach (string s in playerData)
