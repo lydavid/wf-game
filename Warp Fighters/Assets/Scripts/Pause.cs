@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Pause : MonoBehaviour {
 
@@ -22,6 +23,13 @@ public class Pause : MonoBehaviour {
     public GameObject resumeButtonGO;
     public GameObject quitButtonGO;
 
+    public GameObject quitOptions;
+
+    public GameObject quitToStartGO;
+    public GameObject quitToDesktopGO;
+
+    bool inQuitOptions;
+
 	// Use this for initialization
 	void Start () {
 		cameraOrbitX = GameObject.Find("CameraOrbitX");
@@ -36,21 +44,40 @@ public class Pause : MonoBehaviour {
 
         Button quitButton = quitButtonGO.GetComponent<Button>();
         quitButton.onClick.AddListener(QuitButtonClick);
+
+
+        Button quitToStartButton = quitToStartGO.GetComponent<Button>();
+        quitToStartButton.onClick.AddListener(QuitToStartButtonClick);
+
+        Button quitToDesktopButton = quitToDesktopGO.GetComponent<Button>();
+        quitToDesktopButton.onClick.AddListener(QuitToDesktopButtonClick);
     }
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("Menu Button")) {
-			if (pausePanel.activeInHierarchy) {
+			if (pausePanel.activeInHierarchy || quitOptions.activeInHierarchy) {
 				ContinueGame();
                 isPaused = false;
+                inQuitOptions = false;
             } 
-			else if (!pausePanel.activeInHierarchy){
+			else { //if (!pausePanel.activeInHierarchy){
 				PauseGame();
                 isPaused = true;
                 StartCoroutine("HighlightButton");
             }
 		}
+
+        if (inQuitOptions)
+        {
+            if (Input.GetKeyDown("escape") || Input.GetButtonDown("B Button"))
+            {
+                quitOptions.SetActive(false);
+                pausePanel.SetActive(true);
+                eventSystem.SetSelectedGameObject(resumeButtonGO);
+                inQuitOptions = false;
+            }
+        }
 	}
 
 
@@ -89,6 +116,7 @@ public class Pause : MonoBehaviour {
      	}
 		cameraOrbitX.GetComponent<CameraVertical>().enabled = true;
 		pausePanel.SetActive(false);
+        quitOptions.SetActive(false);
 	}
 
     void ResumeButtonClick()
@@ -98,6 +126,20 @@ public class Pause : MonoBehaviour {
     }
 
     void QuitButtonClick()
+    {
+        // Brings up a new panel with option to quit to start or to desktop
+        pausePanel.SetActive(false);
+        quitOptions.SetActive(true);
+        eventSystem.SetSelectedGameObject(quitToStartGO);
+        inQuitOptions = true;
+    }
+
+    void QuitToStartButtonClick()
+    {
+        SceneManager.LoadScene("StartScreen");
+    }
+
+    void QuitToDesktopButtonClick()
     {
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
