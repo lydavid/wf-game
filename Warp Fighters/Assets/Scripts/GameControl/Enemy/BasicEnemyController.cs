@@ -24,9 +24,9 @@ public class BasicEnemyController : MonoBehaviour {
     [Tooltip("Movement speed of the enemy.")]
     public float speed = 4.0f;
     [Tooltip("Distance enemy will move up to before turning back.")]
-    public float patrolDistance;
+    float patrolDistance = 5f;
     [Tooltip("Time in seconds of how long to wait before turning and moving in the other direction.")]
-    public float pauseTime = 0.5f;
+    float pauseTime = 2f;
 
     Transform start, target;  // positions to move between
     bool moveToA = false;

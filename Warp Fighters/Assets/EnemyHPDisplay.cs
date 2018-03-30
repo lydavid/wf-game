@@ -6,7 +6,7 @@ using UnityEngine;
 // such as whether enemy is a boss type and how much HP remains
 public class EnemyHPDisplay : MonoBehaviour {
 
-    public BasicEnemyController BEC;
+    BasicEnemyController BEC;
     EnemyType enemyType;
 
     GameObject hp1; // farthest right
