@@ -80,6 +80,7 @@ public class BasicEnemyController : MonoBehaviour {
     [Header("Animations")]
     Animator animator; // enemy movement animations
 
+    EnemyHPDisplay enemyHPDisplay;
 
     // Use this for initialization
     void Start()
@@ -107,6 +108,16 @@ public class BasicEnemyController : MonoBehaviour {
         originalRotation = transform.rotation;
 
         animator = GetComponent<Animator>();
+
+
+        // for boss only
+        if (enemyType == EnemyType.c_boss)
+        {
+            healthPoints = 5;
+        }
+
+        enemyHPDisplay = GetComponent<EnemyHPDisplay>();
+        enemyHPDisplay.SetUpHPSprites();
     }
 
 
@@ -506,6 +517,9 @@ public class BasicEnemyController : MonoBehaviour {
     {
         healthPoints -= 1;
         //ChangeColorOfChildren(damagedColor);
+
+        // Remove an HP sprite above head
+        enemyHPDisplay.ChangeHPSprites(healthPoints);
 
         // let's delay it from dying until it bounces into something
         // then make it explode into triangles

@@ -7,12 +7,14 @@ public class EnemyVisuals : MonoBehaviour {
     BasicEnemyController BEC;
 
     [Header("Materials")]
-    public Material green;
-    public Material red;
+    public Material green; // guard
+    public Material red; // patrol
+    public Material blue;  // boss
 
     [Header("Light References")]
     public GameObject greenLight;
     public GameObject redLight;
+    public GameObject blueLight;
 
     [Header("Eye Reference")]
     public GameObject eye;
@@ -40,6 +42,9 @@ public class EnemyVisuals : MonoBehaviour {
         } else
         {
             // ???
+            eye.GetComponent<Renderer>().material = blue;
+            blueLight.GetComponent<Light>().intensity += 2;
+            blueLight.SetActive(true);
         }
 		
 	}
