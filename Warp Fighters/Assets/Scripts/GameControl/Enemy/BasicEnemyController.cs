@@ -117,7 +117,7 @@ public class BasicEnemyController : MonoBehaviour {
         }
 
         enemyHPDisplay = GetComponent<EnemyHPDisplay>();
-        enemyHPDisplay.SetUpHPSprites();
+        //enemyHPDisplay.SetUpHPSprites();
     }
 
 

@@ -6,14 +6,14 @@ using UnityEngine;
 // such as whether enemy is a boss type and how much HP remains
 public class EnemyHPDisplay : MonoBehaviour {
 
-    BasicEnemyController BEC;
+    public BasicEnemyController BEC;
     EnemyType enemyType;
 
-    public GameObject hp1; // farthest right
-    public GameObject hp2;
-    public GameObject hp3; // center hp
-    public GameObject hp4;
-    public GameObject hp5; // farthest left
+    GameObject hp1; // farthest right
+    GameObject hp2;
+    GameObject hp3; // center hp
+    GameObject hp4;
+    GameObject hp5; // farthest left
 
     // hp depletes from right to left
 
@@ -22,42 +22,74 @@ public class EnemyHPDisplay : MonoBehaviour {
         BEC = GetComponent<BasicEnemyController>();
         enemyType = BEC.enemyType;
 
-        /*hp1 = transform.Find("HP1").gameObject;
-        hp2 = transform.Find("HP2").gameObject;
-        hp3 = transform.Find("HP3").gameObject;
-        hp4 = transform.Find("HP4").gameObject;
-        hp5 = transform.Find("HP5").gameObject;*/
-        
+        Transform hp;
+
+        foreach (Transform child in transform)
+        {
+            if (child.name == "HealthBar")
+            {
+                hp = child;
+                hp1 = hp.Find("HP1").gameObject;
+                hp2 = hp.Find("HP2").gameObject;
+                hp3 = hp.Find("HP3").gameObject;
+                hp4 = hp.Find("HP4").gameObject;
+                hp5 = hp.Find("HP5").gameObject;
+            }
+        }
 
 
+
+
+        SetUpHPSprites();
     }
 
     // this way we ensure BEC has the correct hp set up before calling this
+    // note that we can't do it that way, cause this script refers to BEC, and so if we try to call this script form BEC's
+    // Start method, BEC will not have been instantiated yet...
     public void SetUpHPSprites()
     {
         if (BEC.healthPoints > 0)
         {
             hp3.SetActive(true);
+        } else
+        {
+            hp3.SetActive(false);
         }
 
         if (BEC.healthPoints > 1)
         {
             hp4.SetActive(true);
         }
+        else
+        {
+            hp4.SetActive(false);
+        }
 
         if (BEC.healthPoints > 2)
         {
             hp2.SetActive(true);
+        }
+        else
+        {
+            hp2.SetActive(false);
         }
 
         if (BEC.healthPoints > 3)
         {
             hp1.SetActive(true);
         }
+        else
+        {
+            hp1.SetActive(false);
+        }
 
         if (BEC.healthPoints > 4)
         {
             hp5.SetActive(true);
+        }
+        else
+        {
+            hp5.SetActive(false);
         }
     }
 	
