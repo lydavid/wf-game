@@ -268,7 +268,7 @@ public class AltCameraClipping : MonoBehaviour {
         }
 
         transform.Translate(new Vector3(0, 0, amount));
-        Debug.Log(transform.localPosition);
+        //Debug.Log(transform.localPosition);
         if (transform.localPosition.z >= -1.0f)
         {
             // go fps
