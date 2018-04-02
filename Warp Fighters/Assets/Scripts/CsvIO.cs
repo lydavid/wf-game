@@ -17,10 +17,14 @@ public class CsvIO : MonoBehaviour
     public Font font;
     public Canvas canvas;
 
+    
 
     int numPages = 0;
     int curPageNum = 0;
     List<GameObject> currentPage = new List<GameObject>();
+
+    Color highlightThisPlayerColor = Color.cyan;
+    int playerPageNum = 0;
 
     // Use this for initialization
     void Start()
@@ -28,7 +32,8 @@ public class CsvIO : MonoBehaviour
         filePath = "Saved_data.csv";//Application.dataPath + "/CSV/" + "Saved_data.csv";
         Save();
         Load();
-        DisplayPlayers(0);
+        SetPlayerPageNum();
+        DisplayPlayers(playerPageNum - 1);
     }
 
     void Save()
@@ -160,6 +165,19 @@ public class CsvIO : MonoBehaviour
 
     }
 
+
+    void SetPlayerPageNum()
+    {
+        for (int i = 0; i < dataOUT.Length; i++)
+        {
+            string[] playerData = (dataOUT[i].Trim()).Split(',');
+            if (int.Parse(playerData[Constants.ID_INDEX]) == PlayerPrefs.GetInt(Constants.ID_KEY))
+            {
+                playerPageNum = (int)Mathf.Ceil((float)i / 10);
+            }
+        }
+        Debug.Log(playerPageNum);
+    }
     
 
     void DisplayPlayers (int pageNum)
@@ -217,7 +235,15 @@ public class CsvIO : MonoBehaviour
             // font and color
             text.font = font;
             text.fontSize = 25;
-            text.color = Color.white;
+
+            if (int.Parse(playerData[Constants.ID_INDEX]) == PlayerPrefs.GetInt(Constants.ID_KEY))
+            {
+                text.color = highlightThisPlayerColor;
+            }
+            else
+            {
+                text.color = Color.white;
+            }
             y -= 20;
         }
     }
