@@ -118,10 +118,14 @@ public class CsvIO : MonoBehaviour
 
     void DisplayPlayers ()
     {
-        float x = 30;
+        float x = 0; // 30
         float y = 55;
         for (int i = 0; i < dataOUT.Length; i++)
-        { 
+        {
+
+
+
+
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             foreach (string s in playerData)
             {
@@ -131,18 +135,30 @@ public class CsvIO : MonoBehaviour
             player.transform.SetParent(canvas.transform);
 
             RectTransform trans = player.AddComponent<RectTransform>();
-            trans.sizeDelta = new Vector2(300, 30);
+            trans.sizeDelta = new Vector2(400, 30);
             trans.localPosition = new Vector2(x, y);
+
+            // center it
+            
 
             // text and position
             Text text = player.AddComponent<Text>();
-            text.alignment = TextAnchor.UpperLeft;
-            text.text = "RANK " + (i + 1) + "   -   " + StringHelpers.TimeInSecondsToFormattedString(float.Parse(playerData[Constants.SCORE_INDEX])) + "   >   " + playerData[Constants.NAME_INDEX];
+            text.alignment = TextAnchor.MiddleCenter;
+            text.text = StringHelpers.FormatRank(i + 1) + " - "
+                + StringHelpers.TimeInSecondsToFormattedString(float.Parse(playerData[Constants.SCORE_INDEX])) + " - " 
+                + playerData[Constants.NAME_INDEX] + " - " 
+                + playerData[Constants.WARPS_INDEX].ToString() + " - " 
+                + playerData[Constants.KILLS_INDEX].ToString();
+            
+
+
+
+
 
             // font and color
             text.font = font;
             text.fontSize = 25;
-            text.color = Color.gray;
+            text.color = Color.white;
             y -= 20;
         }
     }
