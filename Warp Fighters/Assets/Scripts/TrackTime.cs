@@ -46,6 +46,13 @@ public class TrackTime : MonoBehaviour {
     }
 
 
+    // used in cheats only
+    public void AddToTime(int seconds)
+    {
+        timeInSeconds += seconds;
+    }
+
+
     // Toggles whether to start/stop tracking time
     // if given true param, set to true -> used in ForcedInstructions
     public void SetTrackTime(bool setTo)

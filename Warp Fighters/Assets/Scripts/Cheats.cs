@@ -48,5 +48,10 @@ public class Cheats : MonoBehaviour {
             // win game
             tempWinCond.Win();
         }
+
+        if (Input.GetKeyDown("4"))
+        {
+            trackTime.AddToTime(point * 60);
+        }
     }
 }

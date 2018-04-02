@@ -108,6 +108,10 @@ public class CsvIO : MonoBehaviour
         unsortedLines.Sort(delegate (String x, String y) {
             if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) > float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return 1;
             else if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) < float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return -1;
+            else if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) == float.Parse(y.Split(',')[Constants.SCORE_INDEX]) &&
+                int.Parse(x.Split(',')[Constants.ID_INDEX]) < int.Parse(y.Split(',')[Constants.ID_INDEX])) return 1;
+            else if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) == float.Parse(y.Split(',')[Constants.SCORE_INDEX]) &&
+                int.Parse(x.Split(',')[Constants.ID_INDEX]) > int.Parse(y.Split(',')[Constants.ID_INDEX])) return -1;
             else return 0;
             
         });
@@ -215,12 +219,13 @@ public class CsvIO : MonoBehaviour
             }
             GameObject player = new GameObject(""+i);
             player.transform.SetParent(canvas.transform);
+            player.layer = 5; // UI
             currentPage.Add(player);
 
             RectTransform trans = player.AddComponent<RectTransform>();
             trans.sizeDelta = new Vector2(400, 30);
             trans.localPosition = new Vector2(x, y);
-
+            trans.localScale = new Vector2(1, 1);
 
             // text and position
             Text text = player.AddComponent<Text>();
