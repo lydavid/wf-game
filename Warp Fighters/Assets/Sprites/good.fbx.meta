@@ -281,6 +281,41 @@ ModelImporter:
     4300064: pasted__pSphere4
     4300066: pCone1
     4300068: pasted__pCone1
+    6400000: pasted__pasted__pasted__pasted__pasted__pCylinder1
+    6400002: pasted__pasted__pasted__pasted__pCylinder1
+    6400004: pasted__pasted__pasted__pasted__pCylinder1 1
+    6400006: pasted__pasted__pasted__pCylinder1
+    6400008: pasted__pasted__pasted__pCylinder1 1
+    6400010: pasted__pasted__pasted__pCylinder1 2
+    6400012: pasted__pasted__pasted__pCylinder4
+    6400014: pasted__pasted__pCylinder1
+    6400016: pasted__pasted__pCylinder1 1
+    6400018: pasted__pasted__pCylinder4
+    6400020: pasted__pasted__pCylinder4 1
+    6400022: pasted__pCone1
+    6400024: pasted__pCube1
+    6400026: pasted__pCylinder1
+    6400028: pasted__pCylinder2
+    6400030: pasted__pCylinder3
+    6400032: pasted__pCylinder4
+    6400034: pasted__pCylinder4 1
+    6400036: pasted__pSphere1
+    6400038: pasted__pSphere2
+    6400040: pasted__pSphere3
+    6400042: pasted__pSphere4
+    6400044: pCone1
+    6400046: pCube1
+    6400048: pCube2
+    6400050: pCylinder2
+    6400052: pCylinder3
+    6400054: pCylinder4
+    6400056: pCylinder7
+    6400058: pPyramid1
+    6400060: pPyramid2
+    6400062: pSphere1
+    6400064: pSphere2
+    6400066: pSphere3
+    6400068: pSphere4
     7400000: Take 001
     9500000: //RootNode
   externalObjects: {}
@@ -315,7 +350,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
