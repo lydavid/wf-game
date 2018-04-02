@@ -26,6 +26,8 @@ public class DPadButton : MonoBehaviour
 
         if (x != 0 && dpadXPressed == false)
         {
+
+
             if (x > 0)//(x == 1)
             {
                 countX += 1;
@@ -37,7 +39,10 @@ public class DPadButton : MonoBehaviour
                 countX -= 1;
                 left = true;
             }
-            dpadXPressed = true;         
+            dpadXPressed = true;
+        } else
+        {
+            left = right = false;
         }
         if (x == 0)
         {
@@ -58,6 +63,9 @@ public class DPadButton : MonoBehaviour
                 down = true;
             }
             dpadYPressed = true;
+        } else
+        {
+            up = down = false;
         }
         if (y == 0)
         {

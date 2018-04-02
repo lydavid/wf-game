@@ -6,9 +6,11 @@ using System.IO;
 using System;
 using UnityEngine.UI;
 
+
+// IO for CSV file, but seems to also handle everything else for Leaderboard scene
 public class CsvIO : MonoBehaviour
 {
-    //source: https://sushanta1991.blogspot.ca/2015/02/how-to-write-data-to-csv-file-in-unity.html
+    // modified from: https://sushanta1991.blogspot.ca/2015/02/how-to-write-data-to-csv-file-in-unity.html
     private List<string[]> rowData = new List<string[]>();
     private string filePath;
     public string[] dataOUT;
@@ -16,13 +18,17 @@ public class CsvIO : MonoBehaviour
     public Canvas canvas;
 
 
+    int numPages = 0;
+    int curPageNum = 0;
+    List<GameObject> currentPage = new List<GameObject>();
+
     // Use this for initialization
     void Start()
     {
         filePath = "Saved_data.csv";//Application.dataPath + "/CSV/" + "Saved_data.csv";
         Save();
         Load();
-        DisplayPlayers();
+        DisplayPlayers(0);
     }
 
     void Save()
@@ -100,27 +106,85 @@ public class CsvIO : MonoBehaviour
             else return 0;
             
         });
-        foreach (String s in unsortedLines)
+        /*foreach (String s in unsortedLines)
         {
             Debug.Log(s);
             
-        }
+        }*/
         dataOUT = unsortedLines.ToArray();
+        Debug.Log(dataOUT.Length);
+
+        numPages = (int)Mathf.Ceil((float)dataOUT.Length / 10);
+        Debug.Log(numPages);
     }
 
     void Update ()
     {
-        
-       
+        // LB: First page
+        if (Input.GetButtonDown("Left Bumper"))
+        {
+            DisplayPlayers(0);
+        }
+
+        // RB: Last page
+        if (Input.GetButtonDown("Right Bumper"))
+        {
+            DisplayPlayers(numPages - 1);
+        }
+
+
+        // Left D-pad: Prev page
+        if (DPadButton.left)
+        {
+            Debug.Log("left");
+            Debug.Log(curPageNum);
+            if (curPageNum > 0)
+            {
+                DisplayPlayers(curPageNum - 1);
+            }
+        }
+
+
+        // Right D-pad: Next page
+        if (DPadButton.right)
+        {
+            Debug.Log("right");
+            Debug.Log(curPageNum);
+            if (curPageNum < numPages - 1)
+            {
+                DisplayPlayers(curPageNum + 1);
+            }
+        }
+
+
+
     }
 
     
 
-    void DisplayPlayers ()
+    void DisplayPlayers (int pageNum)
     {
+
+        // update current page number
+        // we need to know this for Prev/Next button
+        curPageNum = pageNum;
+
+        // empty anything on screen first before displaying
+        foreach (GameObject playerEntry in currentPage)
+        {
+            Destroy(playerEntry);
+        }
+        currentPage.Clear();
+
+
         float x = 0; // 30
         float y = 55;
-        for (int i = 0; i < dataOUT.Length; i++)
+
+
+        // now make it only display 10 at a time depending on page number
+        // page 1 -> i=0 to 9, page 2 -> i=10 to 19
+
+        for (int i = 0 + pageNum * 10; i < Mathf.Min(10 + pageNum * 10, dataOUT.Length); i++)
         {
 
 
@@ -129,17 +193,16 @@ public class CsvIO : MonoBehaviour
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             foreach (string s in playerData)
             {
-                Debug.Log(s);
+                //Debug.Log(s);
             }
             GameObject player = new GameObject(""+i);
             player.transform.SetParent(canvas.transform);
+            currentPage.Add(player);
 
             RectTransform trans = player.AddComponent<RectTransform>();
             trans.sizeDelta = new Vector2(400, 30);
             trans.localPosition = new Vector2(x, y);
 
-            // center it
-            
 
             // text and position
             Text text = player.AddComponent<Text>();
@@ -149,10 +212,6 @@ public class CsvIO : MonoBehaviour
                 + playerData[Constants.NAME_INDEX] + " - " 
                 + playerData[Constants.WARPS_INDEX].ToString() + " - " 
                 + playerData[Constants.KILLS_INDEX].ToString();
-            
-
-
-
 
 
             // font and color

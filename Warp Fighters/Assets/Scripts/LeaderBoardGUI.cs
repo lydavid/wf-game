@@ -25,10 +25,10 @@ public class LeaderBoardGUI : MonoBehaviour {
     void DisplayPlayers ()
     {
        
-        foreach (String s in players)
+        /*foreach (String s in players)
         {
-            Debug.Log(s);
-        }
+            //Debug.Log(s);
+        }*/
 
     }
 }
