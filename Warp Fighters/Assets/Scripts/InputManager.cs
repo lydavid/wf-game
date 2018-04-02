@@ -18,6 +18,7 @@ public static class InputManager
             case (ControllerType.ps):
                 warp |= Input.GetButtonDown("X Button");
                 break;
+
             default:
                 warp |= Input.GetMouseButtonDown(0);
                 break;
@@ -58,10 +59,20 @@ public static class InputManager
         return Mathf.Clamp(moveY, -1.0f, 1.0f);
     }
 
-    public static float LookX()
+    public static float LookX(ControllerType controllerType)
     {
         float lookX = 0.0f;
-        lookX += Input.GetAxis("Right Stick X");
+
+        switch (controllerType)
+        {
+            case ControllerType.xbox:
+                lookX += Input.GetAxis("Right Stick X");
+                break;
+            case ControllerType.ps:
+                lookX += Input.GetAxis("Right Stick X (PS4)");
+                break;
+        }
+        
         lookX += Input.GetAxis("Mouse X");
         return Mathf.Clamp(lookX, -1.0f, 1.0f);
     }

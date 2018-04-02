@@ -194,8 +194,8 @@ public class TPSPlayerController : MonoBehaviour {
         03 = Right
         04 = Left
         */
-        mH = Input.GetAxis("Horizontal");
-        mV = Input.GetAxis("Vertical");
+        mH = InputManager.MoveX();//Input.GetAxis("Horizontal");
+        mV = InputManager.MoveY();//Input.GetAxis("Vertical");
         
         if (mH < 0) { state = 4; }
         else if (mH > 0) { state = 3; }
@@ -302,7 +302,7 @@ public class TPSPlayerController : MonoBehaviour {
             {
                 y = -gravity;
             }*/
-            targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            targetVelocity = new Vector3(InputManager.MoveX(), 0, InputManager.MoveY());//new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *= speed * Time.deltaTime;
             var velocity = rb.velocity;
@@ -322,6 +322,8 @@ public class TPSPlayerController : MonoBehaviour {
         // Prevent weird camera movement when locking on to target
         if (!GetComponent<LockOn>().targetLockedOn)
         {
+
+            //InputManager.LookX(controllerType);
             if (Input.GetAxis("Mouse X") != 0)
             {
                 mouseHorizontal = Input.GetAxis("Mouse X");

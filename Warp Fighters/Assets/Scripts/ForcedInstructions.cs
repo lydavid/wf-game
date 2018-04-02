@@ -33,7 +33,7 @@ public class ForcedInstructions : MonoBehaviour {
             trackTime.ToggleTrackTime(true);
         }
 
-        if (InputManager.LookX() > 0 || InputManager.LookY() > 0)
+        if (InputManager.LookX(TPSPlayerController.controllerType) > 0 || InputManager.LookY() > 0)
         {
             looked = true;
             trackTime.ToggleTrackTime(true);

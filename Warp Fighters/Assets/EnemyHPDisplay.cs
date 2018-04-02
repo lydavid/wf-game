@@ -40,7 +40,7 @@ public class EnemyHPDisplay : MonoBehaviour {
 
 
 
-        SetUpHPSprites();
+        //SetUpHPSprites();
     }
 
     // this way we ensure BEC has the correct hp set up before calling this
@@ -48,6 +48,8 @@ public class EnemyHPDisplay : MonoBehaviour {
     // Start method, BEC will not have been instantiated yet...
     public void SetUpHPSprites()
     {
+        Debug.Log(gameObject.name);
+        Debug.Log(BEC.healthPoints);
         if (BEC.healthPoints > 0)
         {
             hp3.SetActive(true);

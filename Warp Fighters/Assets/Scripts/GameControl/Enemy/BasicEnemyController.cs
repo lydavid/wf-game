@@ -82,6 +82,8 @@ public class BasicEnemyController : MonoBehaviour {
 
     EnemyHPDisplay enemyHPDisplay;
 
+    bool setUp = true;
+
     // Use this for initialization
     void Start()
     {
@@ -117,13 +119,20 @@ public class BasicEnemyController : MonoBehaviour {
         }
 
         enemyHPDisplay = GetComponent<EnemyHPDisplay>();
-        //enemyHPDisplay.SetUpHPSprites();
+        //
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (setUp)
+        {
+            enemyHPDisplay.SetUpHPSprites();
+            setUp = false;
+        }
+
+
         // State machine to control enemy actions
         switch (enemyMoveState)
         {
