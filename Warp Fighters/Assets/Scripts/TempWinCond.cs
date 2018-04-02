@@ -23,7 +23,11 @@ public class TempWinCond : MonoBehaviour {
         } else*/
         if (!bossEnemy) // if a boss is not assigned, we cannot win, this prevents instant winning
         {
-            cannotWin = true;
+            bossEnemy = GameObject.Find("RiggedEnemy (4)");  // try to find boss enemy in Beta scene
+            if (!bossEnemy)
+            {
+                cannotWin = true;
+            }
         }
         ResetAllPlayerPrefs(); // do it here instead of start screen so that restarting game doesn't require us sending player back to start screen
 	}

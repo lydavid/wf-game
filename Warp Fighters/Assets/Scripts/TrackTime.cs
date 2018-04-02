@@ -48,9 +48,10 @@ public class TrackTime : MonoBehaviour {
 
     // Toggles whether to start/stop tracking time
     // if given true param, set to true -> used in ForcedInstructions
-    public void ToggleTrackTime(bool setTo = false)
+    public void SetTrackTime(bool setTo)
     {
-        if (!setTo)
+        trackTime = setTo;
+        /*if (!setTo)
         {
             if (trackTime)
             {
@@ -63,6 +64,6 @@ public class TrackTime : MonoBehaviour {
         } else
         {
             trackTime = true;
-        }
+        }*/
     }
 }

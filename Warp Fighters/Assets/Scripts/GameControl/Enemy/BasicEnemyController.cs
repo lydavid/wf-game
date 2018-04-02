@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround, flyingToDeath, waitToDestroy };
+public enum EnemyMoveState { patroling, chasingPlayer, coolingOff, warpAtPlayer, waiting, warpBackToGround, flyingToDeath, waitToDestroy, fallToDeath };
 
 /*
  * Guard: Stands still, if player passes through its sight, it will warp attack them, then return. Take them out from behind or beside them.
@@ -84,6 +84,9 @@ public class BasicEnemyController : MonoBehaviour {
 
     bool setUp = true;
 
+    CollectedKeysManager ckm;
+    TrackTime trackTime;
+
     // Use this for initialization
     void Start()
     {
@@ -120,6 +123,9 @@ public class BasicEnemyController : MonoBehaviour {
 
         enemyHPDisplay = GetComponent<EnemyHPDisplay>();
         //
+
+        ckm = player.GetComponent<CollectedKeysManager>();
+        trackTime = player.GetComponent<TrackTime>();
     }
 
 
@@ -130,6 +136,18 @@ public class BasicEnemyController : MonoBehaviour {
         {
             enemyHPDisplay.SetUpHPSprites();
             setUp = false;
+        }
+
+
+        // if player has collected all keys (cyan, magenta, yellow), boss will fall to death
+        // ie stop whatever state it's in and let itself freefall then explode
+        if (enemyType == EnemyType.c_boss)
+        {
+            if (ckm.HasAllKeys())
+            {
+                enemyMoveState = EnemyMoveState.fallToDeath;
+                trackTime.SetTrackTime(false);
+            }
         }
 
 
@@ -185,8 +203,18 @@ public class BasicEnemyController : MonoBehaviour {
                 WaitToDestroy();
                 break;
 
+            case EnemyMoveState.fallToDeath:
+                FallToDeath();
+                break;
+
             default: break;
         }
+    }
+
+
+    void FallToDeath()
+    {
+
     }
 
 
@@ -476,7 +504,7 @@ public class BasicEnemyController : MonoBehaviour {
 
         } else
         {
-            if (enemyMoveState == EnemyMoveState.flyingToDeath)// && other.gameObject.layer != 9)
+            if (enemyMoveState == EnemyMoveState.flyingToDeath || enemyMoveState == EnemyMoveState.fallToDeath)// && other.gameObject.layer != 9)
             {
                 ExplodeOnImpact();
             }

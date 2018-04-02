@@ -6,23 +6,33 @@ public class CollectedKeysManager : MonoBehaviour {
 
     List<KeyType> collectedKeys;
 
+    bool hasCyanKey;
+    bool hasMagentaKey;
+    bool hasYellowKey;
+
 	// Use this for initialization
 	void Start () {
         collectedKeys = new List<KeyType>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        if (collectedKeys.Count > 0)
-        {
-            //Debug.Log(collectedKeys[0]);
-        }
-	}
 
     // outside scripts should call this to add a key to player's key stash
     public void AddKey(KeyType keyType)
     {
         collectedKeys.Add(keyType);
+        switch (keyType)
+        {
+            case KeyType.Cyan:
+                hasCyanKey = true;
+                break;
+            case KeyType.Magenta:
+                hasMagentaKey = true;
+                break;
+            case KeyType.Yellow:
+                hasYellowKey = true;
+                break;
+
+        }
     }
 
     public bool HasKey(KeyType keyType)
@@ -30,10 +40,15 @@ public class CollectedKeysManager : MonoBehaviour {
         return collectedKeys.Contains(keyType);
     }
 
+    public bool HasAllKeys()
+    {
+        return hasCyanKey && hasMagentaKey && hasYellowKey;
+    }
+
     // call this to remove a key from player's stash
     // it does not matter which one is removed, just that the right type is removed
-    public void ConsumeKey(KeyType keyType)
+    /*public void ConsumeKey(KeyType keyType)
     {
         collectedKeys.Remove(keyType);
-    }
+    }*/
 }

@@ -30,25 +30,25 @@ public class ForcedInstructions : MonoBehaviour {
         if (InputManager.MoveX() != 0 || InputManager.MoveY() != 0)
         {
             moved = true;
-            trackTime.ToggleTrackTime(true);
+            trackTime.SetTrackTime(true);
         }
 
         if (InputManager.LookX(TPSPlayerController.controllerType) > 0 || InputManager.LookY() > 0)
         {
             looked = true;
-            trackTime.ToggleTrackTime(true);
+            trackTime.SetTrackTime(true);
         }
 
         if (InputManager.WarpButton(TPSPlayerController.controllerType))
         {
             warped = true;
-            trackTime.ToggleTrackTime(true);
+            trackTime.SetTrackTime(true);
         }
 
         if (InputManager.LockOnButton(TPSPlayerController.controllerType))
         {
             locked = true;
-            trackTime.ToggleTrackTime(true);
+            trackTime.SetTrackTime(true);
         }
 
         if (moved && looked && warped && locked)
