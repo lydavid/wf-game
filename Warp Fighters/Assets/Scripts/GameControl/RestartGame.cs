@@ -15,7 +15,15 @@ public class RestartGame : MonoBehaviour {
 
     void TaskOnClick()
     {
-        SceneManager.LoadScene("Alpha3.0");
+
+        if (PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD) == 0)
+        {
+            SceneManager.LoadScene("Beta 0.3");
+        }
+        else if (PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD) == 1)
+        {
+            SceneManager.LoadScene("Alpha3.0");
+        }
 	}
 	
 	// Update is called once per frame

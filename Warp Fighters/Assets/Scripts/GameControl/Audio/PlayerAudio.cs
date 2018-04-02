@@ -33,12 +33,12 @@ public class PlayerAudio : MonoBehaviour {
 
 	void Awake () {
 
-        bgmAudio = AddAudio(gameObject, bgmClip, true, true, 0.2f);
+        bgmAudio = AddAudio(gameObject, bgmClip, true, true, 1f);
 
-        warpAudio = AddAudio(gameObject, warpClip, false, false, 0.2f);
-        impactAudio = AddAudio(gameObject, impactClip, false, false, 0.2f);
-        deathAudio = AddAudio(gameObject, deathClip, false, false, 0.2f);
-        healthLowAudio = AddAudio(gameObject, healthLowClip, false, false, 0.2f);
+        warpAudio = AddAudio(gameObject, warpClip, false, false, 1f);
+        impactAudio = AddAudio(gameObject, impactClip, false, false, 1f);
+        deathAudio = AddAudio(gameObject, deathClip, false, false, 1f);
+        healthLowAudio = AddAudio(gameObject, healthLowClip, false, false, 1f);
     }
 
 	AudioSource AddAudio (GameObject obj, AudioClip clip, bool loop, bool playOnAwake, float volume) {

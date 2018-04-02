@@ -84,6 +84,11 @@ public class TPSPlayerController : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        if (hPManager.isDead)
+        {
+            return;
+        }
+
         if (moveWithPhysics)
         {
             Control();

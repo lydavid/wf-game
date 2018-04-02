@@ -9,7 +9,7 @@ public class LoadGameAsync : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        sceneToLoad = PlayerPrefs.GetInt("Scene");
+        sceneToLoad = PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD);
         StartCoroutine(LoadYourAsyncScene());
     }
 
@@ -25,8 +25,8 @@ public class LoadGameAsync : MonoBehaviour {
         AsyncOperation asyncLoad;
         if (sceneToLoad == 0)
         {
-            //asyncLoad = SceneManager.LoadSceneAsync("Beta 0.0");
-            asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
+            asyncLoad = SceneManager.LoadSceneAsync("Beta 0.3");
+            //asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
         } else
         {
             asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");

@@ -21,7 +21,7 @@ public static class Constants
     public const string WARPS_KEY = "Warp Count"; // num times warped
     public const int KILLS_INDEX = 5;
     public const string KILLS_KEY = "Enemies Killed"; // num enemies killed
-    
 
 
+    public const string SCENE_TO_LOAD = "Scene";
 }
