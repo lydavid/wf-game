@@ -28,7 +28,7 @@ public class WarpLimiter : MonoBehaviour {
 
         if (maxWarpCharges == 0) // allows for manually setting this in editor
         {
-            maxWarpCharges = 2;
+            maxWarpCharges = 5;
         }
 
         warpCharges = maxWarpCharges;
