@@ -18,21 +18,21 @@ public class DPadButton : MonoBehaviour
     void Update()
     {
         x = Input.GetAxisRaw("D-Pad X Axis");
-        x += Input.GetAxisRaw("Horizontal");
+        x += Input.GetAxis("Horizontal");
         x = Mathf.Clamp(x, -1f, 1f);
-        y = Input.GetAxisRaw("D-Pad Y Axis");
+        y = Input.GetAxis("D-Pad Y Axis");
         y += Input.GetAxisRaw("Vertical");
         y = Mathf.Clamp(y, -1f, 1f);
 
         if (x != 0 && dpadXPressed == false)
         {
-            if (x == 1)
+            if (x > 0)//(x == 1)
             {
                 countX += 1;
                 right = true;
                    
             }
-            else if (x == -1)
+            else if (x < 0)//(x == -1)
             {
                 countX -= 1;
                 left = true;
@@ -47,12 +47,12 @@ public class DPadButton : MonoBehaviour
 
         if (y != 0 && dpadYPressed == false)
         {
-            if (y == 1)
+            if (y > 0)//(y == 1)
             {
                 countY += 1;
                 up = true; 
             }
-            else if (y == -1)
+            else if (y < 0)//(y == -1)
             {
                 countY -= 1;
                 down = true;
