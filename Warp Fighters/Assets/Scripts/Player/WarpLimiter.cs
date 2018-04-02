@@ -15,8 +15,8 @@ public class WarpLimiter : MonoBehaviour {
     float warpRechargeTimeProgress;
 
     Text NumWarpChargesText;
-    Text WarpChargesDisplayText;
-    RectTransform WarpChargesDisplayBackdrop;
+    //Text WarpChargesDisplayText;
+    //RectTransform WarpChargesDisplayBackdrop;
 
     TPSPlayerController TPSPlayerController;
 
@@ -35,9 +35,10 @@ public class WarpLimiter : MonoBehaviour {
         warpRechargeTime = 0.5f;
         warpRechargeTimeProgress = warpRechargeTime;
 
+
         NumWarpChargesText = GameObject.Find("NumWarpChargesText").GetComponent<Text>();
-        WarpChargesDisplayText = GameObject.Find("WarpChargesDisplayText").GetComponent<Text>();
-        WarpChargesDisplayBackdrop = GameObject.Find("WarpChargesDisplayBackdrop").GetComponent<RectTransform>();
+       // WarpChargesDisplayText = GameObject.Find("WarpChargesDisplayText").GetComponent<Text>();
+       // WarpChargesDisplayBackdrop = GameObject.Find("WarpChargesDisplayBackdrop").GetComponent<RectTransform>();
 
         TPSPlayerController = GetComponent<TPSPlayerController>();
 
@@ -70,23 +71,24 @@ public class WarpLimiter : MonoBehaviour {
     void UpdateUI()
     {
         // NumWarpChargesText
-        string zeroInFront = "";
-        if (warpCharges < 10)
-        {
-            zeroInFront = "0";
-        }
-        NumWarpChargesText.text = zeroInFront + warpCharges.ToString();
+        //string zeroInFront = "";
+        //if (warpCharges < 10)
+        //{
+        //    zeroInFront = "0";
+        //}
+        // NumWarpChargesText.text = zeroInFront + warpCharges.ToString();
 
         // WarpChargesDisplayText
-        WarpChargesDisplayText.text = "";
-        for (int i = 0; i < warpCharges; i++)
-        {
-            WarpChargesDisplayText.text += "|";
-        }
+        // WarpChargesDisplayText.text = "";
+        // for (int i = 0; i < warpCharges; i++)
+        //{
+        //     WarpChargesDisplayText.text += "|";
+        //}
 
+        NumWarpChargesText.text = warpCharges.ToString(); 
         // WarpChargesDisplayTextBackdrop
         // size varies on maxWarpCharges
-        WarpChargesDisplayBackdrop.sizeDelta = new Vector2(maxWarpCharges * 8, 40);
+        //WarpChargesDisplayBackdrop.sizeDelta = new Vector2(maxWarpCharges * 8, 40);
     }
 
 
