@@ -20,7 +20,7 @@ public class CsvIO : MonoBehaviour
     
 
     int numPages = 0;
-    int curPageNum = 0;
+    int curPageNum = 0;  // 
     List<GameObject> currentPage = new List<GameObject>();
 
     Color highlightThisPlayerColor = Color.cyan;
@@ -33,7 +33,7 @@ public class CsvIO : MonoBehaviour
         Save();
         Load();
         SetPlayerPageNum();
-        DisplayPlayers(playerPageNum - 1);
+        DisplayPlayers(playerPageNum);
     }
 
     void Save()
@@ -121,10 +121,10 @@ public class CsvIO : MonoBehaviour
             
         }*/
         dataOUT = unsortedLines.ToArray();
-        Debug.Log(dataOUT.Length);
+        //Debug.Log(dataOUT.Length);
 
         numPages = (int)Mathf.Ceil((float)dataOUT.Length / 10);
-        Debug.Log(numPages);
+        //Debug.Log(numPages);
     }
 
     void Update ()
@@ -166,6 +166,12 @@ public class CsvIO : MonoBehaviour
         }
 
 
+        // Window Button: Player's page
+        if (Input.GetButtonDown("Window Button"))
+        {
+            DisplayPlayers(playerPageNum);
+        }
+
 
     }
 
@@ -177,7 +183,7 @@ public class CsvIO : MonoBehaviour
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             if (int.Parse(playerData[Constants.ID_INDEX]) == PlayerPrefs.GetInt(Constants.ID_KEY))
             {
-                playerPageNum = (int)Mathf.Ceil((float)i / 10);
+                playerPageNum = (int)Mathf.Ceil((float)i / 10) - 1;
             }
         }
         Debug.Log(playerPageNum);
