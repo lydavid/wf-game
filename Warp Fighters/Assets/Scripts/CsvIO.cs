@@ -183,7 +183,7 @@ public class CsvIO : MonoBehaviour
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             if (int.Parse(playerData[Constants.ID_INDEX]) == PlayerPrefs.GetInt(Constants.ID_KEY))
             {
-                playerPageNum = (int)Mathf.Ceil((float)i / 10) - 1;
+                playerPageNum = (int)Mathf.Floor((float)i / 10); // 0-9 -> pg0, 10-19 -> pg1
             }
         }
         Debug.Log(playerPageNum);
@@ -211,7 +211,7 @@ public class CsvIO : MonoBehaviour
 
         // now make it only display 10 at a time depending on page number
         // page 1 -> i=0 to 9, page 2 -> i=10 to 19
-
+        Debug.Log(pageNum);
         for (int i = 0 + pageNum * 10; i < Mathf.Min(10 + pageNum * 10, dataOUT.Length); i++)
         {
 

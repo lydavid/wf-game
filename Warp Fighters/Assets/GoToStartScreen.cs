@@ -5,15 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GoToStartScreen : MonoBehaviour {
 
+    GameObject BGM;
+
 	// Use this for initialization
 	void Start () {
-		
+
+        // try to find any audio and destroy them before returning to start
+        BGM = GameObject.Find("Audio");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("return"))
         {
+            Destroy(BGM);
             SceneManager.LoadScene("StartScreen");
         }
 	}
