@@ -17,7 +17,7 @@ public class GoToStartScreen : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (InputManager.MenuButton())
-
+        {
             if (BGM)
             {
                 Destroy(BGM);
