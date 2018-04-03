@@ -55,7 +55,7 @@ public class HPManager : MonoBehaviour {
 
         // TODO: Touching "Terrain" auto-kills you? Maybe wanna change this
         if (hit.gameObject.tag == "Terrain") {
-            SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene(Constants.SCENE_GAME_OVER);
         }
     }
 
@@ -78,7 +78,7 @@ public class HPManager : MonoBehaviour {
 
 
                 // GAME OVER
-                //SceneManager.LoadScene("GameOver");
+                
                 // now handled in MeshExplosion, exclusively for Player obj
             } else if (healthPoints <= 1)
             {

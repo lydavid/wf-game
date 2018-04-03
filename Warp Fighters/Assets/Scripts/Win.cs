@@ -19,7 +19,7 @@ public class Win : MonoBehaviour {
     {
         if (other.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene("Win");
+            SceneManager.LoadScene(Constants.SCENE_WIN);
         } 
     }
 }
