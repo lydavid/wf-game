@@ -22,6 +22,16 @@ public static class Constants
     public const int KILLS_INDEX = 5;
     public const string KILLS_KEY = "Enemies Killed"; // num enemies killed
 
-
+    // Tracks which scene to load: 0-Beta, 1-Alpha
     public const string SCENE_TO_LOAD = "Scene";
+
+    public const string SCENE_BETA = "Beta 0.3";
+    public const string SCENE_ALPHA = "Alpha 3.0";
+    public const string SCENE_LOADING = "LoadingScreen";
+    public const string SCENE_START = "StartScreen";
+    public const string SCENE_WIN = "Win";
+    public const string SCENE_ENTER_NAME = "Highscore";
+    public const string SCENE_LEADERBOARD = "Leaderboard";
+    public const string SCENE_GAME_OVER = "GameOver";
+
 }

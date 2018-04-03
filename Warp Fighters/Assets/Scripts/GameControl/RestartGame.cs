@@ -6,28 +6,27 @@ using UnityEngine.SceneManagement;
 
 public class RestartGame : MonoBehaviour {
 
-	public Button restartBtn;
+	//public Button restartBtn;
 
 	// Use this for initialization
 	void Start () {
-		restartBtn.onClick.AddListener(TaskOnClick);
+		//restartBtn.onClick.AddListener(TaskOnClick);
     }
 
-    void TaskOnClick()
-    {
-
-        if (PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD) == 0)
-        {
-            SceneManager.LoadScene("Beta 0.3");
-        }
-        else if (PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD) == 1)
-        {
-            SceneManager.LoadScene("Alpha3.0");
-        }
-	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
+        // Restart game
+		if (InputManager.WindowButton())
+        {
+            SceneManager.LoadScene(Constants.SCENE_LOADING);  // loading screen will determine which scene to load
+        }
+
+        // Return to Start
+        if (InputManager.MenuButton())
+        {
+            SceneManager.LoadScene(Constants.SCENE_START);
+        }
 	}
 }
