@@ -12,13 +12,19 @@ public class LoadGameAsync : MonoBehaviour {
     int sceneToLoad;
     float progress;
 
+    GameObject startScreenBGM;
+
 	// Use this for initialization
 	void Start () {
 
         loadingBarSlider = loadingBar.GetComponent<Slider>();
 
+        startScreenBGM = GameObject.Find("StartBGM");
+
         sceneToLoad = PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD);
         StartCoroutine(LoadYourAsyncScene());
+
+
     }
 
     void Update()
@@ -46,6 +52,16 @@ public class LoadGameAsync : MonoBehaviour {
             progress = asyncLoad.progress / 0.9f;  // since unity load goes from 0.0 to 0.9
             loadingBarSlider.value = progress;
             Debug.Log(progress);
+
+            if (loadingBarSlider.value == 1.0f)  // loading is done
+            {
+                // kill the music carried over from start screen
+                if (startScreenBGM)
+                {
+                    Destroy(startScreenBGM);
+                }
+            }
+
             yield return null;
         }
     }
