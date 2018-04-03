@@ -21,7 +21,7 @@ public class LoadGameAsync : MonoBehaviour {
 
         startScreenBGM = GameObject.Find("StartBGM");
 
-        sceneToLoad = PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD);
+        //sceneToLoad = PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD);
         StartCoroutine(LoadYourAsyncScene());
 
 
@@ -33,21 +33,21 @@ public class LoadGameAsync : MonoBehaviour {
         // The Application loads the Scene in the background at the same time as the current Scene.
         //This is particularly good for creating loading screens. You could also load the Scene by build //number.
         AsyncOperation asyncLoad;
-        if (sceneToLoad == 0)
+        /*if (sceneToLoad == 0)
         {
-            asyncLoad = SceneManager.LoadSceneAsync(Constants.SCENE_BETA);
+            
             //asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
         } else
         {
             asyncLoad = SceneManager.LoadSceneAsync(Constants.SCENE_ALPHA);
-        }
+        }*/
+        asyncLoad = SceneManager.LoadSceneAsync(Constants.SCENE_BETA);
 
         //Wait until the last operation fully loads to return anything
         while (!asyncLoad.isDone)
         {
             progress = asyncLoad.progress / 0.9f;  // since unity load goes from 0.0 to 0.9
             loadingBarSlider.value = progress;
-            Debug.Log(progress);
 
             if (loadingBarSlider.value == 1.0f)  // loading is done
             {

@@ -22,17 +22,17 @@ public class StartGame : MonoBehaviour {
 	{
 		if (InputManager.MenuButton())
         {
-            PlayerPrefs.SetInt(Constants.SCENE_TO_LOAD, 0);// 0); // 0 is Beta 0.0, 1 is Alpha3.0
+            //PlayerPrefs.SetInt(Constants.SCENE_TO_LOAD, 0);// 0); // 0 is Beta 0.0, 1 is Alpha3.0
             bgm.Play();
             StartCoroutine(Fade());
         }
 
-        if (InputManager.WindowButton())
+        /*if (InputManager.WindowButton())
         {
             PlayerPrefs.SetInt(Constants.SCENE_TO_LOAD, 1);
             bgm.Play();
             StartCoroutine(Fade());
-        }
+        }*/
 	}
 
 
