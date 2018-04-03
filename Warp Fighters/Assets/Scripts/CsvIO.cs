@@ -16,15 +16,15 @@ public class CsvIO : MonoBehaviour
     public string[] dataOUT;
     public Font font;
     public Canvas canvas;
-
     
 
     int numPages = 0;
-    int curPageNum = 0;  // 
+    int curPageNum = 0;
     List<GameObject> currentPage = new List<GameObject>();
 
     Color highlightThisPlayerColor = Color.cyan;
     int playerPageNum = 0;
+
 
     // Use this for initialization
     void Start()
@@ -71,40 +71,21 @@ public class CsvIO : MonoBehaviour
         int length = output.GetLength(0);
         string delimiter = ",";
 
-        //StringBuilder sb = new StringBuilder();
-
-        //StreamWriter outStream = System.IO.File.AppendText(filePath);
         StreamWriter writer = new StreamWriter(filePath, true); // writes to file, appending if file exists
 
         for (int index = 0; index < length; index++)
-            //ssb = string.Join(delimiter, output[index]);
-            //outStream.WriteLine(ssb);
+        {
             writer.WriteLine(string.Join(delimiter, output[index]));
-
-        //sb = sb.Replace(System.Environment.NewLine, "");
-
-        
-        //writer.WriteLine("Test");
+        }
         writer.Close();
-
-
-        //outStream.Close();
     }
 
     void Load ()
     {
         String[] lines = System.IO.File.ReadAllLines(filePath);
-        
-
-        //dataOUT = lines;
-
         List<String> unsortedLines = new List<String>(lines);
         unsortedLines.RemoveRange(0, 1);
 
-        foreach (String s in unsortedLines)
-        {
-            Debug.Log(s);
-        }
         unsortedLines.Sort(delegate (String x, String y) {
             if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) > float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return 1;
             else if (float.Parse(x.Split(',')[Constants.SCORE_INDEX]) < float.Parse(y.Split(',')[Constants.SCORE_INDEX])) return -1;
@@ -115,25 +96,20 @@ public class CsvIO : MonoBehaviour
             else return 0;
             
         });
-        /*foreach (String s in unsortedLines)
-        {
-            Debug.Log(s);
-            
-        }*/
-        dataOUT = unsortedLines.ToArray();
-        //Debug.Log(dataOUT.Length);
 
+        dataOUT = unsortedLines.ToArray();
         numPages = (int)Mathf.Ceil((float)dataOUT.Length / 10);
-        //Debug.Log(numPages);
     }
 
     void Update ()
     {
+
         // LB: First page
         if (Input.GetButtonDown("Left Bumper"))
         {
             DisplayPlayers(0);
         }
+
 
         // RB: Last page
         if (Input.GetButtonDown("Right Bumper"))
@@ -167,12 +143,10 @@ public class CsvIO : MonoBehaviour
 
 
         // Window Button: Player's page
-        if (Input.GetButtonDown("Window Button"))
+        if (InputManager.WindowButton())
         {
             DisplayPlayers(playerPageNum);
         }
-
-
     }
 
 
@@ -194,7 +168,7 @@ public class CsvIO : MonoBehaviour
     {
 
         // update current page number
-        // we need to know this for Prev/Next button
+        // we need to know this for our buttons
         curPageNum = pageNum;
 
         // empty anything on screen first before displaying
@@ -214,10 +188,6 @@ public class CsvIO : MonoBehaviour
         Debug.Log(pageNum);
         for (int i = 0 + pageNum * 10; i < Mathf.Min(10 + pageNum * 10, dataOUT.Length); i++)
         {
-
-
-
-
             string[] playerData = (dataOUT[i].Trim()).Split(',');
             foreach (string s in playerData)
             {
@@ -243,10 +213,12 @@ public class CsvIO : MonoBehaviour
                 + playerData[Constants.KILLS_INDEX].ToString();
 
 
-            // font and color
+            // font
             text.font = font;
             text.fontSize = 25;
 
+            // color
+            // highlight the text of the current player's score
             if (int.Parse(playerData[Constants.ID_INDEX]) == PlayerPrefs.GetInt(Constants.ID_KEY))
             {
                 text.color = highlightThisPlayerColor;
@@ -255,9 +227,8 @@ public class CsvIO : MonoBehaviour
             {
                 text.color = Color.white;
             }
+
             y -= 20;
         }
     }
-
-    
 }

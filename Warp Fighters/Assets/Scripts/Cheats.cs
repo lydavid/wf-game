@@ -23,6 +23,7 @@ public class Cheats : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
+
         // Determine whether to gain or lose a point in whatever
         if (Input.GetKey("left shift"))
         {
@@ -31,6 +32,7 @@ public class Cheats : MonoBehaviour {
         {
             point = 1;
         }
+
 
         if (Input.GetKeyDown("1"))
         {
@@ -43,15 +45,17 @@ public class Cheats : MonoBehaviour {
             warpLimiter.GainMaxChargeAndRefill(point);
         }
 
+
         if (Input.GetKeyDown("3"))
         {
-            // win game
-            tempWinCond.Win();
+            trackTime.AddToTime(point * 60);
         }
+
 
         if (Input.GetKeyDown("4"))
         {
-            trackTime.AddToTime(point * 60);
+            // win game
+            tempWinCond.Win();
         }
     }
 }
