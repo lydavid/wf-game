@@ -60,7 +60,7 @@ public class HighscoreGUI : MonoBehaviour {
     {
         String curLetter = individualLetters[curLetPos].text;
 
-        if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("return"))
+        if (InputManager.MenuButton())
         {
             // Set initials
             PlayerPrefs.SetString(Constants.NAME_KEY, initial1.text + initial2.text + initial3.text);

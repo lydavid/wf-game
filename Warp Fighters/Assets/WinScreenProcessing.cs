@@ -25,7 +25,7 @@ public class WinScreenProcessing : MonoBehaviour {
 
 
         // manually go to next scene
-        if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("return"))
+        if (InputManager.MenuButton())
         {
             SceneManager.LoadScene("Highscore");
         }

@@ -84,4 +84,15 @@ public static class InputManager
         lookY += Input.GetAxis("Mouse Y");
         return Mathf.Clamp(lookY, -1.0f, 1.0f);
     }
+
+
+    public static bool MenuButton()
+    {
+        return Input.GetButtonDown("Menu Button") || Input.GetKeyDown("return");
+    }
+
+    public static bool WindowButton()
+    {
+        return Input.GetButtonDown("Window Button") || Input.GetKeyDown("left shift");
+    }
 }
