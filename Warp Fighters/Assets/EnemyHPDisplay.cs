@@ -107,7 +107,29 @@ public class EnemyHPDisplay : MonoBehaviour {
             hp3.SetActive(false); // only account for nonboss enemies having 1 HP
         } else
         {
-            if (hpLeft == 4)
+
+            if (hpLeft < 1)
+            {
+                hp1.SetActive(false);
+            }
+            if (hpLeft < 2)
+            {
+                hp2.SetActive(false);
+            }
+            if (hpLeft < 3)
+            {
+                hp3.SetActive(false);
+            }
+            if (hpLeft < 4)
+            {
+                hp4.SetActive(false);
+            }
+            if (hpLeft < 5)
+            {
+                hp5.SetActive(false);
+            }
+
+            /*if (hpLeft == 4)
             {
                 hp5.SetActive(false);
             } else if (hpLeft == 3)
@@ -125,7 +147,7 @@ public class EnemyHPDisplay : MonoBehaviour {
             else if (hpLeft == 0)
             {
                 hp1.SetActive(false);
-            }
+            }*/
         }
     }
 }

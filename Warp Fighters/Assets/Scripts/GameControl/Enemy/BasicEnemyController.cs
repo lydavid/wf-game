@@ -146,6 +146,7 @@ public class BasicEnemyController : MonoBehaviour {
             if (ckm.HasAllKeys())
             {
                 enemyMoveState = EnemyMoveState.fallToDeath;
+                Damage(healthPoints);  // rest of HP
                 trackTime.SetTrackTime(false);
             }
         }
@@ -550,9 +551,9 @@ public class BasicEnemyController : MonoBehaviour {
     }
 
 
-    void Damage()
+    void Damage(int damage = 1)
     {
-        healthPoints -= 1;
+        healthPoints -= damage;
         //ChangeColorOfChildren(damagedColor);
 
         // Remove an HP sprite above head
@@ -563,7 +564,10 @@ public class BasicEnemyController : MonoBehaviour {
         if (healthPoints <= 0)
         {
             //Destroy(gameObject);
-            enemyMoveState = EnemyMoveState.flyingToDeath;
+            if (enemyMoveState != EnemyMoveState.fallToDeath)
+            {
+                enemyMoveState = EnemyMoveState.flyingToDeath;
+            }
         }
     }
 
