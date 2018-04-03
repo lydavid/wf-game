@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadGameAsync : MonoBehaviour {
 
+    public GameObject loadingBar;
+    Slider loadingBarSlider;
+
     int sceneToLoad;
+    float progress;
 
 	// Use this for initialization
 	void Start () {
+
+        loadingBarSlider = loadingBar.GetComponent<Slider>();
+
         sceneToLoad = PlayerPrefs.GetInt(Constants.SCENE_TO_LOAD);
         StartCoroutine(LoadYourAsyncScene());
     }
@@ -35,6 +43,9 @@ public class LoadGameAsync : MonoBehaviour {
         //Wait until the last operation fully loads to return anything
         while (!asyncLoad.isDone)
         {
+            progress = asyncLoad.progress / 0.9f;  // since unity load goes from 0.0 to 0.9
+            loadingBarSlider.value = progress;
+            Debug.Log(progress);
             yield return null;
         }
     }
