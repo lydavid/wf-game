@@ -30,7 +30,7 @@ public class AltCameraClipping : MonoBehaviour {
         playerTag = player.tag;
         // default dist to player
         defaultDistance = transform.localPosition.z; //Vector3.Distance(player.transform.position, transform.position);//
-        closestDistance = 0.0f; // -1.0f;
+        closestDistance = 0f; // -1.0f;
         curDistance = defaultDistance;
         distToPlayer = defaultDistance;
         //Debug.Log(distToPlayer);
