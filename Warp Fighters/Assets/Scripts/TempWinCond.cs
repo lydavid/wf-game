@@ -65,6 +65,6 @@ public class TempWinCond : MonoBehaviour {
         PlayerPrefs.SetInt(Constants.WARPS_KEY, humanBullet.warpCount);
         PlayerPrefs.SetInt(Constants.KILLS_KEY, warpLimiter.kills);
 
-        SceneManager.LoadScene("Win");
+        SceneManager.LoadScene(Constants.SCENE_WIN);
     }
 }

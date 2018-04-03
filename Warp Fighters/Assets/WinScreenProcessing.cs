@@ -7,20 +7,21 @@ using UnityEngine.UI;
 // Timestamp the end date and go to initial input screen after a period of time
 public class WinScreenProcessing : MonoBehaviour {
 
+    
     public GameObject progressBar;
     Slider slider;
 
     float startingWaitTime = 10.0f;
     float waitTime;
 
+
 	// Use this for initialization
 	void Start () {
-
         waitTime = startingWaitTime;
-
         slider = progressBar.GetComponent<Slider>();
     }
 	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -31,14 +32,13 @@ public class WinScreenProcessing : MonoBehaviour {
         waitTime -= Time.deltaTime;
         if (waitTime <= 0.0f)
         {
-            SceneManager.LoadScene("Highscore");
+            SceneManager.LoadScene(Constants.SCENE_ENTER_NAME);
         }
-
 
         // manually go to next scene
         if (InputManager.MenuButton())
         {
-            SceneManager.LoadScene("Highscore");
+            SceneManager.LoadScene(Constants.SCENE_ENTER_NAME);
         }
 	}
 }

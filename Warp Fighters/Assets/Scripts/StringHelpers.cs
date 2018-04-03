@@ -31,6 +31,7 @@ public static class StringHelpers
         return timeText;
     }
 
+
     /*
      * Given 1, returns 1st, 2, 2nd, etc.
      */
@@ -54,9 +55,6 @@ public static class StringHelpers
                 suffix = "rd";
             }
         }
-        
-
-
         return rankString + suffix;
     }
 }

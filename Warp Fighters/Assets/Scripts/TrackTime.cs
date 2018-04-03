@@ -40,37 +40,25 @@ public class TrackTime : MonoBehaviour {
         displayTimeText.text = StringHelpers.TimeInSecondsToFormattedString(timeInSeconds);
     }
 
+
     public float GetTime ()
     {
         return timeInSeconds;
     }
 
 
+    // Set whether to start/stop tracking time
+    public void SetTrackTime(bool setTo)
+    {
+        trackTime = setTo;
+    }
+
+
+    //============================================================================================
     // used in cheats only
     public void AddToTime(int seconds)
     {
         timeInSeconds += seconds;
     }
-
-
-    // Toggles whether to start/stop tracking time
-    // if given true param, set to true -> used in ForcedInstructions
-    public void SetTrackTime(bool setTo)
-    {
-        trackTime = setTo;
-        /*if (!setTo)
-        {
-            if (trackTime)
-            {
-                trackTime = false;
-            }
-            else
-            {
-                trackTime = true;
-            }
-        } else
-        {
-            trackTime = true;
-        }*/
-    }
+    //============================================================================================
 }

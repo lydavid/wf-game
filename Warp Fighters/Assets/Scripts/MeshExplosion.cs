@@ -290,7 +290,7 @@ public class MeshExplosion : MonoBehaviour {
             /* End the game once the player has exploded */
             if (isPlayer)
             {
-                SceneManager.LoadScene("GameOver");
+                SceneManager.LoadScene(Constants.SCENE_GAME_OVER);
             }
             else
             {
