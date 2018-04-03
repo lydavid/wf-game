@@ -16,19 +16,18 @@ public class StartGame : MonoBehaviour {
 		bgm = GetComponent<AudioSource>();	
 	}
 
-    
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetButtonDown("Menu Button") || Input.GetKeyDown("enter") || Input.GetKeyDown("left shift") || Input.GetKeyDown("return"))
+		if (InputManager.MenuButton())
         {
             PlayerPrefs.SetInt(Constants.SCENE_TO_LOAD, 0);// 0); // 0 is Beta 0.0, 1 is Alpha3.0
             bgm.Play();
             StartCoroutine(Fade());
         }
 
-        if (Input.GetButtonDown("Window Button") || Input.GetKeyDown("right shift"))
+        if (InputManager.WindowButton())
         {
             PlayerPrefs.SetInt(Constants.SCENE_TO_LOAD, 1);
             bgm.Play();
@@ -36,20 +35,11 @@ public class StartGame : MonoBehaviour {
         }
 	}
 
+
 	IEnumerator Fade () 
 	{	
 		anim.SetBool("Fade", true);
 		yield return new WaitForSeconds(1);
-		//SceneManager.LoadScene("JonLevel");
-        SceneManager.LoadScene("LoadingScreen");
+        SceneManager.LoadScene(Constants.SCENE_LOADING);
     }
-
-    /*IEnumerator OtherFade()
-    {
-        anim.SetBool("Fade", true);
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("FullMap");
-    }*/
-
-
 }

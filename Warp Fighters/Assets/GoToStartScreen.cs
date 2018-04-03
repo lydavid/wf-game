@@ -22,7 +22,7 @@ public class GoToStartScreen : MonoBehaviour {
             {
                 Destroy(BGM);
             }
-            SceneManager.LoadScene("StartScreen");
+            SceneManager.LoadScene(Constants.SCENE_START);
         }
 	}
 }

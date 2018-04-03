@@ -27,10 +27,6 @@ public class LoadGameAsync : MonoBehaviour {
 
     }
 
-    void Update()
-    {
-        
-    }
 
     IEnumerator LoadYourAsyncScene()
     {
@@ -39,11 +35,11 @@ public class LoadGameAsync : MonoBehaviour {
         AsyncOperation asyncLoad;
         if (sceneToLoad == 0)
         {
-            asyncLoad = SceneManager.LoadSceneAsync("Beta 0.3");
+            asyncLoad = SceneManager.LoadSceneAsync(Constants.SCENE_BETA);
             //asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
         } else
         {
-            asyncLoad = SceneManager.LoadSceneAsync("Alpha3.0");
+            asyncLoad = SceneManager.LoadSceneAsync(Constants.SCENE_ALPHA);
         }
 
         //Wait until the last operation fully loads to return anything

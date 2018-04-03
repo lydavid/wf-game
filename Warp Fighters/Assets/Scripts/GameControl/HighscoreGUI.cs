@@ -69,7 +69,7 @@ public class HighscoreGUI : MonoBehaviour {
             // or do it all in the next scene as we still have access to playerprefs
 
             // go to next scene
-            SceneManager.LoadScene("Leaderboard");
+            SceneManager.LoadScene(Constants.SCENE_LEADERBOARD);
         }
         if (Input.GetButtonDown("A Button") || Input.GetMouseButtonDown(0))
         {
