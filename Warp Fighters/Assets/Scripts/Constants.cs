@@ -25,7 +25,7 @@ public static class Constants
     // Tracks which scene to load: 0-Beta, 1-Alpha
     public const string SCENE_TO_LOAD = "Scene";
 
-    public const string SCENE_BETA = "Beta 0.3_BUILD";
+    public const string SCENE_BETA = "Beta 0.3";
     public const string SCENE_ALPHA = "Alpha 3.0";
     public const string SCENE_LOADING = "LoadingScreen";
     public const string SCENE_START = "StartScreen";
