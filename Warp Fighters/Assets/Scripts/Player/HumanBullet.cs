@@ -45,8 +45,23 @@ public class HumanBullet : MonoBehaviour {
 
     public WarpType warpType;
 
+
+
+
     // data tracking
     public int warpCount;
+
+    // extents of body renderers, used to change bullet's position on collision to prevent stuck in floor/ceiling problem
+    public GameObject topMost;
+    public GameObject bottomMost;
+    public Vector3 bodyTop;
+    public Vector3 bodyBottom;
+
+    // it's bound
+    public GameObject bulletGOWithMesh;
+    public Vector3 bulletTop;
+    public Vector3 bulletBot;
+
 
     void Start()
     {
@@ -72,6 +87,10 @@ public class HumanBullet : MonoBehaviour {
         {
             //bullet.transform.localPosition = new Vector3(0.0f, 1.5f, 0.0f);
         }
+
+        bodyTop = topMost.GetComponent<Renderer>().bounds.max;
+        bodyBottom = bottomMost.GetComponent<Renderer>().bounds.min;
+
     }
 
     /*private void FixedUpdate()
@@ -113,6 +132,12 @@ public class HumanBullet : MonoBehaviour {
 
     void Update()
     {
+
+        bodyTop = topMost.GetComponent<Renderer>().bounds.max;
+        bodyBottom = bottomMost.GetComponent<Renderer>().bounds.min;
+
+        bulletTop = bulletGOWithMesh.GetComponent<Renderer>().bounds.max;
+        bulletBot = bulletGOWithMesh.GetComponent<Renderer>().bounds.min;
 
         //Debug.Log(GetComponent<Rigidbody>().velocity.magnitude);
 
@@ -269,6 +294,7 @@ public class HumanBullet : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
+        
         //if (other.gameObject.layer != 9 && other.gameObject.tag != "Player")
         //{
         if (bulletMode)
@@ -278,11 +304,42 @@ public class HumanBullet : MonoBehaviour {
 
             if (warpType == WarpType.original)
             {
+
+
+                int e = 0;
+                foreach (ContactPoint c in other.contacts)
+                {
+                    //Debug.Log(e);
+                    //Debug.Log(c.point);
+                    e++;
+
+                    // while this works nicely most of the time, sometimes one of them is closer than other unintentionally
+                    // since bullet is in center between them
+                    //float distToTop = Vector3.Distance(c.point, bodyTop);//bulletTop);
+                    //float distToBot = Vector3.Distance(c.point, bodyBottom);//bulletBot);
+                    //Debug.Log();
+                    //Debug.Log(Vector3.Distance(c.point, bulletBot));
+                    //float 
+                    if (c.point.y > bullet.transform.position.y)//(distToTop < distToBot)
+                    {
+                        Debug.Log("Collision from below.");
+                        transform.position = bodyBottom;
+                    }
+                    else
+                    {
+                        Debug.Log("Collision from above.");
+                        transform.position = bodyTop;
+                    }
+                    break;
+
+                }
+
+
                 //Debug.Log("y");
                 // temp fix for nonconvex pipes in beta
                 //rb.velocity = Vector3.zero;
                 //rb.angularVelocity = Vector3.zero;
-                if (other.contacts[0].point.y >= transform.position.y)
+                /*if (other.contacts[0].point.y >= transform.position.y)
                 { // if point of contact is higher
                     rb.velocity = new Vector3(-3, -3, -3); //stops the player from flying everywhere
 
@@ -290,7 +347,7 @@ public class HumanBullet : MonoBehaviour {
                 else
                 {
                     rb.velocity = new Vector3(Mathf.Max(3, rb.velocity.x), 3, Mathf.Max(3, rb.velocity.z)); //stops the player from flying everywhere
-                }
+                }*/
             // seems we need a minimum velocity on collision, else we may glitch through floors
                 //rb.velocity = Vector3.zero;
                 //rb.angularVelocity = Vector3.zero;
