@@ -46,7 +46,7 @@ public class HPManager : MonoBehaviour {
         if (!deathAudio.isPlaying && !exploded)
         {
             // Explode character upon end of death sound
-            GetComponent<MeshExplosion>().SplitMesh(3.0f);
+            GetComponent<MeshExplosion>().SplitMesh(3.0f, 50f);
             exploded = true;
         }
     }
