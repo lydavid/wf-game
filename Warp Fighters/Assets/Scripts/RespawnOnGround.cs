@@ -36,4 +36,17 @@ public class RespawnOnGround : MonoBehaviour {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "InvisibleWall")
+        {
+            // Respawn player at last ground position
+            transform.position = lastGroundPosition;
+
+            // Remove any velocity in case player had warped off from there
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+    }
 }
