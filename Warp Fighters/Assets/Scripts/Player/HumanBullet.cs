@@ -285,13 +285,6 @@ public class HumanBullet : MonoBehaviour {
 
     }
 
-    /*private void FixedUpdate()
-    {
-        GetComponent<Rigidbody>().AddForce(Physics.gravity);
-    }*/
-
-    
-
     private void OnCollisionEnter(Collision other)
     {
         
@@ -309,8 +302,7 @@ public class HumanBullet : MonoBehaviour {
                 int e = 0;
                 foreach (ContactPoint c in other.contacts)
                 {
-                    //Debug.Log(e);
-                    //Debug.Log(c.point);
+                    
                     e++;
 
                     // while this works nicely most of the time, sometimes one of them is closer than other unintentionally
