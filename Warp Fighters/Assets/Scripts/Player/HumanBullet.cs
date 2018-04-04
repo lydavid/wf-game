@@ -320,15 +320,21 @@ public class HumanBullet : MonoBehaviour {
                     //Debug.Log();
                     //Debug.Log(Vector3.Distance(c.point, bulletBot));
                     //float 
-                    if (c.point.y > bullet.transform.position.y)//(distToTop < distToBot)
+                    if (c.point.y >= bullet.transform.position.y)//(distToTop < distToBot)
                     {
                         Debug.Log("Collision from below.");
+                        //rb.velocity = Vector3.zero;
+                        //rb.angularVelocity = Vector3.zero;
                         transform.position = bodyBottom;
+                        //rb.velocity = new Vector3(0, -3, 0);
                     }
                     else
                     {
                         Debug.Log("Collision from above.");
+                        //rb.velocity = Vector3.zero;
+                        //rb.angularVelocity = Vector3.zero;
                         transform.position = bodyTop;
+                        //rb.velocity = new Vector3(0, 3, 0);
                     }
                     break;
 
