@@ -22,6 +22,9 @@ public class LockOn : MonoBehaviour {
 
     List<GameObject> interactables; // list of interactable objects in the scene
 
+    public GameObject reticle;
+    public GameObject lockOnReticle;
+
     // Use this for initialization
     void Start () {
         targetLockedOn = false;
@@ -86,6 +89,8 @@ public class LockOn : MonoBehaviour {
             InputManager.LockOnButton(controller.controllerType)
             )//&& GetComponent<HumanBullet>().target != null)
         {
+            
+            
             targetLockedOn = true;
 
             target = GetComponent<HumanBullet>().target;
@@ -135,6 +140,7 @@ public class LockOn : MonoBehaviour {
                                             target = GO;
                                         }
                                     }
+                                    
                                 }
                             }
                         }
@@ -145,6 +151,8 @@ public class LockOn : MonoBehaviour {
 
             if (target != null)
             {
+                reticle.SetActive(false);
+                lockOnReticle.SetActive(true);
                 //transform.LookAt(target.GetComponent<Center>().center.transform.position);
                 //Debug.Log(target.name);
                 targetCenter = target.GetComponent<Center>().GetCenter();
@@ -157,6 +165,8 @@ public class LockOn : MonoBehaviour {
         }
         else
         {
+            lockOnReticle.SetActive(false);
+            reticle.SetActive(true);
             targetLockedOn = false;
             GetComponent<HumanBullet>().target = null;
             cam.transform.localPosition = camOriginalPos;

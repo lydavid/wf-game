@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum WarpType {original, projectBulletToCamRay, noBulletMode};
 
@@ -62,6 +63,9 @@ public class HumanBullet : MonoBehaviour {
     public Vector3 bulletTop;
     public Vector3 bulletBot;
 
+    Image reticleImg;
+    Color pink;
+    Color white;
 
     void Start()
     {
@@ -91,6 +95,9 @@ public class HumanBullet : MonoBehaviour {
         bodyTop = topMost.GetComponent<Renderer>().bounds.max;
         bodyBottom = bottomMost.GetComponent<Renderer>().bounds.min;
 
+        reticleImg = GetComponent<LockOn>().reticle.GetComponent<Image>();
+        white = reticleImg.color;
+        pink = new Color(255, 0, 255);
     }
 
     /*private void FixedUpdate()
@@ -182,8 +189,12 @@ public class HumanBullet : MonoBehaviour {
                 if (hit.transform.gameObject.layer == 10)
                 {
                     //Debug.Log(hit.transform.gameObject.name);
+                    reticleImg.color = pink;
                     target = hit.transform.gameObject;
 
+                } else
+                {
+                    reticleImg.color = white;
                 }
                 // Do something with the object that was hit by the raycast.
             }
