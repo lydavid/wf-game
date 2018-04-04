@@ -117,6 +117,27 @@ public class TPSPlayerController : MonoBehaviour {
         {
             grounded = true;
         }
+
+        if (!humanBullet.bulletMode && other.gameObject.layer == 9)
+        {
+            foreach (ContactPoint c in other.contacts)
+            {
+
+                if (c.normal != Vector3.up)
+                {
+                    float y = Mathf.Abs(c.point.y - c.otherCollider.gameObject.GetComponent<Collider>().bounds.max.y);
+                    if (y < 3)
+                    {
+                        //rb.AddForce(new Vector3(0, y, 0));
+                        //rb.velocity = new Vector3(0, Mathf.Max(y, 5), 0);
+                        //rb.AddForce(new Vector3(0, Mathf.Max(y, 5), 0), ForceMode.VelocityChange);
+                        transform.position += new Vector3(0, Mathf.Max(y, 0.5f), 0);
+                        break;
+                    }
+                    
+                }
+            }
+        }
     }
 
     private void OnCollisionStay(Collision other)
@@ -125,6 +146,8 @@ public class TPSPlayerController : MonoBehaviour {
         {
             grounded = true;
         }
+
+        
     }
 
     // Collision exit doesn't work with warping, toggle grounded when player warps
@@ -366,8 +389,10 @@ public class TPSPlayerController : MonoBehaviour {
 			gameObject.transform.position = gameObject.transform.position + gameObject.transform.up;}
 	}*/
 
+    
+
 	void Gravity () {
         //if (!humanBullet.bulletMode)
-        transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
+        //transform.GetComponent<Rigidbody>().AddForce(gravity * Vector3.down);
 	}
 }
