@@ -119,6 +119,14 @@ public class TPSPlayerController : MonoBehaviour {
         }
     }
 
+    private void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.layer == 9) // ground
+        {
+            grounded = true;
+        }
+    }
+
     // Collision exit doesn't work with warping, toggle grounded when player warps
     private void OnCollisionExit(Collision other)
     {

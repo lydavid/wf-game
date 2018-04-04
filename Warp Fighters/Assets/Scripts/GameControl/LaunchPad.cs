@@ -31,7 +31,7 @@ public class LaunchPad : MonoBehaviour {
 
 	void OnCollisionEnter (Collision hit)
 	{
-		if (hit.gameObject.tag == "Player" && playerRB.velocity.magnitude > 10)
+		if (hit.gameObject.tag == "Player" && playerRB.velocity.magnitude > 6)
 		{
             //Vector3 curVelocity = playerRB.velocity;
             //Debug.Log(playerRB.velocity.magnitude);
