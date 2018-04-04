@@ -126,7 +126,7 @@ public class TPSPlayerController : MonoBehaviour {
                 if (c.normal != Vector3.up)
                 {
                     float y = Mathf.Abs(c.point.y - c.otherCollider.gameObject.GetComponent<Collider>().bounds.max.y);
-                    if (y < 3)
+                    if (y < 0.5f)
                     {
                         //rb.AddForce(new Vector3(0, y, 0));
                         //rb.velocity = new Vector3(0, Mathf.Max(y, 5), 0);
